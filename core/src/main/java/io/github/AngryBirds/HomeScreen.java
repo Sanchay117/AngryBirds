@@ -64,6 +64,26 @@ public class HomeScreen implements Screen {
         stage.addActor(playButton);
         stage.addActor(quitButton);
         stage.addActor(settingsButton);
+
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(game));
+            }
+        });
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();  // Quit the game
+            }
+        });
+
+    settingsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SettingsScreen(game));  // Switch to SettingsScreen
+            }
+        });
     }
 
     private ImageButton createButton(String texturePath, float x, float y) {
@@ -97,15 +117,7 @@ public class HomeScreen implements Screen {
         // Draw the buttons (handled by the stage)
         stage.act(delta);
         stage.draw();
-
-        // Handle button clicks
-//        if (playButton.isPressed()) {
-//            game.setScreen(new GameScreen(game));  // Switch to GameScreen
-//        } else if (quitButton.isPressed()) {
-//            Gdx.app.exit();  // Quit the game
-//        } else if (settingsButton.isPressed()) {
-//            game.setScreen(new SettingsScreen(game));  // Switch to SettingsScreen
-//        }
+        
     }
 
     @Override
