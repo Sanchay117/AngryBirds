@@ -34,7 +34,7 @@ public class HomeScreen implements Screen {
         camera.setToOrtho(false, 800, 480);  // Set a fixed resolution
 
         // Load the background texture
-        background = new Texture(Gdx.files.internal("ui/angry_birds_bg.jpg"));
+        background = new Texture(Gdx.files.internal("angry_birds_bg.jpg"));
 
         // Generate fonts from TTF files
         FreeTypeFontGenerator generator1 = new FreeTypeFontGenerator(Gdx.files.internal("Comicartoon-3DExtrude.ttf"));
@@ -56,9 +56,9 @@ public class HomeScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         // Create buttons with textures
-        playButton = createButton("ui/play.png", 400, 240);
-        quitButton = createButton("ui/play.png", 400, 160);
-        settingsButton = createButton("ui/settings.jpg", 400, 80);
+        playButton = createButton("play.png", 400, 240);
+        quitButton = createButton("play.png", 400, 160);
+        settingsButton = createButton("settings.jpg", 400, 80);
 
         // Add buttons to the stage
         stage.addActor(playButton);
