@@ -1,4 +1,5 @@
-package io.github.AngryBirds;
+package com.mygdx.angrybirds;
+
 
 import com.badlogic.gdx.Game;
 import com.mygame.screens.HomeScreen;
