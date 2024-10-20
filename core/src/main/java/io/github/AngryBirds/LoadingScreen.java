@@ -30,14 +30,11 @@ public class LoadingScreen implements Screen {
         background = new Texture("loading_bg.jpg");
         loadingBarTexture = new Texture("loading.jpg");
         
-        // Initialize font for the "LOADING..." text
-        font = new BitmapFont(); // You can load a custom .ttf for a better font
+        font = new BitmapFont(); 
         font.setColor(Color.GREEN);
         
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        
-        // Create a loading bar
         createLoadingBar();
     }
 
@@ -45,15 +42,13 @@ public class LoadingScreen implements Screen {
         Skin skin = new Skin();
         ProgressBarStyle style = new ProgressBarStyle();
         
-        // Set up the empty background of the bar (optional)
         style.background = new TextureRegionDrawable(new Texture("empty_bar.jpg"));
         
-        // Set the loading bar with the texture
         style.knobBefore = new TextureRegionDrawable(new Texture("loading.jpg")); 
 
         loadingBar = new ProgressBar(0, 1, 0.01f, false, style);
-        loadingBar.setSize(400, 50); // Width and height of the bar
-        loadingBar.setPosition(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f - 50); // Centering
+        loadingBar.setSize(400, 50); 
+        loadingBar.setPosition(Gdx.graphics.getWidth() / 2f - 200, Gdx.graphics.getHeight() / 2f - 50); 
         loadingBar.setValue(0);
 
         stage.addActor(loadingBar);
@@ -61,25 +56,24 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void show() {
-        // Timer to simulate loading
+       
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                game.setScreen(new MenuScreen(game)); // Switch to GameScreen after loading
+                game.setScreen(new MenuScreen(game)); 
             }
-        }, 2); // Loading time: 2 seconds
+        }, 2);
     }
 
     @Override
     public void render(float delta) {
-        progress += delta / 2; // Simulate progress over 2 seconds
+        progress += delta / 2; 
         if (progress > 1) progress = 1;
         loadingBar.setValue(progress);
 
-        // Draw background and "LOADING..." text
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        font.draw(batch, "LOADING...", Gdx.graphics.getWidth() / 2f - 190, Gdx.graphics.getHeight() / 2f + 20); // Position above the bar on the left
+        font.draw(batch, "LOADING...", Gdx.graphics.getWidth() / 2f - 190, Gdx.graphics.getHeight() / 2f + 20); 
         batch.end();
 
         stage.act(delta);
