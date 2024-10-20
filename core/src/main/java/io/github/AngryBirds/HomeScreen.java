@@ -1,4 +1,5 @@
-package com.mygame.screens;
+package com.mygdx.angrybirds;
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
