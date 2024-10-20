@@ -1,156 +1,110 @@
-package io.github.AngryBirds;
+package com.mygame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mygame.MainGame;
 
 public class HomeScreen implements Screen {
-    private final io.github.AngryBirds.Main game;
-    private OrthographicCamera camera;
-    private Texture background;
-    private BitmapFont titleFont, buttonFont;
-    private Stage stage;
-    private ImageButton playButton, quitButton, settingsButton;
+    private final MainGame game;
     private SpriteBatch batch;
+    private Texture background;
+    private BitmapFont titleFont;
+    private Stage stage;
 
-    public HomeScreen(io.github.AngryBirds.Main game) {
+    public HomeScreen(MainGame game) {
         this.game = game;
         batch = new SpriteBatch();
-
-        // Setup the camera
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);  // Set a fixed resolution
-
-        // Load the background texture
-        background = new Texture(Gdx.files.internal("angry_birds_bg.jpg"));
-
-        // Generate fonts from TTF files
-        FreeTypeFontGenerator generator1 = new FreeTypeFontGenerator(Gdx.files.internal("Comicartoon-3DExtrude.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter titleParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        titleParameter.size = 72;  // Title font size
-        titleParameter.color = Color.RED;
-        titleParameter.characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        titleFont = generator1.generateFont(titleParameter);  // Generate title font
-        generator1.dispose();
-
-        FreeTypeFontGenerator generator2 = new FreeTypeFontGenerator(Gdx.files.internal("Comicartoon-Regular.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter buttonParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        buttonParameter.size = 36;  // Button font size
-        buttonParameter.color = Color.WHITE;
-        buttonParameter.characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        buttonFont = generator2.generateFont(buttonParameter);  // Generate button font
-        generator2.dispose();
-
-        // Initialize the stage
+        background = new Texture("angry_bird_bg.jpg");
+        titleFont = new BitmapFont(); // Use a custom font if you want
+        
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
+        
+        createButtons();
+    }
 
-        // Create buttons with textures
-        playButton = createButton("play.png", 400, 240);
-        quitButton = createButton("play.png", 400, 160);
-        settingsButton = createButton("settings.jpg", 400, 80);
+    private void createButtons() {
+        Skin skin = new Skin();
 
-        // Add buttons to the stage
-        stage.addActor(playButton);
-        stage.addActor(quitButton);
-        stage.addActor(settingsButton);
-
+        // Play Button
+        Texture playTexture = new Texture("play.png");
+        ImageButton playButton = new ImageButton(new Image(playTexture).getDrawable());
+        playButton.setPosition(Gdx.graphics.getWidth() / 2f - playTexture.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new PlayScreen(game)); // Navigate to the PlayScreen
             }
         });
+
+        // Settings Button
+        Texture settingsTexture = new Texture("settings.jpg");
+        ImageButton settingsButton = new ImageButton(new Image(settingsTexture).getDrawable());
+        settingsButton.setPosition(Gdx.graphics.getWidth() / 2f - settingsTexture.getWidth() / 2f, Gdx.graphics.getHeight() / 2f - 100);
+        settingsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SettingsScreen(game)); // Navigate to SettingsScreen
+            }
+        });
+
+        // Quit Button
+        Texture quitTexture = new Texture("play.png");
+        ImageButton quitButton = new ImageButton(new Image(quitTexture).getDrawable());
+        quitButton.setPosition(Gdx.graphics.getWidth() / 2f - quitTexture.getWidth() / 2f, Gdx.graphics.getHeight() / 2f - 200);
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();  // Quit the game
+                Gdx.app.exit(); // Quit the game
             }
         });
 
-    settingsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SettingsScreen(game));  // Switch to SettingsScreen
-            }
-        });
-    }
-
-    private ImageButton createButton(String texturePath, float x, float y) {
-        Texture buttonTexture = new Texture(Gdx.files.internal(texturePath));
-        Drawable drawable = new TextureRegionDrawable(buttonTexture);
-        ImageButton button = new ImageButton(drawable);
-        button.setPosition(x - button.getWidth() / 2, y - button.getHeight() / 2);  // Center the button
-        return button;
+        // Add buttons to the stage
+        stage.addActor(playButton);
+        stage.addActor(settingsButton);
+        stage.addActor(quitButton);
     }
 
     @Override
-    public void show() {
-        // Not needed for now
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
-        // Clear the screen with a black background
-        ScreenUtils.clear(0, 0, 0, 1);
-
-        // Update the camera
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-
-        // Draw the background and title
         batch.begin();
-        batch.draw(background, 0, 0, 800, 480);  // Draw background full screen
-        titleFont.draw(batch, "Angry Birds", 400 - 150, 400);  // Draw title at the center
+        batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        titleFont.draw(batch, "Angry Birds", Gdx.graphics.getWidth() / 2f - 50, Gdx.graphics.getHeight() - 50); // Center title at top
         batch.end();
 
-        // Draw the buttons (handled by the stage)
         stage.act(delta);
         stage.draw();
-        
     }
 
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-        // Not needed for now
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-        // Not needed for now
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-        // Not needed for now
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
-        // Dispose of assets
         batch.dispose();
         background.dispose();
         titleFont.dispose();
-        buttonFont.dispose();
         stage.dispose();
     }
 }
