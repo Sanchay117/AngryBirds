@@ -43,6 +43,7 @@ public class HomeScreen implements Screen {
         FreeTypeFontGenerator.FreeTypeFontParameter titleParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         titleParameter.size = 72;  // Title font size
         titleParameter.color = Color.RED;
+        titleParameter.characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         titleFont = generator1.generateFont(titleParameter);  // Generate title font
         generator1.dispose();
 
@@ -50,6 +51,7 @@ public class HomeScreen implements Screen {
         FreeTypeFontGenerator.FreeTypeFontParameter buttonParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         buttonParameter.size = 36;  // Button font size
         buttonParameter.color = Color.WHITE;
+        buttonParameter.characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         buttonFont = generator2.generateFont(buttonParameter);  // Generate button font
         generator2.dispose();
 
