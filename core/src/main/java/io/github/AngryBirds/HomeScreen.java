@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.Color;
 
-public class MainScreen extends ScreenAdapter {
+public class HomeScreen extends ScreenAdapter {
 
     private final Main game;
     private int viewHeight = Gdx.graphics.getHeight();
@@ -25,16 +25,13 @@ public class MainScreen extends ScreenAdapter {
     private GlyphLayout layout;
 
 
-    public MainScreen(Main game) {
+    public HomeScreen(Main game) {
         this.game = game;
-        game.background = new Texture("MainScreenBG.jpg");
+        game.background = new Texture("bg.jpg");
     }
 
     @Override
     public void show(){
-
-
-
     }
 
     @Override
@@ -42,20 +39,9 @@ public class MainScreen extends ScreenAdapter {
 
         game.batch.begin();
 
-        game.batch.draw(game.background, 0, 0,viewWidth,viewHeight);
-        game.font.draw(game.batch, "LEVELS", viewWidth*0.38f, viewHeight*0.95f);
-        game.batch.draw(backArrow,viewWidth*0.03f,viewHeight*0.95f - 130,120,150);
-
-        float x = 0.23f;
-        game.font.draw(game.batch, "1", viewHeight*x, viewHeight*0.68f);
-        x+=0.23f;
-        game.font.draw(game.batch, "2", viewHeight*x, viewHeight*0.68f);
-        x+=0.23f;
-        game.font.draw(game.batch, "3", viewHeight*x, viewHeight*0.68f);
-        x+=0.23f;
-        game.font.draw(game.batch, "4", viewHeight*x, viewHeight*0.68f);
-        x+=0.23f;
-        game.font.draw(game.batch, "5", viewHeight*x, viewHeight*0.68f);
+        game.batch.draw(game.background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.batch.draw(new Texture("play2.png"), (float) (Gdx.graphics.getWidth() /2 - 205 ),50,350,350);
+        game.batch.draw(new Texture("settings.jpg"), 0,50,150,50);
 
         game.batch.end();
     }
