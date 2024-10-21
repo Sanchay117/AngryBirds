@@ -30,7 +30,7 @@ public class Main extends Game {
         // bg music
         music = Gdx.audio.newMusic(Gdx.files.internal("fine.mp3"));
         music.setLooping(true);
-        music.setVolume(.5f);
+        music.setVolume(0f);
         music.play();
 
         // font
@@ -45,9 +45,9 @@ public class Main extends Game {
         generator.dispose(); // Don't forget to dispose of the generator after use
         shapeRenderer = new ShapeRenderer();
 
-        setScreen(new LevelScreen(this));
+//        setScreen(new LevelScreen(this));
 //        setScreen(new MainScreen(this));
-//        setScreen(new HomeScreen(this));
+        setScreen(new HomeScreen(this));
     }
 
     @Override
