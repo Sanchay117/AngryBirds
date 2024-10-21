@@ -16,6 +16,7 @@ public class Main extends Game {
     SpriteBatch batch;
     ShapeRenderer shapeRenderer;
     BitmapFont font;
+    BitmapFont smallFont;
     Music music;
     Texture background;
 
@@ -37,6 +38,10 @@ public class Main extends Game {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 130;  // Set the font size
         font = generator.generateFont(parameter); // Generate the BitmapFont
+
+        parameter.size = 60;
+        smallFont = generator.generateFont(parameter);
+
         generator.dispose(); // Don't forget to dispose of the generator after use
         shapeRenderer = new ShapeRenderer();
 

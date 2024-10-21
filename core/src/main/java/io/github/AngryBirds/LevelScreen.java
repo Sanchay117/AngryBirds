@@ -32,6 +32,8 @@ public class LevelScreen extends ScreenAdapter {
     private Stage stage;
     private Texture pauseTexture;
     private ImageButton pauseButton;
+    private Texture settingsTexture;
+    private ImageButton settingsButton;
     private boolean isPaused;
 
     public LevelScreen(Main game) {
@@ -44,19 +46,26 @@ public class LevelScreen extends ScreenAdapter {
         layout = new GlyphLayout();
         stage = new Stage();
 
-        // Load the pause button texture
+        // Load the button textures
         pauseTexture = new Texture("pause.png");
+        settingsTexture = new Texture("settings.jpg");
 
         // Create an ImageButton from the texture
         Skin skin = new Skin();
         skin.add("pause", pauseTexture);
+        skin.add("settings", settingsTexture);
 
         pauseButton = new ImageButton(new ImageButton.ImageButtonStyle());
+        settingsButton = new ImageButton(new ImageButton.ImageButtonStyle());
         pauseButton.getStyle().imageUp = skin.getDrawable("pause");
+        settingsButton.getStyle().imageUp = skin.getDrawable("settings");
 
         // Set the button's position and size
-        pauseButton.setPosition(Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 100);
+        pauseButton.setPosition(viewWidth - 100, viewHeight - 100);
         pauseButton.setSize(80, 80);
+
+        settingsButton.setPosition(viewWidth-200, viewHeight-100);
+        settingsButton.setSize(80, 80);
 
         // Add a ClickListener to toggle the pause state
         pauseButton.addListener(new ClickListener() {
@@ -66,8 +75,9 @@ public class LevelScreen extends ScreenAdapter {
             }
         });
 
-        // Add the button to the stage
+        // Add the buttons to the stage
         stage.addActor(pauseButton);
+        stage.addActor(settingsButton);
 
         // Set the input processor to the stage
         Gdx.input.setInputProcessor(stage);
@@ -81,11 +91,11 @@ public class LevelScreen extends ScreenAdapter {
         game.batch.begin();
 
         game.batch.draw(game.background, 0, 0,viewWidth,viewHeight);
-        game.batch.draw(backArrow,viewWidth*0.03f,viewHeight*0.95f - 130,120,150);
+        game.smallFont.draw(game.batch,"Score: 0",viewWidth*0.425f,viewHeight-30);
 
         if (isPaused) {
             // Game is paused, show a "Paused" message
-            game.font.draw(game.batch, "Game Paused", Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+            game.font.draw(game.batch, "Game Paused", viewWidth / 2f, viewHeight / 2f);
         } else {
             // Game is not paused, update game logic
             // Update game objects, handle input, etc.
