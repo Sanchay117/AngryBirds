@@ -14,8 +14,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.Color;
@@ -30,6 +32,7 @@ public class LevelScreen extends ScreenAdapter {
     private GlyphLayout layout;
 
     private Stage stage;
+    private Stage pauseStage;
     private Texture pauseTexture;
     private ImageButton pauseButton;
     private Texture settingsTexture;
@@ -38,13 +41,39 @@ public class LevelScreen extends ScreenAdapter {
 
     public LevelScreen(Main game) {
         this.game = game;
-        game.background = new Texture("LevelScreen.jpg");
+        game.background = new Texture("lvlBG_enhanced.jpg");
+    }
+
+    private void createPauseScreen() {
+        Skin skin = new Skin();
+        Texture pauseBg = new Texture("bg.png");  // Your pause background image
+        Image pauseBackground = new Image(pauseBg);
+        pauseBackground.setSize(viewWidth/2, viewHeight/2);  // Set the size of the pause screen
+        pauseStage.addActor(pauseBackground);  // Add the background to the pause stage
+
+        // Create Resume Button
+//        TextButton resumeButton = new TextButton("Resume", skin);
+//        resumeButton.setPosition(viewWidth / 2 - 100, viewHeight / 2);
+//        resumeButton.setSize(200, 80);
+//
+//        // Add Resume Button Listener
+//        resumeButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                isPaused = false;  // Resume the game
+//                Gdx.input.setInputProcessor(stage);  // Set input back to the game stage
+//            }
+//        });
+
+        // Add the resume button to the pause stage
+//        pauseStage.addActor(resumeButton);
     }
 
     @Override
     public void show(){
         layout = new GlyphLayout();
         stage = new Stage();
+        pauseStage = new Stage();
 
         // Load the button textures
         pauseTexture = new Texture("pause.png");
@@ -79,6 +108,8 @@ public class LevelScreen extends ScreenAdapter {
         stage.addActor(pauseButton);
         stage.addActor(settingsButton);
 
+        createPauseScreen();
+
         // Set the input processor to the stage
         Gdx.input.setInputProcessor(stage);
     }
@@ -94,8 +125,9 @@ public class LevelScreen extends ScreenAdapter {
         game.smallFont.draw(game.batch,"Score: 0",viewWidth*0.425f,viewHeight-30);
 
         if (isPaused) {
-            // Game is paused, show a "Paused" message
-            game.font.draw(game.batch, "Game Paused", viewWidth / 2f, viewHeight / 2f);
+            // Draw the pause screen
+            pauseStage.act(delta);
+            pauseStage.draw();
         } else {
             // Game is not paused, update game logic
             // Update game objects, handle input, etc.
