@@ -87,14 +87,14 @@ public class HomeScreen extends ScreenAdapter {
                 game.setScreen(new MainScreen(game));
             }
 
-//            @Override
-//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//                // When the mouse hovers over the button, apply a "breathing" animation
-//                playButton.addAction(Actions.sequence(
-//                    Actions.scaleTo(1.1f, 1.1f, 0.5f),  // Scale up (breathe in)
-//                    Actions.scaleTo(1.0f, 1.0f, 0.5f)   // Scale back down (breathe out)
-//                ));
-//            }
+           @Override
+           public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+               // When the mouse hovers over the button, apply a "breathing" animation
+               playButton.addAction(Actions.sequence(
+                   Actions.scaleTo(1.4f, 1.4f, 0.5f),  // Scale up (breathe in)
+                   Actions.scaleTo(1.0f, 1.0f, 0.5f)   // Scale back down (breathe out)
+               ));
+           }
 
 //            @Override
 //            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
