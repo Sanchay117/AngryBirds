@@ -13,8 +13,10 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -84,6 +86,22 @@ public class HomeScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MainScreen(game));
             }
+
+//            @Override
+//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//                // When the mouse hovers over the button, apply a "breathing" animation
+//                playButton.addAction(Actions.sequence(
+//                    Actions.scaleTo(1.1f, 1.1f, 0.5f),  // Scale up (breathe in)
+//                    Actions.scaleTo(1.0f, 1.0f, 0.5f)   // Scale back down (breathe out)
+//                ));
+//            }
+
+//            @Override
+//            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+//                // Stop the animation when the mouse exits the button
+//                playButton.clearActions();  // Stop any scaling animations if hover is lost
+//                playButton.setScale(1.0f);  // Reset the button scale to normal
+//            }
         });
 
         // Add the buttons to the stage

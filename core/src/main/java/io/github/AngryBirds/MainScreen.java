@@ -7,11 +7,19 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.Color;
 
@@ -20,9 +28,10 @@ public class MainScreen extends ScreenAdapter {
     private final Main game;
     private int viewHeight = Gdx.graphics.getHeight();
     private int viewWidth = Gdx.graphics.getWidth();
-    private final Texture backArrow = new Texture(Gdx.files.internal("LeftArrow.png"));
-    private ShapeRenderer shapeRenderer;
-    private GlyphLayout layout;
+
+    private Stage stage;
+    private Texture backBtnTexture;
+    private ImageButton backBtn;
 
 
     public MainScreen(Main game) {
@@ -32,19 +41,41 @@ public class MainScreen extends ScreenAdapter {
 
     @Override
     public void show(){
+        stage = new Stage();
 
+        backBtnTexture = new Texture("back.png");
 
+        Skin skin = new Skin();
+        skin.add("back", backBtnTexture);
 
+        ImageButton.ImageButtonStyle playStyle = new ImageButton.ImageButtonStyle();
+        playStyle.imageUp = new TextureRegionDrawable(new TextureRegion(backBtnTexture));
+        backBtn = new ImageButton(playStyle);
+
+        backBtn.setPosition(0.05f,viewHeight-200);
+        backBtn.setSize(200, 200);
+
+        backBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new HomeScreen(game));
+            }
+        });
+
+        stage.addActor(backBtn);
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
 
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         game.batch.begin();
 
         game.batch.draw(game.background, 0, 0,viewWidth,viewHeight);
         game.font.draw(game.batch, "LEVELS", viewWidth*0.38f, viewHeight*0.95f);
-        game.batch.draw(backArrow,viewWidth*0.03f,viewHeight*0.95f - 130,120,150);
 
         float x = 0.23f;
         game.font.draw(game.batch, "1", viewHeight*x, viewHeight*0.68f);
@@ -58,6 +89,9 @@ public class MainScreen extends ScreenAdapter {
         game.font.draw(game.batch, "5", viewHeight*x, viewHeight*0.68f);
 
         game.batch.end();
+
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
@@ -69,6 +103,7 @@ public class MainScreen extends ScreenAdapter {
     @Override
     public void hide(){
         Gdx.input.setInputProcessor(null);
-        shapeRenderer.dispose();
+        backBtnTexture.dispose();
+        stage.dispose();
     }
 }
