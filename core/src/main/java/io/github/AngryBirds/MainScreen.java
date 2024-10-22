@@ -31,8 +31,15 @@ public class MainScreen extends ScreenAdapter {
 
     private Stage stage;
     private Texture backBtnTexture;
+    private Texture lvlBtnTexture;
     private ImageButton backBtn;
+    private ImageButton lvlBtn1;
+    private ImageButton lvlBtn2;
+    private ImageButton lvlBtn3;
+    private ImageButton lvlBtn4;
+    private ImageButton lvlBtn5;
 
+    private float x = 0.08f;
 
     public MainScreen(Main game) {
         this.game = game;
@@ -44,16 +51,42 @@ public class MainScreen extends ScreenAdapter {
         stage = new Stage();
 
         backBtnTexture = new Texture("back.png");
+        lvlBtnTexture = new Texture("lvlBG.png");
 
         Skin skin = new Skin();
         skin.add("back", backBtnTexture);
+        skin.add("lvl", lvlBtnTexture);
 
         ImageButton.ImageButtonStyle playStyle = new ImageButton.ImageButtonStyle();
+        ImageButton.ImageButtonStyle lvlStyle = new ImageButton.ImageButtonStyle();
         playStyle.imageUp = new TextureRegionDrawable(new TextureRegion(backBtnTexture));
+        lvlStyle.imageUp = new TextureRegionDrawable(new TextureRegion(lvlBtnTexture));
         backBtn = new ImageButton(playStyle);
+        lvlBtn1 = new ImageButton(lvlStyle);
+        lvlBtn2 = new ImageButton(lvlStyle);
+        lvlBtn3 = new ImageButton(lvlStyle);
+        lvlBtn4 = new ImageButton(lvlStyle);
+        lvlBtn5 = new ImageButton(lvlStyle);
 
         backBtn.setPosition(0.05f,viewHeight-200);
         backBtn.setSize(200, 200);
+
+        lvlBtn1.setSize(250, 250);
+        lvlBtn2.setSize(250, 250);
+        lvlBtn3.setSize(250, 250);
+        lvlBtn4.setSize(250, 250);
+        lvlBtn5.setSize(250, 250);
+
+        lvlBtn1.setPosition(viewWidth*x, viewHeight*0.5f);
+        x+=0.175f;
+        lvlBtn2.setPosition(viewWidth*x, viewHeight*0.5f);
+        x+=0.175f;
+        lvlBtn3.setPosition(viewWidth*x, viewHeight*0.5f);
+        x+=0.175f;
+        lvlBtn4.setPosition(viewWidth*x, viewHeight*0.5f);
+        x+=0.175f;
+        lvlBtn5.setPosition(viewWidth*x, viewHeight*0.5f);
+        x=0.08f;
 
         backBtn.addListener(new ClickListener() {
             @Override
@@ -62,7 +95,57 @@ public class MainScreen extends ScreenAdapter {
             }
         });
 
+        lvlBtn1.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelScreen(game));
+            }
+
+        });
+
+        lvlBtn2.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelScreen(game));
+            }
+
+        });
+
+        lvlBtn3.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelScreen(game));
+            }
+
+        });
+
+        lvlBtn4.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelScreen(game));
+            }
+
+        });
+
+        lvlBtn5.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelScreen(game));
+            }
+
+        });
+
         stage.addActor(backBtn);
+        stage.addActor(lvlBtn1);
+        stage.addActor(lvlBtn2);
+        stage.addActor(lvlBtn3);
+        stage.addActor(lvlBtn4);
+        stage.addActor(lvlBtn5);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -77,21 +160,24 @@ public class MainScreen extends ScreenAdapter {
         game.batch.draw(game.background, 0, 0,viewWidth,viewHeight);
         game.font.draw(game.batch, "LEVELS", viewWidth*0.38f, viewHeight*0.95f);
 
-        float x = 0.23f;
-        game.font.draw(game.batch, "1", viewHeight*x, viewHeight*0.68f);
-        x+=0.23f;
-        game.font.draw(game.batch, "2", viewHeight*x, viewHeight*0.68f);
-        x+=0.23f;
-        game.font.draw(game.batch, "3", viewHeight*x, viewHeight*0.68f);
-        x+=0.23f;
-        game.font.draw(game.batch, "4", viewHeight*x, viewHeight*0.68f);
-        x+=0.23f;
-        game.font.draw(game.batch, "5", viewHeight*x, viewHeight*0.68f);
+        stage.act(delta);
+        stage.draw();
+
+        game.mediumFont.draw(game.batch, "1", viewWidth*x - 120, viewHeight*.5f + 145);
+        x+=0.175f;
+        game.mediumFont.draw(game.batch, "2", viewWidth*x - 120, viewHeight*.5f + 145);
+        x+=0.175f;
+        game.mediumFont.draw(game.batch, "3", viewWidth*x - 120, viewHeight*.5f + 145);
+        x+=0.175f;
+        game.mediumFont.draw(game.batch, "4", viewWidth*x - 120, viewHeight*.5f + 145);
+        x+=0.175f;
+        game.mediumFont.draw(game.batch, "5", viewWidth*x - 120, viewHeight*.5f + 145);
+
+        x=0.23f;
 
         game.batch.end();
 
-        stage.act(delta);
-        stage.draw();
+
     }
 
     @Override

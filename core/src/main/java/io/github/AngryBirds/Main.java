@@ -17,6 +17,7 @@ public class Main extends Game {
     ShapeRenderer shapeRenderer;
     BitmapFont font;
     BitmapFont smallFont;
+    BitmapFont mediumFont;
     Music music;
     Texture background;
 
@@ -41,6 +42,9 @@ public class Main extends Game {
 
         parameter.size = 60;
         smallFont = generator.generateFont(parameter);
+
+        parameter.size = 105;
+        mediumFont = generator.generateFont(parameter);
 
         generator.dispose(); // Don't forget to dispose of the generator after use
         shapeRenderer = new ShapeRenderer();
