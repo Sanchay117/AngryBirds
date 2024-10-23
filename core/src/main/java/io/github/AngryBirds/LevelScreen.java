@@ -162,6 +162,8 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(pauseStage);
             }
 
+            game.background = new Texture("pauseBg.png");
+
             // Draw the pause screen
             pauseStage.act(delta);
             pauseStage.draw();
@@ -173,6 +175,8 @@ public class LevelScreen extends ScreenAdapter {
             if (Gdx.input.getInputProcessor() != stage) {
                 Gdx.input.setInputProcessor(stage);
             }
+
+            game.background = new Texture("lvlBG_enhanced.jpg");
 
             // Game is not paused, update game logic
             stage.act(delta);
