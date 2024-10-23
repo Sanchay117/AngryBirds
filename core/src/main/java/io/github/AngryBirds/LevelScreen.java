@@ -27,9 +27,6 @@ public class LevelScreen extends ScreenAdapter {
     private final Main game;
     private int viewHeight = Gdx.graphics.getHeight();
     private int viewWidth = Gdx.graphics.getWidth();
-    private final Texture backArrow = new Texture(Gdx.files.internal("LeftArrow.png"));
-    private ShapeRenderer shapeRenderer;
-    private GlyphLayout layout;
 
     private Stage stage;
     private Stage pauseStage;
@@ -39,9 +36,21 @@ public class LevelScreen extends ScreenAdapter {
     private ImageButton settingsButton;
     private boolean isPaused;
 
+    private Texture red;
+    private Texture pig;
+    private Texture wall;
+    private Texture floor;
+    private Texture slingshot;
+
     public LevelScreen(Main game) {
         this.game = game;
-        game.background = new Texture("lvlBG_enhanced.jpg");
+        game.background = new Texture("lvlBG.jpg");
+
+        red = new Texture("red.png");
+        pig = new Texture("pig.png");
+        wall = new Texture("wood_wall.png");
+        floor = new Texture("wood.png");
+        slingshot = new Texture("slingShot.png");
     }
 
     private void createPauseScreen() {
@@ -104,7 +113,6 @@ public class LevelScreen extends ScreenAdapter {
 
     @Override
     public void show(){
-        layout = new GlyphLayout();
         stage = new Stage();
         pauseStage = new Stage();
 
@@ -156,6 +164,12 @@ public class LevelScreen extends ScreenAdapter {
 
         game.batch.draw(game.background, 0, 0,viewWidth,viewHeight);
         game.smallFont.draw(game.batch,"Score: 0",viewWidth*0.425f,viewHeight-30);
+        game.batch.draw(red,0,viewHeight*0.22f,100,100);
+        game.batch.draw(red,60,viewHeight*0.22f,100,100);
+        game.batch.draw(slingshot,100,viewHeight*0.22f,100,200);
+
+        game.batch.draw(floor,500,viewHeight*0.22f,300,10);
+        game.batch.draw(pig,550,viewHeight*0.23f,100,100);
 
         if (isPaused) {
             if (Gdx.input.getInputProcessor() != pauseStage) {
@@ -176,7 +190,7 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(stage);
             }
 
-            game.background = new Texture("lvlBG_enhanced.jpg");
+            game.background = new Texture("lvlBG.jpg");
 
             // Game is not paused, update game logic
             stage.act(delta);
