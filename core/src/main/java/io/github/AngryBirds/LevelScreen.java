@@ -70,10 +70,10 @@ public class LevelScreen extends ScreenAdapter {
         backBtn.setPosition(viewWidth*0.35f, viewHeight*0.3f);
 
         playBtn.setSize(150, 150);
-        playBtn.setPosition(viewWidth*0.45f, viewHeight*0.3f);
+        playBtn.setPosition(viewWidth*0.55f, viewHeight*0.3f);
 
         restartBtn.setSize(150,150);
-        restartBtn.setPosition(viewWidth*0.55f, viewHeight*0.3f);
+        restartBtn.setPosition(viewWidth*0.75f, viewHeight*0.3f);
 
         backBtn.addListener(new ClickListener() {
            @Override
@@ -110,7 +110,7 @@ public class LevelScreen extends ScreenAdapter {
 
         // Load the button textures
         pauseTexture = new Texture("pause.png");
-        settingsTexture = new Texture("settings.jpg");
+        settingsTexture = new Texture("settings.png");
 
         // Create an ImageButton from the texture
         Skin skin = new Skin();
