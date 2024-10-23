@@ -49,24 +49,57 @@ public class LevelScreen extends ScreenAdapter {
         Texture pauseBg = new Texture("bg.png");  // Your pause background image
         Image pauseBackground = new Image(pauseBg);
         pauseBackground.setSize(viewWidth/2, viewHeight/2);  // Set the size of the pause screen
-        pauseStage.addActor(pauseBackground);  // Add the background to the pause stage
+        pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
-        // Create Resume Button
-//        TextButton resumeButton = new TextButton("Resume", skin);
-//        resumeButton.setPosition(viewWidth / 2 - 100, viewHeight / 2);
-//        resumeButton.setSize(200, 80);
-//
-//        // Add Resume Button Listener
-//        resumeButton.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                isPaused = false;  // Resume the game
-//                Gdx.input.setInputProcessor(stage);  // Set input back to the game stage
-//            }
-//        });
+        Texture play = new Texture("resume.png");
+        Texture back = new Texture("back2.png");
+        Texture restart = new Texture("restart.png");
 
-        // Add the resume button to the pause stage
-//        pauseStage.addActor(resumeButton);
+        skin.add("play",play);
+        skin.add("back",back);
+        skin.add("restart",restart);
+
+        ImageButton playBtn = new ImageButton(new ImageButton.ImageButtonStyle());
+        ImageButton backBtn = new ImageButton(new ImageButton.ImageButtonStyle());
+        ImageButton restartBtn = new ImageButton(new ImageButton.ImageButtonStyle());
+        playBtn.getStyle().imageUp = skin.getDrawable("play");
+        backBtn.getStyle().imageUp = skin.getDrawable("back");
+        restartBtn.getStyle().imageUp = skin.getDrawable("restart");
+
+        backBtn.setSize(150, 150);
+        backBtn.setPosition(viewWidth*0.35f, viewHeight*0.3f);
+
+        playBtn.setSize(150, 150);
+        playBtn.setPosition(viewWidth*0.45f, viewHeight*0.3f);
+
+        restartBtn.setSize(150,150);
+        restartBtn.setPosition(viewWidth*0.55f, viewHeight*0.3f);
+
+        backBtn.addListener(new ClickListener() {
+           @Override
+           public void clicked(InputEvent event, float x, float y) {
+               game.setScreen(new MainScreen(game));
+           }
+        });
+
+        playBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isPaused=!isPaused;
+            }
+        });
+
+        restartBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelScreen(game));
+            }
+        });
+
+        pauseStage.addActor(pauseBackground);
+        pauseStage.addActor(playBtn);
+        pauseStage.addActor(backBtn);
+        pauseStage.addActor(restartBtn);
     }
 
     @Override
@@ -125,19 +158,28 @@ public class LevelScreen extends ScreenAdapter {
         game.smallFont.draw(game.batch,"Score: 0",viewWidth*0.425f,viewHeight-30);
 
         if (isPaused) {
+            if (Gdx.input.getInputProcessor() != pauseStage) {
+                Gdx.input.setInputProcessor(pauseStage);
+            }
+
             // Draw the pause screen
             pauseStage.act(delta);
             pauseStage.draw();
         } else {
             // Game is not paused, update game logic
             // Update game objects, handle input, etc.
+
+            // Switch input processor back to game stage when not paused
+            if (Gdx.input.getInputProcessor() != stage) {
+                Gdx.input.setInputProcessor(stage);
+            }
+
+            // Game is not paused, update game logic
+            stage.act(delta);
+            stage.draw();
         }
 
         game.batch.end();
-
-        // Render the stage (which includes the pause button)
-        stage.act(delta);
-        stage.draw();
     }
 
     @Override
@@ -149,7 +191,6 @@ public class LevelScreen extends ScreenAdapter {
     @Override
     public void hide(){
         Gdx.input.setInputProcessor(null);
-        shapeRenderer.dispose();
         stage.dispose();
         pauseTexture.dispose();
     }

@@ -29,7 +29,7 @@ public class Main extends Game {
         font = new BitmapFont();
 
         // bg music
-        music = Gdx.audio.newMusic(Gdx.files.internal("fine.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("finalMusic.mp3"));
         music.setLooping(true);
         music.setVolume(0.5f);
         music.play();
