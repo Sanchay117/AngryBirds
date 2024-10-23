@@ -87,28 +87,14 @@ public class HomeScreen extends ScreenAdapter {
                 game.setScreen(new MainScreen(game));
             }
         });
+        playButton.setTransform(true);
+        playButton.setOrigin(playButton.getWidth()/2, playButton.getHeight()/2);
         playButton.addAction(Actions.forever(
             Actions.sequence(
-                Actions.scaleTo(1.4f, 1.4f, 0.5f),  
-                Actions.scaleTo(1.0f, 1.0f, 0.5f)   
+                Actions.scaleTo(1.2f, 1.2f, 0.5f),
+                Actions.scaleTo(1.0f, 1.0f, 0.5f)
             )
         ));
-           // @Override
-           // public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-           //     // When the mouse hovers over the button, apply a "breathing" animation
-           //     playButton.addAction(Actions.sequence(
-           //         Actions.scaleTo(1.4f, 1.4f, 0.5f),  // Scale up (breathe in)
-           //         Actions.scaleTo(1.0f, 1.0f, 0.5f)   // Scale back down (breathe out)
-           //     ));
-           // }
-
-//            @Override
-//            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-//                // Stop the animation when the mouse exits the button
-//                playButton.clearActions();  // Stop any scaling animations if hover is lost
-//                playButton.setScale(1.0f);  // Reset the button scale to normal
-//            }
-        // });
 
         // Add the buttons to the stage
         stage.addActor(playButton);
@@ -122,6 +108,7 @@ public class HomeScreen extends ScreenAdapter {
     public void render(float delta) {
 
         // Clear the screen
+        Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
