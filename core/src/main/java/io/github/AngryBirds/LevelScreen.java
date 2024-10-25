@@ -248,12 +248,11 @@ public class LevelScreen extends ScreenAdapter {
         Bird r1 = new Red(redTexture,0,0,100,100);
         Bird r2 = new Red(redTexture,60,0,100,100);
 
-//        Material floor1 = new Wood(floor,viewWidth*0.43f,viewHeight*0.17f + 250,300,30);
-        Material wall1 = new Wood(wall,viewWidth*0.5f,viewHeight*0.19f,50,250);
-        Material block1 = new Wood(block,viewWidth*0.43f,viewHeight*0.17f + 250,300,30);
+        Material floor1 = new Wood(floor,viewWidth*0.43f, 248,300,30);
+        Material wall1 = new Wood(wall,viewWidth*0.51f,0,50,250);
 
         materials.add(wall1);
-        materials.add(block1);
+        materials.add(floor1);
 
         birds.add(r1);
         birds.add(r2);
@@ -319,9 +318,11 @@ public class LevelScreen extends ScreenAdapter {
 
             game.batch.draw(slingShot.texture,slingShot.x,slingShot.y,slingShot.width,slingShot.height);
 
-            game.batch.draw(floor,viewWidth*0.43f,viewHeight*0.17f + 250,300,30);
-            game.batch.draw(pig,viewWidth*0.43f + 50,viewHeight*0.17f + 250 + 30,125,100);
-            game.batch.draw(wall,viewWidth*0.5f,viewHeight*0.19f,50,250);
+            for(Material material:materials){
+                game.batch.draw(material.texture,material.x,material.y,material.width,material.height);
+            }
+
+
 
             // Game is not paused, update game logic
             stage.act(delta);
