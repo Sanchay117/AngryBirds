@@ -42,6 +42,8 @@ public class LevelScreen extends ScreenAdapter {
 
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
+    private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
+    private final SlingShot slingShot = new SlingShot(slingShotTexture,100,viewHeight*0.22f,200,200);
 
     private Texture pig;
     private Texture wall;
@@ -55,7 +57,6 @@ public class LevelScreen extends ScreenAdapter {
         pig = new Texture("pig.png");
         wall = new Texture("wood_wall.png");
         floor = new Texture("wood.png");
-        slingshot = new Texture("slingShot.png");
     }
 
     public void createGameOverScreen(){
@@ -297,7 +298,8 @@ public class LevelScreen extends ScreenAdapter {
             for(Bird bird : birds){
                 game.batch.draw(bird.texture,bird.x,bird.y,bird.width,bird.height);
             }
-            game.batch.draw(slingshot,100,viewHeight*0.22f,150,200);
+
+            game.batch.draw(slingShot.texture,slingShot.x,slingShot.y,slingShot.width,slingShot.height);
 
             game.batch.draw(floor,viewWidth*0.43f,viewHeight*0.17f + 250,300,30);
             game.batch.draw(pig,viewWidth*0.43f + 50,viewHeight*0.17f + 250 + 30,125,100);
