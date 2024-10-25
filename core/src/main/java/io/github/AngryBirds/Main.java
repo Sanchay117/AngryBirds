@@ -31,7 +31,7 @@ public class Main extends Game {
         // bg music
         music = Gdx.audio.newMusic(Gdx.files.internal("finalMusic.mp3"));
         music.setLooping(true);
-        music.setVolume(0.5f);
+        music.setVolume(0.0f);
         music.play();
 
         // font

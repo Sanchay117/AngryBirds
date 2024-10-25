@@ -41,6 +41,8 @@ public class LevelScreen extends ScreenAdapter {
     private boolean isPaused;
     private boolean isGameOver;
 
+    private int score;
+
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
@@ -54,7 +56,7 @@ public class LevelScreen extends ScreenAdapter {
 
     public LevelScreen(Main game) {
         this.game = game;
-        game.background = new Texture("lvlBG.jpg");
+        game.background = new Texture("levelBG.jpg");
     }
 
     public void createGameOverScreen(){
@@ -214,7 +216,7 @@ public class LevelScreen extends ScreenAdapter {
         settingsButton.setPosition(viewWidth-200, viewHeight-100);
         settingsButton.setSize(80, 80);
 
-        gameOverBtn.setPosition(viewWidth-200,0);
+        gameOverBtn.setPosition(viewWidth-200,-50);
         gameOverBtn.setSize(200,200);
 
         // Add a ClickListener to toggle the pause state
@@ -248,7 +250,7 @@ public class LevelScreen extends ScreenAdapter {
         Material floor1 = new Wood(floor,viewWidth*0.43f, 248,300,30);
         Material wall1 = new Wood(wall,viewWidth*0.51f,0,50,250);
 
-        Pig p1 = new AveragePig(pigTexture,viewWidth*0.47f,276,130,130);
+        Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,276,130,130);
 
         materials.add(wall1);
         materials.add(floor1);
@@ -277,7 +279,7 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(pauseStage);
             }
 
-            game.background = new Texture("pauseBG.png");
+            game.background = new Texture("lvlBGblur.png");
 
             // Draw the pause screen
             pauseStage.act(delta);
@@ -293,14 +295,14 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(gameOverStage);
             }
 
-            game.background = new Texture("pauseBG.png");
+            game.background = new Texture("lvlBGblur.png");
 
             // Draw the pause screen
             gameOverStage.act(delta);
             gameOverStage.draw();
 
-            game.font.draw(game.batch,"Game",viewWidth*0.375f,viewHeight*0.68f);
-            game.font.draw(game.batch,"Over",viewWidth*0.415f,viewHeight*0.54f);
+            game.mediumFont.draw(game.batch,"Game Over",viewWidth*0.355f,viewHeight*0.68f);
+            game.mediumFont.draw(game.batch,"Score: 0",viewWidth*0.375f,viewHeight*0.52f);
 
         }else {
             // Game is not paused, update game logic
