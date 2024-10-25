@@ -62,26 +62,26 @@ public class LevelScreen extends ScreenAdapter {
         pauseBackground.setSize(viewWidth/2, viewHeight/2);  // Set the size of the pause screen
         pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
-        Texture play = new Texture("resume.png");
+        Texture forward = new Texture("forward.png");
         Texture back = new Texture("back1.png");
         Texture restart = new Texture("restart.png");
 
-        skin.add("play",play);
+        skin.add("play",forward);
         skin.add("back",back);
         skin.add("restart",restart);
 
-        ImageButton playBtn = new ImageButton(new ImageButton.ImageButtonStyle());
+        ImageButton nextBtn = new ImageButton(new ImageButton.ImageButtonStyle());
         ImageButton backBtn = new ImageButton(new ImageButton.ImageButtonStyle());
         ImageButton restartBtn = new ImageButton(new ImageButton.ImageButtonStyle());
-        playBtn.getStyle().imageUp = skin.getDrawable("play");
+        nextBtn.getStyle().imageUp = skin.getDrawable("play");
         backBtn.getStyle().imageUp = skin.getDrawable("back");
         restartBtn.getStyle().imageUp = skin.getDrawable("restart");
 
         backBtn.setSize(135, 135);
         backBtn.setPosition(viewWidth*0.33f, viewHeight*0.28f);
 
-        playBtn.setSize(160, 160);
-        playBtn.setPosition(viewWidth*0.55f, viewHeight*0.25f);
+        nextBtn.setSize(135, 135);
+        nextBtn.setPosition(viewWidth*0.57f, viewHeight*0.28f);
 
         restartBtn.setSize(135,135);
         restartBtn.setPosition(viewWidth*0.45f, viewHeight*0.28f);
@@ -93,10 +93,10 @@ public class LevelScreen extends ScreenAdapter {
             }
         });
 
-        playBtn.addListener(new ClickListener() {
+        nextBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                isPaused=!isPaused;
+                game.setScreen(new LevelScreen(game));
             }
         });
 
@@ -108,7 +108,7 @@ public class LevelScreen extends ScreenAdapter {
         });
 
         gameOverStage.addActor(pauseBackground);
-        gameOverStage.addActor(playBtn);
+        gameOverStage.addActor(nextBtn);
         gameOverStage.addActor(backBtn);
         gameOverStage.addActor(restartBtn);
     }
@@ -202,7 +202,7 @@ public class LevelScreen extends ScreenAdapter {
         settingsButton.setPosition(viewWidth-200, viewHeight-100);
         settingsButton.setSize(80, 80);
 
-        gameOverBtn.setPosition(viewWidth-200,viewHeight);
+        gameOverBtn.setPosition(viewWidth-200,0);
         gameOverBtn.setSize(200,200);
 
         // Add a ClickListener to toggle the pause state
@@ -224,6 +224,8 @@ public class LevelScreen extends ScreenAdapter {
         stage.addActor(pauseButton);
         stage.addActor(settingsButton);
         stage.addActor(gameOverBtn);
+
+        stage.draw();
 
         createPauseScreen();
         createGameOverScreen();
@@ -269,8 +271,8 @@ public class LevelScreen extends ScreenAdapter {
             gameOverStage.act(delta);
             gameOverStage.draw();
 
-            game.font.draw(game.batch,"Game",viewWidth*0.415f,viewHeight*0.68f);
-            game.font.draw(game.batch,"Over",viewWidth*0.375f,viewHeight*0.54f);
+            game.font.draw(game.batch,"Game",viewWidth*0.375f,viewHeight*0.68f);
+            game.font.draw(game.batch,"Over",viewWidth*0.415f,viewHeight*0.54f);
 
         }else {
             // Game is not paused, update game logic
