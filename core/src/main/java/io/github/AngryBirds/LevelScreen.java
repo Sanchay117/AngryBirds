@@ -7,6 +7,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -43,11 +44,11 @@ public class LevelScreen extends ScreenAdapter {
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
-    private final SlingShot slingShot = new SlingShot(slingShotTexture,100,viewHeight*0.22f,200,200);
+    private final SlingShot slingShot = new SlingShot(slingShotTexture,100,0,200,200);
+    private final Texture floor = new Texture("wood.png");
+    private final Texture wall = new Texture("wood_wall.png");
 
     private Texture pig;
-    private Texture wall;
-    private Texture floor;
     private Texture slingshot;
 
     public LevelScreen(Main game) {
@@ -55,8 +56,6 @@ public class LevelScreen extends ScreenAdapter {
         game.background = new Texture("lvlBG.jpg");
 
         pig = new Texture("pig.png");
-        wall = new Texture("wood_wall.png");
-        floor = new Texture("wood.png");
     }
 
     public void createGameOverScreen(){
@@ -186,6 +185,16 @@ public class LevelScreen extends ScreenAdapter {
         settingsTexture = new Texture("settings.png");
         Texture gameOver = new Texture("gameOver.png");
 
+        // Load the entire sprite sheet
+        Texture spriteSheet = new Texture(Gdx.files.internal("woods.png"));
+
+        // Split into blocks, assuming each block is 64x64 pixels
+        TextureRegion[][] blocks = TextureRegion.split(spriteSheet, 64, 64);
+
+        // Access specific blocks (e.g., blocks[0][1] for the second block in the first row)
+        TextureRegion block1 = blocks[0][0];
+        TextureRegion block2 = blocks[0][1];
+
         // Create an ImageButton from the texture
         Skin skin = new Skin();
         skin.add("pause", pauseTexture);
@@ -234,8 +243,8 @@ public class LevelScreen extends ScreenAdapter {
         createPauseScreen();
         createGameOverScreen();
 
-        Bird r1 = new Red(redTexture,0,viewHeight*0.22f,100,100);
-        Bird r2 = new Red(redTexture,60,viewHeight*0.22f,100,100);
+        Bird r1 = new Red(redTexture,0,0,100,100);
+        Bird r2 = new Red(redTexture,60,0,100,100);
 
         birds.add(r1);
         birds.add(r2);
@@ -293,7 +302,7 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(stage);
             }
 
-            game.background = new Texture("lvlBG.jpg");
+            game.background = new Texture("levelBG.jpg");
 
             for(Bird bird : birds){
                 game.batch.draw(bird.texture,bird.x,bird.y,bird.width,bird.height);
