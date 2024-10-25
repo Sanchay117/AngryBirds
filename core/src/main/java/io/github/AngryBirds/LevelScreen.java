@@ -55,13 +55,13 @@ public class LevelScreen extends ScreenAdapter {
 
     private void createPauseScreen() {
         Skin skin = new Skin();
-        Texture pauseBg = new Texture("bg.png");  // Your pause background image
+        Texture pauseBg = new Texture("pausepanel.png");  // Your pause background image
         Image pauseBackground = new Image(pauseBg);
         pauseBackground.setSize(viewWidth/2, viewHeight/2);  // Set the size of the pause screen
         pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
         Texture play = new Texture("resume.png");
-        Texture back = new Texture("back2.png");
+        Texture back = new Texture("back1.png");
         Texture restart = new Texture("restart.png");
 
         skin.add("play",play);
@@ -75,14 +75,14 @@ public class LevelScreen extends ScreenAdapter {
         backBtn.getStyle().imageUp = skin.getDrawable("back");
         restartBtn.getStyle().imageUp = skin.getDrawable("restart");
 
-        backBtn.setSize(150, 150);
-        backBtn.setPosition(viewWidth*0.35f, viewHeight*0.3f);
+        backBtn.setSize(135, 135);
+        backBtn.setPosition(viewWidth*0.33f, viewHeight*0.28f);
 
-        playBtn.setSize(150, 150);
-        playBtn.setPosition(viewWidth*0.55f, viewHeight*0.3f);
+        playBtn.setSize(160, 160);
+        playBtn.setPosition(viewWidth*0.55f, viewHeight*0.25f);
 
-        restartBtn.setSize(150,150);
-        restartBtn.setPosition(viewWidth*0.75f, viewHeight*0.3f);
+        restartBtn.setSize(135,135);
+        restartBtn.setPosition(viewWidth*0.45f, viewHeight*0.28f);
 
         backBtn.addListener(new ClickListener() {
            @Override
@@ -164,23 +164,22 @@ public class LevelScreen extends ScreenAdapter {
 
         game.batch.draw(game.background, 0, 0,viewWidth,viewHeight);
         game.smallFont.draw(game.batch,"Score: 0",viewWidth*0.425f,viewHeight-30);
-        game.batch.draw(red,0,viewHeight*0.22f,100,100);
-        game.batch.draw(red,60,viewHeight*0.22f,100,100);
-        game.batch.draw(slingshot,100,viewHeight*0.22f,100,200);
-
-        game.batch.draw(floor,500,viewHeight*0.22f,300,10);
-        game.batch.draw(pig,550,viewHeight*0.23f,100,100);
 
         if (isPaused) {
             if (Gdx.input.getInputProcessor() != pauseStage) {
                 Gdx.input.setInputProcessor(pauseStage);
             }
 
-            game.background = new Texture("pauseBg.png");
+            game.background = new Texture("pauseBG.png");
 
             // Draw the pause screen
             pauseStage.act(delta);
             pauseStage.draw();
+
+            game.font.draw(game.batch,"Game",viewWidth*0.415f,viewHeight*0.68f);
+            game.font.draw(game.batch,"Paused",viewWidth*0.375f,viewHeight*0.54f);
+
+
         } else {
             // Game is not paused, update game logic
             // Update game objects, handle input, etc.
@@ -191,6 +190,14 @@ public class LevelScreen extends ScreenAdapter {
             }
 
             game.background = new Texture("lvlBG.jpg");
+
+            game.batch.draw(red,0,viewHeight*0.22f,100,100);
+            game.batch.draw(red,60,viewHeight*0.22f,100,100);
+            game.batch.draw(slingshot,100,viewHeight*0.22f,150,200);
+
+            game.batch.draw(floor,viewWidth*0.43f,viewHeight*0.17f + 250,300,30);
+            game.batch.draw(pig,viewWidth*0.43f + 50,viewHeight*0.17f + 250 + 30,125,100);
+            game.batch.draw(wall,viewWidth*0.5f,viewHeight*0.19f,50,250);
 
             // Game is not paused, update game logic
             stage.act(delta);
