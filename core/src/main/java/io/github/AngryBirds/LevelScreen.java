@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.Color;
 
+import java.util.ArrayList;
+
 public class LevelScreen extends ScreenAdapter {
 
     private final Main game;
@@ -38,7 +40,9 @@ public class LevelScreen extends ScreenAdapter {
     private boolean isPaused;
     private boolean isGameOver;
 
-    private Texture red;
+    private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
+    private final ArrayList<Bird> birds = new ArrayList<>();
+
     private Texture pig;
     private Texture wall;
     private Texture floor;
@@ -48,7 +52,6 @@ public class LevelScreen extends ScreenAdapter {
         this.game = game;
         game.background = new Texture("lvlBG.jpg");
 
-        red = new Texture("red.png");
         pig = new Texture("pig.png");
         wall = new Texture("wood_wall.png");
         floor = new Texture("wood.png");
@@ -230,6 +233,12 @@ public class LevelScreen extends ScreenAdapter {
         createPauseScreen();
         createGameOverScreen();
 
+        Bird r1 = new Red(redTexture,0,viewHeight*0.22f,100,100);
+        Bird r2 = new Red(redTexture,60,viewHeight*0.22f,100,100);
+
+        birds.add(r1);
+        birds.add(r2);
+
         // Set the input processor to the stage
         Gdx.input.setInputProcessor(stage);
     }
@@ -285,8 +294,9 @@ public class LevelScreen extends ScreenAdapter {
 
             game.background = new Texture("lvlBG.jpg");
 
-            game.batch.draw(red,0,viewHeight*0.22f,100,100);
-            game.batch.draw(red,60,viewHeight*0.22f,100,100);
+            for(Bird bird : birds){
+                game.batch.draw(bird.texture,bird.x,bird.y,bird.width,bird.height);
+            }
             game.batch.draw(slingshot,100,viewHeight*0.22f,150,200);
 
             game.batch.draw(floor,viewWidth*0.43f,viewHeight*0.17f + 250,300,30);
