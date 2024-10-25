@@ -49,15 +49,12 @@ public class LevelScreen extends ScreenAdapter {
     private final Texture wall = new Texture("wall.png");
     private final Texture block = new Texture("wood_block.png");
     private final ArrayList<Material> materials = new ArrayList<>();
-
-    private Texture pig;
-    private Texture slingshot;
+    private final Texture pigTexture = new Texture("pig.png");
+    private final ArrayList<Pig> pigs = new ArrayList<>();
 
     public LevelScreen(Main game) {
         this.game = game;
         game.background = new Texture("lvlBG.jpg");
-
-        pig = new Texture("pig.png");
     }
 
     public void createGameOverScreen(){
@@ -251,11 +248,15 @@ public class LevelScreen extends ScreenAdapter {
         Material floor1 = new Wood(floor,viewWidth*0.43f, 248,300,30);
         Material wall1 = new Wood(wall,viewWidth*0.51f,0,50,250);
 
+        Pig p1 = new AveragePig(pigTexture,viewWidth*0.47f,276,130,130);
+
         materials.add(wall1);
         materials.add(floor1);
 
         birds.add(r1);
         birds.add(r2);
+
+        pigs.add(p1);
 
         // Set the input processor to the stage
         Gdx.input.setInputProcessor(stage);
@@ -322,7 +323,9 @@ public class LevelScreen extends ScreenAdapter {
                 game.batch.draw(material.texture,material.x,material.y,material.width,material.height);
             }
 
-
+            for(Pig pig : pigs){
+                game.batch.draw(pig.texture,pig.x,pig.y,pig.width,pig.height);
+            }
 
             // Game is not paused, update game logic
             stage.act(delta);
