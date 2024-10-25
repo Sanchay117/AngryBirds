@@ -45,8 +45,10 @@ public class LevelScreen extends ScreenAdapter {
     private final ArrayList<Bird> birds = new ArrayList<>();
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
     private final SlingShot slingShot = new SlingShot(slingShotTexture,100,0,200,200);
-    private final Texture floor = new Texture("wood.png");
-    private final Texture wall = new Texture("wood_wall.png");
+    private final Texture floor = new Texture("wood_line.png");
+    private final Texture wall = new Texture("wall.png");
+    private final Texture block = new Texture("wood_block.png");
+    private final ArrayList<Material> materials = new ArrayList<>();
 
     private Texture pig;
     private Texture slingshot;
@@ -185,15 +187,15 @@ public class LevelScreen extends ScreenAdapter {
         settingsTexture = new Texture("settings.png");
         Texture gameOver = new Texture("gameOver.png");
 
-        // Load the entire sprite sheet
-        Texture spriteSheet = new Texture(Gdx.files.internal("woods.png"));
-
-        // Split into blocks, assuming each block is 64x64 pixels
-        TextureRegion[][] blocks = TextureRegion.split(spriteSheet, 64, 64);
-
-        // Access specific blocks (e.g., blocks[0][1] for the second block in the first row)
-        TextureRegion block1 = blocks[0][0];
-        TextureRegion block2 = blocks[0][1];
+//        // Load the entire sprite sheet
+//        Texture spriteSheet = new Texture(Gdx.files.internal("woods.png"));
+//
+//        // Split into blocks, assuming each block is 64x64 pixels
+//        TextureRegion[][] blocks = TextureRegion.split(spriteSheet, 64, 64);
+//
+//        // Access specific blocks (e.g., blocks[0][1] for the second block in the first row)
+//        TextureRegion block1 = blocks[0][0];
+//        TextureRegion block2 = blocks[0][1];
 
         // Create an ImageButton from the texture
         Skin skin = new Skin();
@@ -245,6 +247,13 @@ public class LevelScreen extends ScreenAdapter {
 
         Bird r1 = new Red(redTexture,0,0,100,100);
         Bird r2 = new Red(redTexture,60,0,100,100);
+
+//        Material floor1 = new Wood(floor,viewWidth*0.43f,viewHeight*0.17f + 250,300,30);
+        Material wall1 = new Wood(wall,viewWidth*0.5f,viewHeight*0.19f,50,250);
+        Material block1 = new Wood(block,viewWidth*0.43f,viewHeight*0.17f + 250,300,30);
+
+        materials.add(wall1);
+        materials.add(block1);
 
         birds.add(r1);
         birds.add(r2);
