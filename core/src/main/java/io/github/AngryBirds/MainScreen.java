@@ -42,8 +42,6 @@ public class MainScreen extends ScreenAdapter {
     private ImageButton lvlBtn4;
     private ImageButton lvlBtn5;
 
-    private float x = 0.08f;
-
     public MainScreen(Main game) {
         this.game = game;
         game.background = new Texture("MainScreenBG.jpg");
@@ -55,7 +53,7 @@ public class MainScreen extends ScreenAdapter {
 
         backBtnTexture = new Texture("back.png");
         lvlBtnTexture = new Texture("lvlBG.png");
-        lockTexture = new Texture("lock.png");  
+        lockTexture = new Texture("lock.png");
 
         Skin skin = new Skin();
         skin.add("back", backBtnTexture);
@@ -158,10 +156,10 @@ public class MainScreen extends ScreenAdapter {
     }
     private void shakeButton(ImageButton button) {
         button.addAction(Actions.sequence(
-                Actions.moveBy(10, 0, 0.05f),  
-                Actions.moveBy(-20, 0, 0.05f), 
-                Actions.moveBy(20, 0, 0.05f),  
-                Actions.moveBy(-10, 0, 0.05f)  
+                Actions.moveBy(10, 0, 0.05f),
+                Actions.moveBy(-20, 0, 0.05f),
+                Actions.moveBy(20, 0, 0.05f),
+                Actions.moveBy(-10, 0, 0.05f)
         ));
     }
     private void drawCenteredText(BitmapFont font, String text, ImageButton button) {

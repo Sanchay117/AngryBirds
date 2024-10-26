@@ -29,8 +29,6 @@ public class HomeScreen extends ScreenAdapter {
     private final Main game;
     private int viewHeight = Gdx.graphics.getHeight();
     private int viewWidth = Gdx.graphics.getWidth();
-    private ShapeRenderer shapeRenderer;
-    private GlyphLayout layout;
 
     private Stage stage;
     private Texture playTexture;
