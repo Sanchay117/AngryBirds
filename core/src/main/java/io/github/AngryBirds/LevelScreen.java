@@ -66,7 +66,7 @@ public class LevelScreen extends ScreenAdapter {
         pauseBackground.setSize(viewWidth/2, viewHeight/2);  // Set the size of the pause screen
         pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
-        Texture forward = new Texture("forward.png");
+        Texture forward = new Texture("resume.png");
         Texture back = new Texture("back1.png");
         Texture restart = new Texture("restart.png");
 
