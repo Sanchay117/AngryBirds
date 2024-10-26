@@ -66,7 +66,7 @@ public class LevelScreen extends ScreenAdapter {
         pauseBackground.setSize(viewWidth/2, viewHeight/2);  // Set the size of the pause screen
         pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
-        Texture forward = new Texture("resume.png");
+        Texture forward = new Texture("forward.png");
         Texture back = new Texture("back1.png");
         Texture restart = new Texture("restart.png");
 
@@ -119,9 +119,9 @@ public class LevelScreen extends ScreenAdapter {
 
     private void createPauseScreen() {
         Skin skin = new Skin();
-        Texture pauseBg = new Texture("pausepanel.png");  // Your pause background image
+        Texture pauseBg = new Texture("pausepanel.png");  
         Image pauseBackground = new Image(pauseBg);
-        pauseBackground.setSize(viewWidth/2, viewHeight/2);  // Set the size of the pause screen
+        pauseBackground.setSize(viewWidth/2, viewHeight/2);  
         pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
         Texture play = new Texture("resume.png");
@@ -140,13 +140,13 @@ public class LevelScreen extends ScreenAdapter {
         restartBtn.getStyle().imageUp = skin.getDrawable("restart");
 
         backBtn.setSize(135, 135);
-        backBtn.setPosition(viewWidth*0.33f, viewHeight*0.28f);
+        backBtn.setPosition(viewWidth*0.33f, viewHeight*0.25f);
 
         playBtn.setSize(135, 135);
-        playBtn.setPosition(viewWidth*0.57f, viewHeight*0.28f);
+        playBtn.setPosition(viewWidth*0.57f, viewHeight*0.25f);
 
         restartBtn.setSize(135,135);
-        restartBtn.setPosition(viewWidth*0.45f, viewHeight*0.28f);
+        restartBtn.setPosition(viewWidth*0.45f, viewHeight*0.25f);
 
         backBtn.addListener(new ClickListener() {
            @Override
@@ -209,24 +209,28 @@ public class LevelScreen extends ScreenAdapter {
         settingsButton.getStyle().imageUp = skin.getDrawable("settings");
         gameOverBtn.getStyle().imageUp = skin.getDrawable("gameOver");
 
-        // Set the button's position and size
         pauseButton.setPosition(viewWidth - 100, viewHeight - 100);
-        pauseButton.setSize(80, 80);
+        pauseButton.setSize(90, 90);
 
-        settingsButton.setPosition(viewWidth-200, viewHeight-100);
-        settingsButton.setSize(80, 80);
+        settingsButton.setPosition(10, viewHeight - 100);
+        settingsButton.setSize(90, 90);
 
         gameOverBtn.setPosition(viewWidth-200,-50);
         gameOverBtn.setSize(200,200);
 
-        // Add a ClickListener to toggle the pause state
+
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                isPaused = !isPaused;  // Toggle pause state
+                isPaused = !isPaused;
             }
         });
-
+        settingsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SettingsScreen(game));
+            }
+        });
         gameOverBtn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -234,7 +238,6 @@ public class LevelScreen extends ScreenAdapter {
             }
         });
 
-        // Add the buttons to the stage
         stage.addActor(pauseButton);
         stage.addActor(settingsButton);
         stage.addActor(gameOverBtn);
@@ -260,13 +263,11 @@ public class LevelScreen extends ScreenAdapter {
 
         pigs.add(p1);
 
-        // Set the input processor to the stage
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
-        // Clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
@@ -281,12 +282,11 @@ public class LevelScreen extends ScreenAdapter {
 
             game.background = new Texture("lvlBGblur.png");
 
-            // Draw the pause screen
             pauseStage.act(delta);
             pauseStage.draw();
 
-            game.font.draw(game.batch,"Game",viewWidth*0.415f,viewHeight*0.68f);
-            game.font.draw(game.batch,"Paused",viewWidth*0.375f,viewHeight*0.54f);
+            game.font.draw(game.batch,"Game",viewWidth*0.4f,viewHeight*0.7f);
+            game.font.draw(game.batch,"Paused",viewWidth*0.35f,viewHeight*0.6f);
 
 
         }else if(isGameOver){
@@ -297,7 +297,6 @@ public class LevelScreen extends ScreenAdapter {
 
             game.background = new Texture("lvlBGblur.png");
 
-            // Draw the pause screen
             gameOverStage.act(delta);
             gameOverStage.draw();
 
@@ -305,10 +304,6 @@ public class LevelScreen extends ScreenAdapter {
             game.mediumFont.draw(game.batch,"Score: 0",viewWidth*0.375f,viewHeight*0.52f);
 
         }else {
-            // Game is not paused, update game logic
-            // Update game objects, handle input, etc.
-
-            // Switch input processor back to game stage when not paused
             if (Gdx.input.getInputProcessor() != stage) {
                 Gdx.input.setInputProcessor(stage);
             }
@@ -329,7 +324,6 @@ public class LevelScreen extends ScreenAdapter {
                 game.batch.draw(pig.texture,pig.x,pig.y,pig.width,pig.height);
             }
 
-            // Game is not paused, update game logic
             stage.act(delta);
             stage.draw();
         }
