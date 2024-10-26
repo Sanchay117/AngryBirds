@@ -2,7 +2,7 @@
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
-This project was generated with a template including simple application launchers and an empty `ApplicationListener` implementation.
+This is our project for the Advanced Programming Course.
 
 ## Platforms
 
@@ -31,3 +31,15 @@ Useful Gradle tasks and flags:
 
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
+
+## Running The Game
+
+To run this project first pull this repo and then navigate to the project folder and then type the following command 
+in your terminal.<br>
+`./gradlew lwjgl3:run`
+
+### Credits
+
+Sanchay Singh: 2023478<br>
+Abhinav Kashyap: 2023022
+
