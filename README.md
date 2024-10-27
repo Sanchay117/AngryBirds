@@ -37,7 +37,10 @@ LibGDX Docs<br/>
 Canva
 
 ## UML
-You can see the UML in the file named UML_2.pdf
+You can see the updated UML in the file named UML_2.pdf
+
+## Use Case Diagram
+You can see the updated use case diagram in the file named UseCase2.pdf
 
 ## Running The Game
 
