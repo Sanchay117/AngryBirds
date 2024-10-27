@@ -41,6 +41,14 @@ public class MainScreen extends ScreenAdapter {
     private ImageButton lvlBtn3;
     private ImageButton lvlBtn4;
     private ImageButton lvlBtn5;
+    private Image bird;
+    private Image bubble;
+    private Texture birdTexture;
+    private Texture bubbleTexture;
+    private float birdWidth;
+    private float birdHeight;
+    private float bubbleWidth;
+    private float bubbleHeight;
 
     public MainScreen(Main game) {
         this.game = game;
@@ -54,10 +62,27 @@ public class MainScreen extends ScreenAdapter {
         backBtnTexture = new Texture("back.png");
         lvlBtnTexture = new Texture("lvlBGwood.png");
         lockTexture = new Texture("lock.png");
+        birdTexture = new Texture("bird.png");
+        bubbleTexture = new Texture("bubble.png");
 
         Skin skin = new Skin();
         skin.add("back", backBtnTexture);
         skin.add("lvl", lvlBtnTexture);
+        bird = new Image(birdTexture);
+        birdWidth = 200;
+        birdHeight = 200;
+        bird.setSize(birdWidth, birdHeight);
+        bird.setPosition(viewWidth - birdWidth - 50, 20);
+        bubble = new Image(bubbleTexture);
+        bubbleWidth = 350;
+        bubbleHeight = 250;
+        bubble.setSize(bubbleWidth, bubbleHeight);
+        bubble.setPosition(bird.getX() - bubbleWidth * 0.8f+40, bird.getY() + birdHeight -90);
+
+        bubble.addAction(Actions.forever(Actions.sequence(
+                Actions.scaleTo(1.05f, 1.05f, 1.0f),
+                Actions.scaleTo(1.0f, 1.0f, 1.0f)
+        )));
 
         ImageButton.ImageButtonStyle playStyle = new ImageButton.ImageButtonStyle();
         ImageButton.ImageButtonStyle lvlStyle = new ImageButton.ImageButtonStyle();
@@ -126,6 +151,8 @@ public class MainScreen extends ScreenAdapter {
         stage.addActor(lvlBtn3);
         stage.addActor(lvlBtn4);
         stage.addActor(lvlBtn5);
+        stage.addActor(bird);
+        stage.addActor(bubble);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -174,11 +201,13 @@ public class MainScreen extends ScreenAdapter {
     }
 
     private void drawLockOverlay(ImageButton button) {
-        float lockSize = 200;
-        float lockX = button.getX() + (button.getWidth() - lockSize) / 2;
-        float lockY = button.getY() + (button.getHeight() - lockSize) / 2-50;
-        game.batch.draw(lockTexture, lockX, lockY, lockSize, lockSize);
+        float lockSize = 125;
+        float lockX = button.getX() + 10;
+        float lockY = button.getY() + button.getHeight() - lockSize - 10;
+
+        game.batch.draw(lockTexture, lockX, lockY-70, lockSize, lockSize);
     }
+
 
     @Override
     public void resize(int width, int height) {
