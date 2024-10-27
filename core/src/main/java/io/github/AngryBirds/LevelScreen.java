@@ -46,7 +46,7 @@ public class LevelScreen extends ScreenAdapter {
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
-    private final SlingShot slingShot = new SlingShot(slingShotTexture,100,0,200,200);
+    private final SlingShot slingShot = new SlingShot(slingShotTexture,100,128,200,200);
     private final Texture floor = new Texture("wood_line.png");
     private final Texture wall = new Texture("wall.png");
     private final Texture block = new Texture("wood_block.png");
@@ -56,14 +56,14 @@ public class LevelScreen extends ScreenAdapter {
 
     public LevelScreen(Main game) {
         this.game = game;
-        game.background = new Texture("levelBG.jpg");
+        game.background = new Texture("lvlBG.png");
     }
 
     public void createGameOverScreen(){
         Skin skin = new Skin();
-        Texture pauseBg = new Texture("pausepanel.png"); 
+        Texture pauseBg = new Texture("pausepanel.png");
         Image pauseBackground = new Image(pauseBg);
-        pauseBackground.setSize(viewWidth/2, viewHeight/2);  
+        pauseBackground.setSize(viewWidth/2, viewHeight/2);
         pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
         Texture forward = new Texture("forward.png");
@@ -96,7 +96,7 @@ public class LevelScreen extends ScreenAdapter {
                 game.setScreen(new MainScreen(game));
             }
         });
-        
+
         nextBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -119,9 +119,9 @@ public class LevelScreen extends ScreenAdapter {
 
     private void createPauseScreen() {
         Skin skin = new Skin();
-        Texture pauseBg = new Texture("pausepanel.png");  
+        Texture pauseBg = new Texture("pausepanel.png");
         Image pauseBackground = new Image(pauseBg);
-        pauseBackground.setSize(viewWidth/2, viewHeight/2);  
+        pauseBackground.setSize(viewWidth/2, viewHeight/2);
         pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
         Texture play = new Texture("resume.png");
@@ -247,13 +247,13 @@ public class LevelScreen extends ScreenAdapter {
         createPauseScreen();
         createGameOverScreen();
 
-        Bird r1 = new Red(redTexture,0,0,100,100);
-        Bird r2 = new Red(redTexture,60,0,100,100);
+        Bird r1 = new Red(redTexture,0,128,100,100);
+        Bird r2 = new Red(redTexture,60,128,100,100);
 
-        Material floor1 = new Wood(floor,viewWidth*0.43f, 248,300,30);
-        Material wall1 = new Wood(wall,viewWidth*0.51f,0,50,250);
+        Material floor1 = new Wood(floor,viewWidth*0.43f, 128+248,300,30);
+        Material wall1 = new Wood(wall,viewWidth*0.51f,128+0,50,250);
 
-        Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,276,130,130);
+        Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128+276,130,130);
 
         materials.add(wall1);
         materials.add(floor1);
@@ -308,7 +308,7 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(stage);
             }
 
-            game.background = new Texture("levelBG.jpg");
+            game.background = new Texture("lvlBG.png");
 
             for(Bird bird : birds){
                 game.batch.draw(bird.texture,bird.x,bird.y,bird.width,bird.height);
