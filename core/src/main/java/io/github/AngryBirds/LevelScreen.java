@@ -79,11 +79,11 @@ public class LevelScreen extends ScreenAdapter {
         ImageButton nextlvlBtn = new ImageButton(new ImageButton.ImageButtonStyle());
         ImageButton menuBtn = new ImageButton(new ImageButton.ImageButtonStyle());
         ImageButton restartlvlBtn = new ImageButton(new ImageButton.ImageButtonStyle());
-        nextBtn.getStyle().imageUp = skin.getDrawable("play");
-        backBtn.getStyle().imageUp = skin.getDrawable("back");
-        restartBtn.getStyle().imageUp = skin.getDrawable("restart");
-        
-        
+        nextlvlBtn.getStyle().imageUp = skin.getDrawable("next");
+        menuBtn.getStyle().imageUp = skin.getDrawable("menu");
+        restartlvlBtn.getStyle().imageUp = skin.getDrawable("restart");
+
+
         menuBtn.setSize(135, 135);
         menuBtn.setPosition(viewWidth*0.33f, viewHeight*0.28f);
 
@@ -284,7 +284,7 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(pauseStage);
             }
 
-            game.background = new Texture("lvlBGblur.png");
+            game.background = new Texture("settingsBackground.png");
 
             pauseStage.act(delta);
             pauseStage.draw();
@@ -299,7 +299,7 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(gameOverStage);
             }
 
-            game.background = new Texture("lvlBGblur.png");
+            game.background = new Texture("settingsBackground.png");
 
             gameOverStage.act(delta);
             gameOverStage.draw();
