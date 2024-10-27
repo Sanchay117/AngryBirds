@@ -65,10 +65,10 @@ public class HomeScreen extends ScreenAdapter {
         quitButton = new ImageButton(quitStyle); // Create the button with style
 
         // Set the button's position and size
-        playButton.setPosition(viewWidth - 300, 0);
+        playButton.setPosition(viewWidth - 300, -75);
         playButton.setSize(300, 300);
 
-        quitButton.setPosition(0, 0);
+        quitButton.setPosition(0, -75);
         quitButton.setSize(300, 300);
 
         // Add ClickListener
