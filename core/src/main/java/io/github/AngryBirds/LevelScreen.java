@@ -38,6 +38,7 @@ public class LevelScreen extends ScreenAdapter {
     private ImageButton pauseButton;
     private Texture settingsTexture;
     private ImageButton settingsButton;
+    private Texture progressBarTexture;
     private boolean isPaused;
     private boolean isGameOver;
 
@@ -57,6 +58,7 @@ public class LevelScreen extends ScreenAdapter {
     public LevelScreen(Main game) {
         this.game = game;
         game.background = new Texture("lvlBG.png");
+        progressBarTexture = new Texture("bar.png");
     }
 
     public void createGameOverScreen(){
@@ -275,6 +277,7 @@ public class LevelScreen extends ScreenAdapter {
 
         game.batch.draw(game.background, 0, 0,viewWidth,viewHeight);
         game.smallFont.draw(game.batch,"Score: 0",viewWidth*0.425f,viewHeight-30);
+        game.batch.draw(progressBarTexture, viewWidth * 0.4f, viewHeight - 150, 300, 60);
 
         if (isPaused) {
             if (Gdx.input.getInputProcessor() != pauseStage) {
