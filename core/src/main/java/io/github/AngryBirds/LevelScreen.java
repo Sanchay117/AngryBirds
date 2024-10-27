@@ -226,9 +226,9 @@ public class LevelScreen extends ScreenAdapter {
         tutorialToggle = new ImageButton(new ImageButton.ImageButtonStyle());
         tutorialToggle.getStyle().imageUp = tutorialSkin.getDrawable("on");
 
-        tutorialToggle.setPosition(viewWidth / 2 - 40, viewHeight * 0.55f);  // Centered above Game Over
+        tutorialToggle.setPosition(0, -50);  // Centered above Game Over
         // Position above GameOver button
-        tutorialToggle.setSize(90, 90);
+        tutorialToggle.setSize(190, 190);
 
         tutorialToggle.addListener(new ClickListener() {
             @Override
@@ -247,8 +247,8 @@ public class LevelScreen extends ScreenAdapter {
         skin.add("gameOver", gameOver);
 
         handImage = new Image(handTexture);
-        handImage.setPosition(handStartX, handStartY);
-        handImage.setSize(50, 50);
+        handImage.setPosition(handStartX+70, handStartY);
+        handImage.setSize(80, 80);
         handImage.setVisible(isTutorialEnabled);
 
         pauseButton = new ImageButton(new ImageButton.ImageButtonStyle());
