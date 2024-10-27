@@ -70,7 +70,7 @@ public class SettingsScreen extends ScreenAdapter {
         // Set boardWidth to be wider than boardHeight
         boardHeight = Math.min(viewWidth, viewHeight) * 0.9f;  // Height of the board
         boardWidth = boardHeight * 1.2f;  // Width of the board (20% wider than height)
-        float buttonSpacing = 0.15f * boardHeight;
+        float buttonSpacing = 0.17f * boardHeight;
         float boardX = (viewWidth - boardWidth) / 2;
         float boardY = (viewHeight - boardHeight) / 2;
 
@@ -79,8 +79,8 @@ public class SettingsScreen extends ScreenAdapter {
         crossStyle.imageUp = new TextureRegionDrawable(new TextureRegion(crossBtnTexture));
         crossBtn = new ImageButton(crossStyle);
         crossBtn.setSize(110, 110);
-        crossBtn.setPosition(boardX + boardWidth - crossBtn.getWidth() - 10,
-            boardY + boardHeight - crossBtn.getHeight() - 10);
+        crossBtn.setPosition(boardX + boardWidth - crossBtn.getWidth() - 75,
+            boardY + boardHeight - crossBtn.getHeight() - 30);
 
 
         // Click listener to go back to GameScreen
