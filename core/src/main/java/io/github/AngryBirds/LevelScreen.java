@@ -56,7 +56,7 @@ public class LevelScreen extends ScreenAdapter {
     private float handEndX = 180, handEndY = 265;     // Slingshot's tip position
 
     private float handAnimationTime = 0;
-    private float handAnimationDuration = 2.0f;  // Duration of one movement (seconds)
+    private float handAnimationDuration = 1.5f;  // Duration of one movement (seconds)
     private boolean handVisible = true;  // Track visibility of the hand
 
 
