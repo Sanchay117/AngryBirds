@@ -52,7 +52,7 @@ public class MainScreen extends ScreenAdapter {
         stage = new Stage();
 
         backBtnTexture = new Texture("back.png");
-        lvlBtnTexture = new Texture("lvlBG.png");
+        lvlBtnTexture = new Texture("lvlBGwood.png");
         lockTexture = new Texture("lock.png");
 
         Skin skin = new Skin();
