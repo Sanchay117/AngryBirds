@@ -140,13 +140,13 @@ public class LevelScreen extends ScreenAdapter {
         restartBtn.getStyle().imageUp = skin.getDrawable("restart");
 
         backBtn.setSize(135, 135);
-        backBtn.setPosition(viewWidth*0.33f, viewHeight*0.25f);
+        backBtn.setPosition(viewWidth*0.33f, viewHeight*0.27f);
 
         playBtn.setSize(135, 135);
-        playBtn.setPosition(viewWidth*0.57f, viewHeight*0.25f);
+        playBtn.setPosition(viewWidth*0.57f, viewHeight*0.27f);
 
         restartBtn.setSize(135,135);
-        restartBtn.setPosition(viewWidth*0.45f, viewHeight*0.25f);
+        restartBtn.setPosition(viewWidth*0.45f, viewHeight*0.27f);
 
         backBtn.addListener(new ClickListener() {
            @Override
@@ -285,8 +285,8 @@ public class LevelScreen extends ScreenAdapter {
             pauseStage.act(delta);
             pauseStage.draw();
 
-            game.font.draw(game.batch,"Game",viewWidth*0.4f,viewHeight*0.7f);
-            game.font.draw(game.batch,"Paused",viewWidth*0.35f,viewHeight*0.6f);
+            game.font.draw(game.batch,"Game",viewWidth*0.415f,viewHeight*0.68f);
+            game.font.draw(game.batch,"Paused",viewWidth*0.375f,viewHeight*0.54f);
 
 
         }else if(isGameOver){
