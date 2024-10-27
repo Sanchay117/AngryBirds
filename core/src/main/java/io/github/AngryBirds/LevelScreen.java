@@ -61,9 +61,9 @@ public class LevelScreen extends ScreenAdapter {
 
     public void createGameOverScreen(){
         Skin skin = new Skin();
-        Texture pauseBg = new Texture("pausepanel.png");  // Your pause background image
+        Texture pauseBg = new Texture("pausepanel.png"); 
         Image pauseBackground = new Image(pauseBg);
-        pauseBackground.setSize(viewWidth/2, viewHeight/2);  // Set the size of the pause screen
+        pauseBackground.setSize(viewWidth/2, viewHeight/2);  
         pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
         Texture forward = new Texture("forward.png");
@@ -96,7 +96,7 @@ public class LevelScreen extends ScreenAdapter {
                 game.setScreen(new MainScreen(game));
             }
         });
-
+        
         nextBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
