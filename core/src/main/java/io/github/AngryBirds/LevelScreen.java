@@ -44,6 +44,22 @@ public class LevelScreen extends ScreenAdapter {
 
     private int score;
 
+    private boolean isTutorialEnabled = true;
+    private ImageButton tutorialToggle;
+    private Texture tutorialOnTexture = new Texture("tutOn.png");
+    private Texture tutorialOffTexture = new Texture("tutOff.png");
+    private Texture handTexture = new Texture("hand.png");
+    private Image handImage;
+
+    private float handX, handY;
+    private float handStartX = 90, handStartY = 128;  // Bird's position
+    private float handEndX = 180, handEndY = 265;     // Slingshot's tip position
+
+    private float handAnimationTime = 0;
+    private float handAnimationDuration = 2.0f;  // Duration of one movement (seconds)
+    private boolean handVisible = true;  // Track visibility of the hand
+
+
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
@@ -142,13 +158,13 @@ public class LevelScreen extends ScreenAdapter {
         backBtn.getStyle().imageUp = skin.getDrawable("back");
         restartBtn.getStyle().imageUp = skin.getDrawable("restart");
 
-        backBtn.setSize(135, 135);
+        backBtn.setSize(125, 125);
         backBtn.setPosition(viewWidth*0.33f, viewHeight*0.27f);
 
-        playBtn.setSize(135, 135);
+        playBtn.setSize(125, 125);
         playBtn.setPosition(viewWidth*0.57f, viewHeight*0.27f);
 
-        restartBtn.setSize(135,135);
+        restartBtn.setSize(125,125);
         restartBtn.setPosition(viewWidth*0.45f, viewHeight*0.27f);
 
         backBtn.addListener(new ClickListener() {
@@ -184,6 +200,11 @@ public class LevelScreen extends ScreenAdapter {
         pauseStage = new Stage();
         gameOverStage = new Stage();
 
+        handImage = new Image(handTexture);
+        handImage.setSize(180, 250);  // Adjust hand size as needed
+        handX = handStartX;
+        handY = handStartY;
+
         // Load the button textures
         pauseTexture = new Texture("pause.png");
         settingsTexture = new Texture("settings.png");
@@ -199,11 +220,37 @@ public class LevelScreen extends ScreenAdapter {
 //        TextureRegion block1 = blocks[0][0];
 //        TextureRegion block2 = blocks[0][1];
 
-        // Create an ImageButton from the texture
+        Skin tutorialSkin = new Skin();
+        tutorialSkin.add("on", tutorialOnTexture);
+        tutorialSkin.add("off", tutorialOffTexture);
+
+        tutorialToggle = new ImageButton(new ImageButton.ImageButtonStyle());
+        tutorialToggle.getStyle().imageUp = tutorialSkin.getDrawable("on");
+
+        tutorialToggle.setPosition(viewWidth / 2 - 40, viewHeight * 0.55f);  // Centered above Game Over
+        // Position above GameOver button
+        tutorialToggle.setSize(90, 90);
+
+        tutorialToggle.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isTutorialEnabled = !isTutorialEnabled;
+                tutorialToggle.getStyle().imageUp = isTutorialEnabled ?
+                        tutorialSkin.getDrawable("on") : tutorialSkin.getDrawable("off");
+                handImage.setVisible(isTutorialEnabled);
+            }
+        });
+
+
         Skin skin = new Skin();
         skin.add("pause", pauseTexture);
         skin.add("settings", settingsTexture);
         skin.add("gameOver", gameOver);
+
+        handImage = new Image(handTexture);
+        handImage.setPosition(handStartX, handStartY);
+        handImage.setSize(50, 50);
+        handImage.setVisible(isTutorialEnabled);
 
         pauseButton = new ImageButton(new ImageButton.ImageButtonStyle());
         settingsButton = new ImageButton(new ImageButton.ImageButtonStyle());
@@ -244,6 +291,8 @@ public class LevelScreen extends ScreenAdapter {
         stage.addActor(pauseButton);
         stage.addActor(settingsButton);
         stage.addActor(gameOverBtn);
+        stage.addActor(tutorialToggle);
+        stage.addActor(handImage);
 
         stage.draw();
 
@@ -271,8 +320,11 @@ public class LevelScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        if (isTutorialEnabled) {
+            updateHandAnimation(delta);
+        }
         game.batch.begin();
 
         game.batch.draw(game.background, 0, 0,viewWidth,viewHeight);
@@ -327,13 +379,33 @@ public class LevelScreen extends ScreenAdapter {
             for(Pig pig : pigs){
                 game.batch.draw(pig.texture,pig.x,pig.y,pig.width,pig.height);
             }
-
+            handImage.setPosition(handX, handY);
+            handImage.draw(game.batch, 1);
             stage.act(delta);
             stage.draw();
         }
 
         game.batch.end();
     }
+    private void updateHandAnimation(float delta) {
+        handAnimationTime += delta;
+        float animationProgress = handAnimationTime / handAnimationDuration;
+
+        if (animationProgress <= 1.0f) {
+            handX = handStartX + (handEndX - handStartX) * animationProgress;
+            handY = handStartY + (handEndY - handStartY) * animationProgress;
+        } else {
+            handVisible = false;
+
+            if (handAnimationTime >= handAnimationDuration + 1.0f) {
+                handAnimationTime = 0;
+                handX = handStartX;
+                handY = handStartY;
+                handVisible = true;
+            }
+        }
+    }
+
 
     @Override
     public void resize(int width, int height) {
