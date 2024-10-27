@@ -152,10 +152,10 @@ public class LevelScreen extends ScreenAdapter {
         restartBtn.setPosition(viewWidth*0.45f, viewHeight*0.27f);
 
         backBtn.addListener(new ClickListener() {
-           @Override
-           public void clicked(InputEvent event, float x, float y) {
-               game.setScreen(new MainScreen(game));
-           }
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainScreen(game));
+            }
         });
 
         playBtn.addListener(new ClickListener() {
