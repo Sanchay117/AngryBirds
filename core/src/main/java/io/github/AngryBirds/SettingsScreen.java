@@ -93,17 +93,17 @@ public class SettingsScreen extends ScreenAdapter {
 
         // Define button size and spacing for layout consistency
         float buttonSize = 120f;
-        float leftColumnX = boardX + 0.2f * boardWidth;
-        float rightColumnX = boardX + 0.6f * boardWidth;
+        float leftColumnX = boardX + 0.25f * boardWidth;
+        float rightColumnX = boardX + 0.525f * boardWidth;
         float secbuttonSize = 270f;
         // Buttons on the left (sound and music)
-        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.6f * boardHeight, buttonSize);
-        musicBtn = createButton(musicTexture, leftColumnX, boardY + 0.6f * boardHeight - buttonSpacing, buttonSize);
+        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight, buttonSize);
+        musicBtn = createButton(musicTexture, leftColumnX, boardY + 0.475f * boardHeight - buttonSpacing, buttonSize);
 
         // Buttons on the right (language, credits, terms & privacy)
-        languageBtn = createButton(languageTexture, rightColumnX, boardY + 0.6f * boardHeight, secbuttonSize);
-        creditsBtn = createButton(creditsTexture, rightColumnX, boardY + 0.6f * boardHeight - buttonSpacing, secbuttonSize);
-        termsPrivacyBtn = createButton(termsPrivacyTexture, rightColumnX, boardY + 0.6f * boardHeight - 2 * buttonSpacing, secbuttonSize);
+        languageBtn = createButton(languageTexture, rightColumnX, boardY + 0.45f * boardHeight, secbuttonSize);
+        creditsBtn = createButton(creditsTexture, rightColumnX, boardY + 0.45f * boardHeight - buttonSpacing, secbuttonSize);
+        termsPrivacyBtn = createButton(termsPrivacyTexture, rightColumnX, boardY + 0.45f * boardHeight - 2 * buttonSpacing, secbuttonSize);
 
         // Add actors to the stage
         stage.addActor(crossBtn);
