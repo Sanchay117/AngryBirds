@@ -52,12 +52,12 @@ public class LevelScreen extends ScreenAdapter {
     private Image handImage;
 
     private float handX, handY;
-    private float handStartX = 90, handStartY = 128;  // Bird's position
-    private float handEndX = 180, handEndY = 265;     // Slingshot's tip position
+    private float handStartX = 90, handStartY = 128;
+    private float handEndX = 180, handEndY = 265;
 
     private float handAnimationTime = 0;
-    private float handAnimationDuration = 1.5f;  // Duration of one movement (seconds)
-    private boolean handVisible = true;  // Track visibility of the hand
+    private float handAnimationDuration = 2.0f;
+    private boolean handVisible = true;
 
 
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
@@ -201,11 +201,10 @@ public class LevelScreen extends ScreenAdapter {
         gameOverStage = new Stage();
 
         handImage = new Image(handTexture);
-        handImage.setSize(180, 250);  // Adjust hand size as needed
+        handImage.setSize(300, 400);
         handX = handStartX;
         handY = handStartY;
 
-        // Load the button textures
         pauseTexture = new Texture("pause.png");
         settingsTexture = new Texture("settings.png");
         Texture gameOver = new Texture("gameOver.png");
