@@ -209,16 +209,6 @@ public class LevelScreen extends ScreenAdapter {
         settingsTexture = new Texture("settings.png");
         Texture gameOver = new Texture("gameOver.png");
 
-//        // Load the entire sprite sheet
-//        Texture spriteSheet = new Texture(Gdx.files.internal("woods.png"));
-//
-//        // Split into blocks, assuming each block is 64x64 pixels
-//        TextureRegion[][] blocks = TextureRegion.split(spriteSheet, 64, 64);
-//
-//        // Access specific blocks (e.g., blocks[0][1] for the second block in the first row)
-//        TextureRegion block1 = blocks[0][0];
-//        TextureRegion block2 = blocks[0][1];
-
         Skin tutorialSkin = new Skin();
         tutorialSkin.add("on", tutorialOnTexture);
         tutorialSkin.add("off", tutorialOffTexture);

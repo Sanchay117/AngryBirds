@@ -37,8 +37,8 @@ public class Main extends Game {
         // font
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("angrybirds-regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 130;  // Set the font size
-        font = generator.generateFont(parameter); // Generate the BitmapFont
+        parameter.size = 130;
+        font = generator.generateFont(parameter);
 
         parameter.size = 60;
         smallFont = generator.generateFont(parameter);
@@ -46,7 +46,7 @@ public class Main extends Game {
         parameter.size = 105;
         mediumFont = generator.generateFont(parameter);
 
-        generator.dispose(); // Don't forget to dispose of the generator after use
+        generator.dispose();
         shapeRenderer = new ShapeRenderer();
         setScreen(new HomeScreen(this));
     }

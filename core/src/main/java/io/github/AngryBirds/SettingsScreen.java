@@ -35,7 +35,6 @@ public class SettingsScreen extends ScreenAdapter {
     private ImageButton creditsBtn;
     private ImageButton termsPrivacyBtn;
 
-    // Declare boardWidth and boardHeight at the class level
     private float boardWidth;
     private float boardHeight;
 
@@ -50,7 +49,6 @@ public class SettingsScreen extends ScreenAdapter {
     public void show() {
         stage = new Stage();
 
-        // Load textures for cross button and other icons
         crossBtnTexture = new Texture("cross.png");
         soundTexture = new Texture("sound.png");
         musicTexture = new Texture("music.png");
@@ -58,7 +56,6 @@ public class SettingsScreen extends ScreenAdapter {
         creditsTexture = new Texture("credits.png");
         termsPrivacyTexture = new Texture("TnC.png");
 
-        // Skin setup for assets
         Skin skin = new Skin();
         skin.add("cross", crossBtnTexture);
         skin.add("sound", soundTexture);
@@ -67,14 +64,12 @@ public class SettingsScreen extends ScreenAdapter {
         skin.add("credits", creditsTexture);
         skin.add("termsPrivacy", termsPrivacyTexture);
 
-        // Set boardWidth to be wider than boardHeight
-        boardHeight = Math.min(viewWidth, viewHeight) * 0.9f;  // Height of the board
-        boardWidth = boardHeight * 1.2f;  // Width of the board (20% wider than height)
+        boardHeight = Math.min(viewWidth, viewHeight) * 0.9f;
+        boardWidth = boardHeight * 1.2f;
         float buttonSpacing = 0.17f * boardHeight;
         float boardX = (viewWidth - boardWidth) / 2;
         float boardY = (viewHeight - boardHeight) / 2;
 
-        // Cross button (top-right of the board)
         ImageButton.ImageButtonStyle crossStyle = new ImageButton.ImageButtonStyle();
         crossStyle.imageUp = new TextureRegionDrawable(new TextureRegion(crossBtnTexture));
         crossBtn = new ImageButton(crossStyle);
@@ -83,7 +78,6 @@ public class SettingsScreen extends ScreenAdapter {
             boardY + boardHeight - crossBtn.getHeight() - 30);
 
 
-        // Click listener to go back to GameScreen
         crossBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -91,21 +85,17 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        // Define button size and spacing for layout consistency
         float buttonSize = 120f;
         float leftColumnX = boardX + 0.25f * boardWidth;
         float rightColumnX = boardX + 0.525f * boardWidth;
         float secbuttonSize = 270f;
-        // Buttons on the left (sound and music)
         soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight, buttonSize);
         musicBtn = createButton(musicTexture, leftColumnX, boardY + 0.475f * boardHeight - buttonSpacing, buttonSize);
 
-        // Buttons on the right (language, credits, terms & privacy)
         languageBtn = createButton(languageTexture, rightColumnX, boardY + 0.45f * boardHeight, secbuttonSize);
         creditsBtn = createButton(creditsTexture, rightColumnX, boardY + 0.45f * boardHeight - buttonSpacing, secbuttonSize);
         termsPrivacyBtn = createButton(termsPrivacyTexture, rightColumnX, boardY + 0.45f * boardHeight - 2 * buttonSpacing, secbuttonSize);
 
-        // Add actors to the stage
         stage.addActor(crossBtn);
         stage.addActor(soundBtn);
         stage.addActor(musicBtn);
@@ -120,7 +110,6 @@ public class SettingsScreen extends ScreenAdapter {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Draw background and board
         game.batch.begin();
         game.batch.draw(settingsBgTexture, 0, 0, viewWidth, viewHeight);
         game.batch.draw(boardTexture, (viewWidth - boardWidth) / 2, (viewHeight - boardHeight) / 2, boardWidth, boardHeight);
@@ -134,7 +123,7 @@ public class SettingsScreen extends ScreenAdapter {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.imageUp = new TextureRegionDrawable(new TextureRegion(texture));
         ImageButton button = new ImageButton(style);
-        button.setSize(size, size);  // Set button size to specified size
+        button.setSize(size, size);
         button.setPosition(x, y);
         return button;
     }

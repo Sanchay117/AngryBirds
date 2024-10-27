@@ -46,32 +46,27 @@ public class HomeScreen extends ScreenAdapter {
     public void show(){
         stage = new Stage();
 
-        // Load the button textures
         playTexture = new Texture("play.png");
         quitTexture = new Texture("quit.png");
 
-        // Create an ImageButton from the texture
         Skin skin = new Skin();
         skin.add("play", playTexture);
         skin.add("quit", quitTexture);
 
-        // Create ImageButtonStyle and set imageUp
         ImageButton.ImageButtonStyle playStyle = new ImageButton.ImageButtonStyle();
-        playStyle.imageUp = new TextureRegionDrawable(new TextureRegion(playTexture)); // Set the up state
-        playButton = new ImageButton(playStyle); // Create the button with style
+        playStyle.imageUp = new TextureRegionDrawable(new TextureRegion(playTexture));
+        playButton = new ImageButton(playStyle);
 
         ImageButton.ImageButtonStyle quitStyle = new ImageButton.ImageButtonStyle();
-        quitStyle.imageUp = new TextureRegionDrawable(new TextureRegion(quitTexture)); // Set the up state
-        quitButton = new ImageButton(quitStyle); // Create the button with style
+        quitStyle.imageUp = new TextureRegionDrawable(new TextureRegion(quitTexture));
+        quitButton = new ImageButton(quitStyle);
 
-        // Set the button's position and size
         playButton.setPosition(viewWidth - 300, -75);
         playButton.setSize(300, 300);
 
         quitButton.setPosition(0, -75);
         quitButton.setSize(300, 300);
 
-        // Add ClickListener
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -94,18 +89,15 @@ public class HomeScreen extends ScreenAdapter {
             )
         ));
 
-        // Add the buttons to the stage
         stage.addActor(playButton);
         stage.addActor(quitButton);
 
-        // Set the input processor to the stage
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float delta) {
 
-        // Clear the screen
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -115,7 +107,6 @@ public class HomeScreen extends ScreenAdapter {
 
         game.batch.end();
 
-        // Update and draw the stage
         stage.act(delta);
         stage.draw();
     }

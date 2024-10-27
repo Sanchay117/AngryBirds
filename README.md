@@ -32,6 +32,13 @@ Useful Gradle tasks and flags:
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
 
+## Resources Used
+LibGDX Docs<br/>
+Canva
+
+## UML
+You can see the UML in the file named UML_2.pdf
+
 ## Running The Game
 
 To run this project first pull this repo and then navigate to the project folder and then type the following command 
