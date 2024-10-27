@@ -66,45 +66,46 @@ public class LevelScreen extends ScreenAdapter {
         pauseBackground.setSize(viewWidth/2, viewHeight/2);
         pauseBackground.setPosition(viewWidth/4, viewHeight/4);
 
-        Texture forward = new Texture("forward.png");
-        Texture back = new Texture("back1.png");
-        Texture restart = new Texture("restart.png");
+        Texture forward = new Texture("next1.png");
+        Texture back = new Texture("menu.png");
+        Texture restart = new Texture("restart1.png");
 
-        skin.add("play",forward);
-        skin.add("back",back);
+        skin.add("next",forward);
+        skin.add("menu",back);
         skin.add("restart",restart);
 
-        ImageButton nextBtn = new ImageButton(new ImageButton.ImageButtonStyle());
-        ImageButton backBtn = new ImageButton(new ImageButton.ImageButtonStyle());
-        ImageButton restartBtn = new ImageButton(new ImageButton.ImageButtonStyle());
+        ImageButton nextlvlBtn = new ImageButton(new ImageButton.ImageButtonStyle());
+        ImageButton menuBtn = new ImageButton(new ImageButton.ImageButtonStyle());
+        ImageButton restartlvlBtn = new ImageButton(new ImageButton.ImageButtonStyle());
         nextBtn.getStyle().imageUp = skin.getDrawable("play");
         backBtn.getStyle().imageUp = skin.getDrawable("back");
         restartBtn.getStyle().imageUp = skin.getDrawable("restart");
+        
+        
+        menuBtn.setSize(135, 135);
+        menuBtn.setPosition(viewWidth*0.33f, viewHeight*0.28f);
 
-        backBtn.setSize(135, 135);
-        backBtn.setPosition(viewWidth*0.33f, viewHeight*0.28f);
+        nextlvlBtn.setSize(135, 135);
+        nextlvlBtn.setPosition(viewWidth*0.57f, viewHeight*0.28f);
 
-        nextBtn.setSize(135, 135);
-        nextBtn.setPosition(viewWidth*0.57f, viewHeight*0.28f);
+        restartlvlBtn.setSize(135,135);
+        restartlvlBtn.setPosition(viewWidth*0.45f, viewHeight*0.28f);
 
-        restartBtn.setSize(135,135);
-        restartBtn.setPosition(viewWidth*0.45f, viewHeight*0.28f);
-
-        backBtn.addListener(new ClickListener() {
+        menuBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MainScreen(game));
             }
         });
 
-        nextBtn.addListener(new ClickListener() {
+        nextlvlBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new LevelScreen(game));
             }
         });
 
-        restartBtn.addListener(new ClickListener() {
+        restartlvlBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new LevelScreen(game));
@@ -112,9 +113,9 @@ public class LevelScreen extends ScreenAdapter {
         });
 
         gameOverStage.addActor(pauseBackground);
-        gameOverStage.addActor(nextBtn);
-        gameOverStage.addActor(backBtn);
-        gameOverStage.addActor(restartBtn);
+        gameOverStage.addActor(nextlvlBtn);
+        gameOverStage.addActor(menuBtn);
+        gameOverStage.addActor(restartlvlBtn);
     }
 
     private void createPauseScreen() {
