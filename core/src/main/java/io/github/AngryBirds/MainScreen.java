@@ -174,7 +174,7 @@ public class MainScreen extends ScreenAdapter {
     }
 
     private void drawLockOverlay(ImageButton button) {
-        float lockSize = 250;
+        float lockSize = 200;
         float lockX = button.getX() + (button.getWidth() - lockSize) / 2;
         float lockY = button.getY() + (button.getHeight() - lockSize) / 2-50;
         game.batch.draw(lockTexture, lockX, lockY, lockSize, lockSize);
