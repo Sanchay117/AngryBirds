@@ -9,12 +9,16 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.Vector;
 
+import static java.lang.Math.sqrt;
+
 public class SlingShot {
     public Texture texture;
     public float x;
     public float y;
     public int width;
     public int height;
+
+    private final float g = 9.8f;
 
     private Vector2 startPoint1;
     private Vector2 startPoint2;
@@ -26,6 +30,38 @@ public class SlingShot {
             return true;
         }
         return false;
+    }
+
+    float getX(float cos,float x,float velocity_initial,float t) {
+        return x + cos*velocity_initial*t;
+    }
+
+    float getY(float sin,float y,float velocity_initial,float t) {
+        return (float) (y + sin*velocity_initial*t - 0.5*g*t*t);
+    }
+
+    void drawTrajectory(float x,float y,float velocity_initial,ShapeRenderer shapeRenderer) {
+        float tan = x/y;
+        float hypotenuse = (float) sqrt(x*x + y*y);
+
+        float sin = y/hypotenuse;
+        float cos = x/hypotenuse;
+
+        float timeOfFlight = 2*velocity_initial*sin/g;
+        float timeStep = 0.1f;
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(1, 0, 0, 0.5f)); // Semi-transparent red
+
+        for (float t = 0; t <= timeOfFlight; t += timeStep) {
+            float xCoord = getX(x, cos, velocity_initial, t);
+            float yCoord = getY(y, sin, velocity_initial, t);
+
+            // Draw only if the coordinates are valid
+            if (yCoord >= 0) {
+                shapeRenderer.circle(xCoord, yCoord, 5); // Radius 5 for trajectory points
+            }
+        }
     }
 
     public SlingShot(Texture texture, float x, float y, int width, int height) {
@@ -58,6 +94,12 @@ public class SlingShot {
             for (float offset = -thickness / 2; offset <= thickness / 2; offset++) {
                 shapeRenderer.line(startPoint2.x + offset, startPoint2.y, endPoint.x + offset, endPoint.y);
             }
+
+            shapeRenderer.end();
+
+            drawTrajectory(endPoint.x, endPoint.y, 5, shapeRenderer);
+
+            shapeRenderer.end();
         }
 
         // Update the end point as the user moves

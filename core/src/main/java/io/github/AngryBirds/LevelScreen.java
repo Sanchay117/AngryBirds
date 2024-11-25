@@ -365,8 +365,6 @@ public class LevelScreen extends ScreenAdapter {
                 game.batch.draw(bird.texture,bird.x,bird.y,bird.width,bird.height);
             }
 
-            slingShot.render(game.batch,game.shapeRenderer);
-
             for(Material material:materials){
                 game.batch.draw(material.texture,material.x,material.y,material.width,material.height);
             }
@@ -374,8 +372,12 @@ public class LevelScreen extends ScreenAdapter {
             for(Pig pig : pigs){
                 game.batch.draw(pig.texture,pig.x,pig.y,pig.width,pig.height);
             }
+
             handImage.setPosition(handX, handY);
             handImage.draw(game.batch, 1);
+
+            slingShot.render(game.batch,game.shapeRenderer);
+
             stage.act(delta);
             stage.draw();
         }
