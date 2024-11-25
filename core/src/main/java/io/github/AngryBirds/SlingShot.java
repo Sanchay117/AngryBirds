@@ -22,6 +22,7 @@ public class SlingShot {
 
     private Vector2 startPoint1;
     private Vector2 startPoint2;
+    private Vector2 slingShotMiddle = new Vector2(259,354);
     private Vector2 endPoint;   // Point B (moving)
     private boolean dragging = false;
 
@@ -40,6 +41,13 @@ public class SlingShot {
         return (float) (y + sin*velocity_initial*t - 0.5*g*t*t);
     }
 
+    float getInitialVelocity(){
+        float stringLength = (float) sqrt((endPoint.x-slingShotMiddle.x)*(endPoint.x-slingShotMiddle.x) + (endPoint.y-slingShotMiddle.y)*(endPoint.y-slingShotMiddle.y) );
+
+        if(endPoint.x>slingShotMiddle.x) return -1*stringLength/2;
+        return stringLength/2;
+    }
+
     void drawTrajectory(float x,float y,float velocity_initial,ShapeRenderer shapeRenderer) {
         float tan = x/y;
         float hypotenuse = (float) sqrt(x*x + y*y);
@@ -48,19 +56,16 @@ public class SlingShot {
         float cos = x/hypotenuse;
 
         float timeOfFlight = 2*velocity_initial*sin/g;
-        float timeStep = 0.1f;
+        float timeStep = 0.35f;
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(new Color(1, 0, 0, 0.5f)); // Semi-transparent red
+        shapeRenderer.setColor(new Color(10, 10, 10, 0.8f)); // Semi-transparent red
 
         for (float t = 0; t <= timeOfFlight; t += timeStep) {
-            float xCoord = getX(x, cos, velocity_initial, t);
-            float yCoord = getY(y, sin, velocity_initial, t);
+            float xCoord = getX(cos, x, velocity_initial, t);
+            float yCoord = getY(sin, y, velocity_initial, t);
 
-            // Draw only if the coordinates are valid
-            if (yCoord >= 0) {
-                shapeRenderer.circle(xCoord, yCoord, 5); // Radius 5 for trajectory points
-            }
+            shapeRenderer.circle(xCoord, yCoord, 7);
         }
     }
 
@@ -97,7 +102,7 @@ public class SlingShot {
 
             shapeRenderer.end();
 
-            drawTrajectory(endPoint.x, endPoint.y, 5, shapeRenderer);
+            drawTrajectory(endPoint.x, endPoint.y, getInitialVelocity(), shapeRenderer);
 
             shapeRenderer.end();
         }
@@ -106,6 +111,8 @@ public class SlingShot {
         if (Gdx.input.isTouched()) {
             float touchX = Gdx.input.getX();
             float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+//            System.out.println(touchX + " " + touchY);
 
             if (!dragging && inRange(touchX, touchY)) {
                 // Start dragging from the current touch position

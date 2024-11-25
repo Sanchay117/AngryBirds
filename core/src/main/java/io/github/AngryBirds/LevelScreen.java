@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -31,6 +32,9 @@ public class LevelScreen extends ScreenAdapter {
     private final Main game;
     private int viewHeight = Gdx.graphics.getHeight();
     private int viewWidth = Gdx.graphics.getWidth();
+
+    SpriteBatch batch;
+    ShapeRenderer shapeRenderer;
 
     private Stage stage;
     private Stage pauseStage;
@@ -76,7 +80,8 @@ public class LevelScreen extends ScreenAdapter {
         this.game = game;
         game.background = new Texture("lvlBG.png");
         progressBarTexture = new Texture("bar.png");
-
+        this.batch = new SpriteBatch();
+        this.shapeRenderer = new ShapeRenderer();
     }
 
     public void createGameOverScreen(){
@@ -318,11 +323,11 @@ public class LevelScreen extends ScreenAdapter {
         if (isTutorialEnabled) {
             updateHandAnimation(delta);
         }
-        game.batch.begin();
+        batch.begin();
 
-        game.batch.draw(game.background, 0, 0,viewWidth,viewHeight);
-        game.smallFont.draw(game.batch,"Score: 0",viewWidth*0.425f,viewHeight-30);
-        game.batch.draw(progressBarTexture, viewWidth * 0.4f, viewHeight - 150, 300, 60);
+        batch.draw(game.background, 0, 0,viewWidth,viewHeight);
+        game.smallFont.draw(batch,"Score: 0",viewWidth*0.425f,viewHeight-30);
+        batch.draw(progressBarTexture, viewWidth * 0.4f, viewHeight - 150, 300, 60);
 
         if (isPaused) {
             if (Gdx.input.getInputProcessor() != pauseStage) {
@@ -334,8 +339,8 @@ public class LevelScreen extends ScreenAdapter {
             pauseStage.act(delta);
             pauseStage.draw();
 
-            game.font.draw(game.batch,"Game",viewWidth*0.415f,viewHeight*0.68f);
-            game.font.draw(game.batch,"Paused",viewWidth*0.375f,viewHeight*0.54f);
+            game.font.draw(batch,"Game",viewWidth*0.415f,viewHeight*0.68f);
+            game.font.draw(batch,"Paused",viewWidth*0.375f,viewHeight*0.54f);
 
 
         }
@@ -350,8 +355,8 @@ public class LevelScreen extends ScreenAdapter {
             gameOverStage.act(delta);
             gameOverStage.draw();
 
-            game.mediumFont.draw(game.batch,"Game Over",viewWidth*0.355f,viewHeight*0.68f);
-            game.mediumFont.draw(game.batch,"Score: 0",viewWidth*0.375f,viewHeight*0.52f);
+            game.mediumFont.draw(batch,"Game Over",viewWidth*0.355f,viewHeight*0.68f);
+            game.mediumFont.draw(batch,"Score: 0",viewWidth*0.375f,viewHeight*0.52f);
 
         }
         else {
@@ -362,28 +367,28 @@ public class LevelScreen extends ScreenAdapter {
             game.background = new Texture("lvlBG.png");
 
             for(Bird bird : birds){
-                game.batch.draw(bird.texture,bird.x,bird.y,bird.width,bird.height);
+                batch.draw(bird.texture,bird.x,bird.y,bird.width,bird.height);
             }
 
             for(Material material:materials){
-                game.batch.draw(material.texture,material.x,material.y,material.width,material.height);
+                batch.draw(material.texture,material.x,material.y,material.width,material.height);
             }
 
             for(Pig pig : pigs){
-                game.batch.draw(pig.texture,pig.x,pig.y,pig.width,pig.height);
+                batch.draw(pig.texture,pig.x,pig.y,pig.width,pig.height);
             }
 
             handImage.setPosition(handX, handY);
-            handImage.draw(game.batch, 1);
+            handImage.draw(batch, 1);
 
-            slingShot.render(game.batch,game.shapeRenderer);
+            slingShot.render(batch,shapeRenderer);
 
             stage.act(delta);
             stage.draw();
         }
 
-        game.shapeRenderer.end();
-        game.batch.end();
+        shapeRenderer.end();
+        batch.end();
     }
 
     private void updateHandAnimation(float delta) {
@@ -419,5 +424,7 @@ public class LevelScreen extends ScreenAdapter {
         pauseStage.dispose();
         gameOverStage.dispose();
         pauseTexture.dispose();
+        batch.dispose();
+        shapeRenderer.dispose();
     }
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -50,9 +51,13 @@ public class MainScreen extends ScreenAdapter {
     private float bubbleWidth;
     private float bubbleHeight;
 
+    private SpriteBatch batch;
+
     public MainScreen(Main game) {
         this.game = game;
         game.background = new Texture("MainScreenBG.jpg");
+
+        batch = new SpriteBatch();
     }
 
     @Override
@@ -161,10 +166,10 @@ public class MainScreen extends ScreenAdapter {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.batch.begin();
-        game.batch.draw(game.background, 0, 0, viewWidth, viewHeight);
+        batch.begin();
+        batch.draw(game.background, 0, 0, viewWidth, viewHeight);
 
-        game.font.draw(game.batch, "LEVELS", viewWidth * 0.38f, viewHeight * 0.95f);
+        game.font.draw(batch, "LEVELS", viewWidth * 0.38f, viewHeight * 0.95f);
 
         drawCenteredText(game.mediumFont, "1", lvlBtn1);
         drawCenteredText(game.mediumFont, "2", lvlBtn2);
@@ -179,7 +184,7 @@ public class MainScreen extends ScreenAdapter {
         drawLockOverlay(lvlBtn4);
         drawLockOverlay(lvlBtn5);
 
-        game.batch.end();
+        batch.end();
     }
     private void shakeButton(ImageButton button) {
         button.addAction(Actions.sequence(
@@ -197,7 +202,7 @@ public class MainScreen extends ScreenAdapter {
 
         textY -= layout.height / 2;
 
-        font.draw(game.batch, text, textX, textY);
+        font.draw(batch, text, textX, textY);
     }
 
     private void drawLockOverlay(ImageButton button) {
@@ -205,7 +210,7 @@ public class MainScreen extends ScreenAdapter {
         float lockX = button.getX() + 10;
         float lockY = button.getY() + button.getHeight() - lockSize - 10;
 
-        game.batch.draw(lockTexture, lockX, lockY-70, lockSize, lockSize);
+        batch.draw(lockTexture, lockX, lockY-70, lockSize, lockSize);
     }
 
 
@@ -221,5 +226,6 @@ public class MainScreen extends ScreenAdapter {
         backBtnTexture.dispose();
         lockTexture.dispose();
         stage.dispose();
+        batch.dispose();
     }
 }

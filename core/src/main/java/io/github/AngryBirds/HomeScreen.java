@@ -7,6 +7,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -36,10 +37,14 @@ public class HomeScreen extends ScreenAdapter {
     private Texture quitTexture;
     private ImageButton quitButton;
 
+    private SpriteBatch batch;
+
 
     public HomeScreen(Main game) {
         this.game = game;
         game.background = new Texture("bg.png");
+
+        batch = new SpriteBatch();
     }
 
     @Override
@@ -101,11 +106,11 @@ public class HomeScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.batch.begin();
+        batch.begin();
 
-        game.batch.draw(game.background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(game.background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        game.batch.end();
+        batch.end();
 
         stage.act(delta);
         stage.draw();
@@ -123,5 +128,7 @@ public class HomeScreen extends ScreenAdapter {
         stage.dispose();
         playTexture.dispose();
         quitTexture.dispose();
+
+        batch.dispose();
     }
 }
