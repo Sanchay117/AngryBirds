@@ -318,9 +318,6 @@ public class LevelScreen extends ScreenAdapter {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.camera.update(); // Update the camera matrix
-        game.batch.setProjectionMatrix(game.camera.combined); // Apply the camera projection to the SpriteBatch
-
         if (isTutorialEnabled) {
             updateHandAnimation(delta);
         }
