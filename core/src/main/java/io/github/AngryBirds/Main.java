@@ -22,8 +22,6 @@ public class Main extends Game {
     Music music;
     Texture background;
 
-    OrthographicCamera camera;
-
     @Override
     public void create () {
 

@@ -77,9 +77,6 @@ public class LevelScreen extends ScreenAdapter {
         game.background = new Texture("lvlBG.png");
         progressBarTexture = new Texture("bar.png");
 
-//        game.camera = new OrthographicCamera();
-//        game.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        Gdx.input.setInputProcessor(new SlingShotInputProcessor(slingShot, game.camera));
     }
 
     public void createGameOverScreen(){
@@ -383,6 +380,7 @@ public class LevelScreen extends ScreenAdapter {
             stage.draw();
         }
 
+        game.shapeRenderer.end();
         game.batch.end();
     }
 
