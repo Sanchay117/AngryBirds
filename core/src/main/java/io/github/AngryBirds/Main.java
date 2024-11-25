@@ -3,6 +3,7 @@ package io.github.AngryBirds;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -21,8 +22,11 @@ public class Main extends Game {
     Music music;
     Texture background;
 
+    OrthographicCamera camera;
+
     @Override
     public void create () {
+
         batch = new SpriteBatch();
         shapeRenderer = new ShapeRenderer();
 

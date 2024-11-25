@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -63,7 +64,7 @@ public class LevelScreen extends ScreenAdapter {
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
-    private final SlingShot slingShot = new SlingShot(slingShotTexture,100,128,200,200);
+    private final SlingShot slingShot = new SlingShot(slingShotTexture,100,128,300,270);
     private final Texture floor = new Texture("wood_line.png");
     private final Texture wall = new Texture("wall.png");
     private final Texture block = new Texture("wood_block.png");
@@ -75,6 +76,10 @@ public class LevelScreen extends ScreenAdapter {
         this.game = game;
         game.background = new Texture("lvlBG.png");
         progressBarTexture = new Texture("bar.png");
+
+//        game.camera = new OrthographicCamera();
+//        game.camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        Gdx.input.setInputProcessor(new SlingShotInputProcessor(slingShot, game.camera));
     }
 
     public void createGameOverScreen(){
@@ -310,7 +315,12 @@ public class LevelScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        game.camera.update(); // Update the camera matrix
+        game.batch.setProjectionMatrix(game.camera.combined); // Apply the camera projection to the SpriteBatch
+
         if (isTutorialEnabled) {
             updateHandAnimation(delta);
         }
@@ -334,7 +344,8 @@ public class LevelScreen extends ScreenAdapter {
             game.font.draw(game.batch,"Paused",viewWidth*0.375f,viewHeight*0.54f);
 
 
-        }else if(isGameOver){
+        }
+        else if(isGameOver){
 
             if(Gdx.input.getInputProcessor() != gameOverStage){
                 Gdx.input.setInputProcessor(gameOverStage);
@@ -348,7 +359,8 @@ public class LevelScreen extends ScreenAdapter {
             game.mediumFont.draw(game.batch,"Game Over",viewWidth*0.355f,viewHeight*0.68f);
             game.mediumFont.draw(game.batch,"Score: 0",viewWidth*0.375f,viewHeight*0.52f);
 
-        }else {
+        }
+        else {
             if (Gdx.input.getInputProcessor() != stage) {
                 Gdx.input.setInputProcessor(stage);
             }
@@ -359,7 +371,7 @@ public class LevelScreen extends ScreenAdapter {
                 game.batch.draw(bird.texture,bird.x,bird.y,bird.width,bird.height);
             }
 
-            game.batch.draw(slingShot.texture,slingShot.x,slingShot.y,slingShot.width,slingShot.height);
+            slingShot.render(game.batch,game.shapeRenderer);
 
             for(Material material:materials){
                 game.batch.draw(material.texture,material.x,material.y,material.width,material.height);
@@ -376,6 +388,7 @@ public class LevelScreen extends ScreenAdapter {
 
         game.batch.end();
     }
+
     private void updateHandAnimation(float delta) {
         handAnimationTime += delta;
         float animationProgress = handAnimationTime / handAnimationDuration;
