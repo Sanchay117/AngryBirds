@@ -37,21 +37,21 @@ public class Bird {
         bodyDef.position.set(x,y);
 
         // Create our body in the world using our body definition
-//        body = world.createBody(bodyDef);
+        body = world.createBody(bodyDef);
 //
 //        // Create a circle shape and set its radius to 6
-//        CircleShape circle = new CircleShape();
-//        circle.setRadius(width/2f);
+        CircleShape circle = new CircleShape();
+        circle.setRadius(width/4f);
 //
 //        // Create a fixture definition to apply our shape to
-//        FixtureDef fixtureDef = new FixtureDef();
-//        fixtureDef.shape = circle;
-//        fixtureDef.density = 0.5f;
-//        fixtureDef.friction = 0.4f;
-//        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circle;
+        fixtureDef.density = 0.5f;
+        fixtureDef.friction = 0.4f;
+        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
 //
 //        // Create our fixture and attach it to the body
-//        Fixture fixture = body.createFixture(fixtureDef);
+        Fixture fixture = body.createFixture(fixtureDef);
 //
 //        // Remember to dispose of any shapes after you're done with them!
 //        // BodyDef and FixtureDef don't need disposing, but shapes do.
@@ -59,17 +59,10 @@ public class Bird {
 
     }
 
-    public void render(SpriteBatch batch){
-//        float x = body.getPosition().x*PPM;
-//        float y = body.getPosition().y*PPM;
-
-        batch.draw(texture, x, y, width, height);
-    }
-
     public void setPos(float x, float y){
         this.x = x;
         this.y = y;
-//        body.setTransform(x, y, body.getAngle());
+        body.setTransform(x, y, body.getAngle());
     }
 
     public float getX(){

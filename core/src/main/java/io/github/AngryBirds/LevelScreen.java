@@ -29,6 +29,8 @@ import com.badlogic.gdx.graphics.Color;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.sqrt;
+
 public class LevelScreen extends ScreenAdapter {
 
     private final Main game;
@@ -72,7 +74,7 @@ public class LevelScreen extends ScreenAdapter {
 
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
-    private final Bird testBird = new Red(redTexture,60,128,100,100,world);
+    private final Bird testBird = new Red(redTexture,120,128,100,100,world);
 
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
     private final SlingShot slingShot = new SlingShot(slingShotTexture,100,128,300,270,world);
@@ -91,7 +93,7 @@ public class LevelScreen extends ScreenAdapter {
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
 
-        game.music.setVolume(0.0f);
+        game.music.setVolume(0.4f);
     }
 
     public void createGameOverScreen(){
@@ -217,6 +219,13 @@ public class LevelScreen extends ScreenAdapter {
         pauseStage = new Stage();
         gameOverStage = new Stage();
 
+        camera.viewportWidth = Gdx.graphics.getWidth(); // Convert screen width to meters
+        camera.viewportHeight = Gdx.graphics.getHeight() ; // Convert screen height to meters
+
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
+
+        camera.update();
+
         handImage = new Image(handTexture);
         handImage.setSize(300, 400);
         handX = handStartX;
@@ -324,22 +333,73 @@ public class LevelScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
 
         // Create our body definition
-//        BodyDef groundBodyDef = new BodyDef();
-//        // Set its world position
-//        groundBodyDef.position.set(new Vector2(0, 10));
-//
-//        // Create a body from the definition and add it to the world
-//        Body groundBody = world.createBody(groundBodyDef);
-//
-//        // Create a polygon shape
-//        PolygonShape groundBox = new PolygonShape();
-//        // Set the polygon shape as a box which is twice the size of our view port and 20 high
-//        // (setAsBox takes half-width and half-height as arguments)
-//        groundBox.setAsBox(camera.viewportWidth, 10.0f);
-//        // Create a fixture from our polygon shape and add it to our ground body
-//        groundBody.createFixture(groundBox, 0.0f);
-//        // Clean up after ourselves
-//        groundBox.dispose();
+        BodyDef groundBodyDef = new BodyDef();
+        // Set its world position
+        groundBodyDef.position.set(new Vector2(0, 10));
+
+        // Create a body from the definition and add it to the world
+        Body groundBody = world.createBody(groundBodyDef);
+
+        // Create a polygon shape
+        PolygonShape groundBox = new PolygonShape();
+        // Set the polygon shape as a box which is twice the size of our view port and 20 high
+        // (setAsBox takes half-width and half-height as arguments)
+        groundBox.setAsBox(camera.viewportWidth, 120f);
+        // Create a fixture from our polygon shape and add it to our ground body
+        groundBody.createFixture(groundBox, 0.0f);
+        // Clean up after ourselves
+        groundBox.dispose();
+    }
+
+    private final float g = 9.8f;
+
+    private Vector2 startPoint1 = new Vector2(228, 346);
+    private Vector2 startPoint2 = new Vector2(293, 356);
+    private Vector2 slingShotMiddle = new Vector2(259,354);
+    private Vector2 endPoint = new Vector2();   // Point B (moving)
+    private boolean dragging = false;
+
+    private boolean inRange(float x, float y) {
+        if(200f <= x && x <= 300f && 300f <= y && y <= 400f) {
+            return true;
+        }
+        return false;
+    }
+
+    private float getX(float cos,float x,float velocity_initial,float t) {
+        return x + cos*velocity_initial*t;
+    }
+
+    private float getY(float sin,float y,float velocity_initial,float t) {
+        return (float) (y + sin*velocity_initial*t - 0.5*g*t*t);
+    }
+
+    private float getInitialVelocity(){
+        float stringLength = (float) sqrt((endPoint.x-slingShotMiddle.x)*(endPoint.x-slingShotMiddle.x) + (endPoint.y-slingShotMiddle.y)*(endPoint.y-slingShotMiddle.y) );
+
+        if(endPoint.x>slingShotMiddle.x) return -1*stringLength/2;
+        return stringLength/2;
+    }
+
+    private void drawTrajectory(float x,float y,float velocity_initial,ShapeRenderer shapeRenderer) {
+        float tan = y/x;
+        float hypotenuse = (float) (float) sqrt((endPoint.x-slingShotMiddle.x)*(endPoint.x-slingShotMiddle.x) + (endPoint.y-slingShotMiddle.y)*(endPoint.y-slingShotMiddle.y) );;
+
+        float sin = (y)/hypotenuse;
+        float cos = x/hypotenuse;
+
+        float timeOfFlight = 2*velocity_initial*sin/g;
+        float timeStep = 0.35f;
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(20, 20, 20, 0.8f)); // Semi-transparent red
+
+        for (float t = 0; t <= timeOfFlight; t += timeStep) {
+            float xCoord = getX(cos, x, velocity_initial, t);
+            float yCoord = getY(sin, y, velocity_initial, t);
+
+            shapeRenderer.circle(xCoord, yCoord, 7);
+        }
     }
 
     @Override
@@ -348,9 +408,13 @@ public class LevelScreen extends ScreenAdapter {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (isTutorialEnabled) {
-            updateHandAnimation(delta);
-        }
+//        if (isTutorialEnabled) {
+//            updateHandAnimation(delta);
+//        }
+
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
 
         batch.draw(game.background, 0, 0,viewWidth,viewHeight);
@@ -406,11 +470,54 @@ public class LevelScreen extends ScreenAdapter {
                 batch.draw(pig.texture,pig.x,pig.y,pig.width,pig.height);
             }
 
-            handImage.setPosition(handX, handY);
-            handImage.draw(batch, 1);
+//            handImage.setPosition(handX, handY);
+//            handImage.draw(batch, 1);
 
-            slingShot.setBirb(testBird);
-            slingShot.render(batch,shapeRenderer);
+            batch.draw(SlingShot.texture,SlingShot.x,SlingShot.y,SlingShot.width,SlingShot.height);
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.BLACK);
+
+            float thickness = 4f;
+
+            if (dragging) {
+                // For the first line (startPoint1 to endPoint)
+                for (float offset = -thickness / 2; offset <= thickness / 2; offset++) {
+                    shapeRenderer.line(startPoint1.x + offset, startPoint1.y, endPoint.x + offset, endPoint.y);
+                }
+
+                // For the second line (startPoint2 to endPoint)
+                for (float offset = -thickness / 2; offset <= thickness / 2; offset++) {
+                    shapeRenderer.line(startPoint2.x + offset, startPoint2.y, endPoint.x + offset, endPoint.y);
+                }
+
+                shapeRenderer.end();
+
+                testBird.setPos(endPoint.x - testBird.width/4f - 20,endPoint.y - testBird.height/4f + 10);
+
+                drawTrajectory(endPoint.x, endPoint.y, getInitialVelocity(), shapeRenderer);
+
+                shapeRenderer.end();
+            }else{
+                testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
+            }
+
+            // Update the end point as the user moves
+            if (Gdx.input.isTouched()) {
+                float touchX = Gdx.input.getX();
+                float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+                if (!dragging && inRange(touchX, touchY)) {
+                    // Start dragging from the current touch position
+                    dragging = true;
+                }
+                // Update the end point (B) as the user moves
+                endPoint.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+            } else {
+                dragging = false;
+            }
+
+            batch.draw(testBird.texture, testBird.getX(), testBird.getY(), testBird.width, testBird.height);
 
             stage.act(delta);
             stage.draw();
