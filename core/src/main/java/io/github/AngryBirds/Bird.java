@@ -13,7 +13,7 @@ public class Bird {
     public int height;
     public int width;
 
-    private Body body;
+    public Body body;
     public World world;
     private BodyDef bodyDef;
 
@@ -66,11 +66,11 @@ public class Bird {
     }
 
     public float getX(){
-        return x;
+        return body.getPosition().x;
     }
 
     public float getY(){
-        return y;
+        return body.getPosition().y;
     }
 
 }

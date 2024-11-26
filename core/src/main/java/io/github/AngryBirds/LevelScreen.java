@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -402,6 +403,7 @@ public class LevelScreen extends ScreenAdapter {
         }
     }
 
+    private boolean thrown = false;
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -434,7 +436,7 @@ public class LevelScreen extends ScreenAdapter {
             game.font.draw(batch,"Game",viewWidth*0.415f,viewHeight*0.68f);
             game.font.draw(batch,"Paused",viewWidth*0.375f,viewHeight*0.54f);
 
-
+            batch.end();
         }
         else if(isGameOver){
 
@@ -450,6 +452,7 @@ public class LevelScreen extends ScreenAdapter {
             game.mediumFont.draw(batch,"Game Over",viewWidth*0.355f,viewHeight*0.68f);
             game.mediumFont.draw(batch,"Score: 0",viewWidth*0.375f,viewHeight*0.52f);
 
+            batch.end();
         }
         else {
             if (Gdx.input.getInputProcessor() != stage) {
@@ -474,13 +477,14 @@ public class LevelScreen extends ScreenAdapter {
 //            handImage.draw(batch, 1);
 
             batch.draw(SlingShot.texture,SlingShot.x,SlingShot.y,SlingShot.width,SlingShot.height);
-
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(Color.BLACK);
+            batch.end();
 
             float thickness = 4f;
 
             if (dragging) {
+                thrown = true;
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(Color.BLACK);
                 // For the first line (startPoint1 to endPoint)
                 for (float offset = -thickness / 2; offset <= thickness / 2; offset++) {
                     shapeRenderer.line(startPoint1.x + offset, startPoint1.y, endPoint.x + offset, endPoint.y);
@@ -499,7 +503,18 @@ public class LevelScreen extends ScreenAdapter {
 
                 shapeRenderer.end();
             }else{
-                testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
+
+                if(thrown){
+                    float magnitude = 10000000.0f;  // Magnitude of the impulse
+                    float angle = -1*(slingShotMiddle.y - testBird.getY())/(slingShotMiddle.x - testBird.getY()); // Convert degrees to radians (example: 45 degrees)
+
+                    float impulseX = magnitude * MathUtils.cos(angle);
+                    float impulseY = magnitude * MathUtils.sin(angle);
+
+                    testBird.body.applyLinearImpulse(impulseX, impulseY, testBird.getX(), testBird.getY(), true);
+                }else{
+                    testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
+                }
             }
 
             // Update the end point as the user moves
@@ -517,7 +532,9 @@ public class LevelScreen extends ScreenAdapter {
                 dragging = false;
             }
 
+            batch.begin();
             batch.draw(testBird.texture, testBird.getX(), testBird.getY(), testBird.width, testBird.height);
+            batch.end();
 
             stage.act(delta);
             stage.draw();
@@ -526,8 +543,6 @@ public class LevelScreen extends ScreenAdapter {
         world.step(1/60f, 6, 2);
         debugRenderer.render(world, camera.combined);
 
-        shapeRenderer.end();
-        batch.end();
     }
 
     private void updateHandAnimation(float delta) {
