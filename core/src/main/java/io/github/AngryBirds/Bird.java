@@ -8,69 +8,76 @@ public class Bird {
     private String type;
     private float size;
     public Texture texture;
-    public int height; // Height in pixels
-    public int width;  // Width in pixels
+    private float x;
+    private float y;
+    public int height;
+    public int width;
 
     private Body body;
-    private World world;
+    public World world;
+    private BodyDef bodyDef;
 
-    public static final float PPM = 100.0f; // Pixels per meter
+    public static final float PPM = 100.0f; // 1 meter = 100 pixels
 
-    public Bird(String type, float size, Texture texture, float x, float y, int width, int height, World world) {
+    public Bird(String type, float size, Texture texture, float x, float y,int width, int height,World world) {
         this.type = type;
         this.size = size;
         this.texture = texture;
+        this.x = x;
+        this.y = y;
         this.width = width;
         this.height = height;
         this.world = world;
 
-        // Create a body definition
-        BodyDef bodyDef = new BodyDef();
+        // First we create a body definition
+        bodyDef = new BodyDef();
+        // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        // Set body's starting position (convert pixels to meters)
-        bodyDef.position.set(x / PPM, y / PPM);
+        // Set our body's starting position in the world
+        bodyDef.position.set(x,y);
 
-        // Create the body in the world
-        body = world.createBody(bodyDef);
+        // Create our body in the world using our body definition
+//        body = world.createBody(bodyDef);
+//
+//        // Create a circle shape and set its radius to 6
+//        CircleShape circle = new CircleShape();
+//        circle.setRadius(width/2f);
+//
+//        // Create a fixture definition to apply our shape to
+//        FixtureDef fixtureDef = new FixtureDef();
+//        fixtureDef.shape = circle;
+//        fixtureDef.density = 0.5f;
+//        fixtureDef.friction = 0.4f;
+//        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
+//
+//        // Create our fixture and attach it to the body
+//        Fixture fixture = body.createFixture(fixtureDef);
+//
+//        // Remember to dispose of any shapes after you're done with them!
+//        // BodyDef and FixtureDef don't need disposing, but shapes do.
+//        circle.dispose();
 
-        // Create a circle shape for the body (radius in meters)
-        CircleShape circle = new CircleShape();
-        circle.setRadius((width / 2f) / PPM);
-
-        // Create a fixture definition and attach it to the body
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circle;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f; // Make it bounce a little
-
-        body.createFixture(fixtureDef);
-
-        // Dispose of the shape to free memory
-        circle.dispose();
     }
 
-    public void render(SpriteBatch batch) {
-        // Get body position (in meters) and convert to pixels
-        float renderX = (body.getPosition().x * PPM) - (width / 2f); // Center texture
-        float renderY = (body.getPosition().y * PPM) - (height / 2f);
+    public void render(SpriteBatch batch){
+//        float x = body.getPosition().x*PPM;
+//        float y = body.getPosition().y*PPM;
 
-        // Draw the texture at the adjusted position
-        batch.draw(texture, renderX, renderY, width, height);
+        batch.draw(texture, x, y, width, height);
     }
 
-    public void setPos(float x, float y) {
-        // Set body position (convert pixels to meters)
-        body.setTransform(x / PPM, y / PPM, body.getAngle());
+    public void setPos(float x, float y){
+        this.x = x;
+        this.y = y;
+//        body.setTransform(x, y, body.getAngle());
     }
 
-    public float getX() {
-        // Convert body position from meters to pixels
-        return body.getPosition().x * PPM;
+    public float getX(){
+        return x;
     }
 
-    public float getY() {
-        // Convert body position from meters to pixels
-        return body.getPosition().y * PPM;
+    public float getY(){
+        return y;
     }
+
 }

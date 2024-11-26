@@ -16,8 +16,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -323,6 +322,24 @@ public class LevelScreen extends ScreenAdapter {
         pigs.add(p1);
 
         Gdx.input.setInputProcessor(stage);
+
+        // Create our body definition
+//        BodyDef groundBodyDef = new BodyDef();
+//        // Set its world position
+//        groundBodyDef.position.set(new Vector2(0, 10));
+//
+//        // Create a body from the definition and add it to the world
+//        Body groundBody = world.createBody(groundBodyDef);
+//
+//        // Create a polygon shape
+//        PolygonShape groundBox = new PolygonShape();
+//        // Set the polygon shape as a box which is twice the size of our view port and 20 high
+//        // (setAsBox takes half-width and half-height as arguments)
+//        groundBox.setAsBox(camera.viewportWidth, 10.0f);
+//        // Create a fixture from our polygon shape and add it to our ground body
+//        groundBody.createFixture(groundBox, 0.0f);
+//        // Clean up after ourselves
+//        groundBox.dispose();
     }
 
     @Override
