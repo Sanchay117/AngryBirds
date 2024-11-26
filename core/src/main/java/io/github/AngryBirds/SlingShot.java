@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.Vector;
 
@@ -25,6 +27,20 @@ public class SlingShot {
     private Vector2 slingShotMiddle = new Vector2(259,354);
     private Vector2 endPoint;   // Point B (moving)
     private boolean dragging = false;
+
+//    private final World world;
+
+    public SlingShot(Texture texture, float x, float y, int width, int height) {
+        this.texture = texture;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+
+        startPoint1 = new Vector2(228, 346);
+        startPoint2 = new Vector2(293, 356);
+        endPoint = new Vector2();
+    }
 
     boolean inRange(float x, float y) {
         if(200f <= x && x <= 300f && 300f <= y && y <= 400f) {
@@ -49,17 +65,17 @@ public class SlingShot {
     }
 
     void drawTrajectory(float x,float y,float velocity_initial,ShapeRenderer shapeRenderer) {
-        float tan = x/y;
-        float hypotenuse = (float) sqrt(x*x + y*y);
+        float tan = y/x;
+        float hypotenuse = (float) (float) sqrt((endPoint.x-slingShotMiddle.x)*(endPoint.x-slingShotMiddle.x) + (endPoint.y-slingShotMiddle.y)*(endPoint.y-slingShotMiddle.y) );;
 
-        float sin = y/hypotenuse;
+        float sin = (y)/hypotenuse;
         float cos = x/hypotenuse;
 
         float timeOfFlight = 2*velocity_initial*sin/g;
         float timeStep = 0.35f;
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(new Color(10, 10, 10, 0.8f)); // Semi-transparent red
+        shapeRenderer.setColor(new Color(20, 20, 20, 0.8f)); // Semi-transparent red
 
         for (float t = 0; t <= timeOfFlight; t += timeStep) {
             float xCoord = getX(cos, x, velocity_initial, t);
@@ -69,25 +85,17 @@ public class SlingShot {
         }
     }
 
-    public SlingShot(Texture texture, float x, float y, int width, int height) {
-        this.texture = texture;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-
-        startPoint1 = new Vector2(228, 346);
-        startPoint2 = new Vector2(293, 356);
-        endPoint = new Vector2();
-    }
-
-    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer,Bird birb) {
         batch.draw(texture,x,y,width,height);
 
-        float thickness = 4f;
+        // Physics
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.BLACK);
+
+        float thickness = 4f;
 
         if (dragging) {
             // For the first line (startPoint1 to endPoint)
@@ -100,11 +108,21 @@ public class SlingShot {
                 shapeRenderer.line(startPoint2.x + offset, startPoint2.y, endPoint.x + offset, endPoint.y);
             }
 
+            birb.x = endPoint.x - birb.width/4f - 20;
+            birb.y = endPoint.y - birb.height/4f + 10;
+
+            batch.draw(birb.texture,birb.x,birb.y,birb.width,birb.height);
+
             shapeRenderer.end();
 
             drawTrajectory(endPoint.x, endPoint.y, getInitialVelocity(), shapeRenderer);
 
             shapeRenderer.end();
+        }else{
+            float x = slingShotMiddle.x - birb.width/4f - 20;
+            float y = slingShotMiddle.y - birb.height/4f - 10;
+
+            batch.draw(birb.texture,x,y,birb.width,birb.height);
         }
 
         // Update the end point as the user moves

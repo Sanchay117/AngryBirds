@@ -15,6 +15,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -64,11 +67,17 @@ public class LevelScreen extends ScreenAdapter {
     private float handAnimationDuration = 2.0f;
     private boolean handVisible = true;
 
+    private final World world = new World(new Vector2(0, -9.8f), true);
+    private final Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
+    private final OrthographicCamera camera = new OrthographicCamera();
 
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
+    private final Bird testBird = new Red(redTexture,60,128,100,100);
+
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
     private final SlingShot slingShot = new SlingShot(slingShotTexture,100,128,300,270);
+
     private final Texture floor = new Texture("wood_line.png");
     private final Texture wall = new Texture("wall.png");
     private final Texture block = new Texture("wood_block.png");
@@ -82,6 +91,8 @@ public class LevelScreen extends ScreenAdapter {
         progressBarTexture = new Texture("bar.png");
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
+
+        game.music.setVolume(0.0f);
     }
 
     public void createGameOverScreen(){
@@ -381,11 +392,14 @@ public class LevelScreen extends ScreenAdapter {
             handImage.setPosition(handX, handY);
             handImage.draw(batch, 1);
 
-            slingShot.render(batch,shapeRenderer);
+            slingShot.render(batch,shapeRenderer,testBird);
 
             stage.act(delta);
             stage.draw();
         }
+
+        world.step(1/60f, 6, 2);
+        debugRenderer.render(world, camera.combined);
 
         shapeRenderer.end();
         batch.end();
