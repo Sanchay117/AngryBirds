@@ -73,10 +73,10 @@ public class LevelScreen extends ScreenAdapter {
 
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
-    private final Bird testBird = new Red(redTexture,60,128,100,100);
+    private final Bird testBird = new Red(redTexture,60,128,100,100,world);
 
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
-    private final SlingShot slingShot = new SlingShot(slingShotTexture,100,128,300,270);
+    private final SlingShot slingShot = new SlingShot(slingShotTexture,100,128,300,270,world);
 
     private final Texture floor = new Texture("wood_line.png");
     private final Texture wall = new Texture("wall.png");
@@ -306,8 +306,8 @@ public class LevelScreen extends ScreenAdapter {
         createPauseScreen();
         createGameOverScreen();
 
-        Bird r1 = new Red(redTexture,0,128,100,100);
-        Bird r2 = new Red(redTexture,60,128,100,100);
+        Bird r1 = new Red(redTexture,0,128,100,100,world);
+        Bird r2 = new Red(redTexture,60,128,100,100,world);
 
         Material floor1 = new Wood(floor,viewWidth*0.43f, 128+248,300,30);
         Material wall1 = new Wood(wall,viewWidth*0.51f,128+0,50,250);
@@ -392,7 +392,8 @@ public class LevelScreen extends ScreenAdapter {
             handImage.setPosition(handX, handY);
             handImage.draw(batch, 1);
 
-            slingShot.render(batch,shapeRenderer,testBird);
+            slingShot.setBirb(testBird);
+            slingShot.render(batch,shapeRenderer);
 
             stage.act(delta);
             stage.draw();

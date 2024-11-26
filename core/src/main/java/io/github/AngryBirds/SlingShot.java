@@ -20,6 +20,8 @@ public class SlingShot {
     public int width;
     public int height;
 
+    private static final float PPM = 100.0f; // Pixels per meter
+
     private final float g = 9.8f;
 
     private Vector2 startPoint1;
@@ -28,9 +30,10 @@ public class SlingShot {
     private Vector2 endPoint;   // Point B (moving)
     private boolean dragging = false;
 
-//    private final World world;
+    private World world = null;
+    private Bird birb = null;
 
-    public SlingShot(Texture texture, float x, float y, int width, int height) {
+    public SlingShot(Texture texture, float x, float y, int width, int height,World world) {
         this.texture = texture;
         this.x = x;
         this.y = y;
@@ -40,6 +43,14 @@ public class SlingShot {
         startPoint1 = new Vector2(228, 346);
         startPoint2 = new Vector2(293, 356);
         endPoint = new Vector2();
+        this.world = world;
+    }
+
+    public void setBirb(Bird birb) {
+        this.birb = birb;
+
+        birb.x = slingShotMiddle.x - birb.width/4f - 20;
+        birb.y = slingShotMiddle.y - birb.height/4f - 10;
     }
 
     boolean inRange(float x, float y) {
@@ -85,12 +96,8 @@ public class SlingShot {
         }
     }
 
-    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer,Bird birb) {
+    public void render(SpriteBatch batch, ShapeRenderer shapeRenderer) {
         batch.draw(texture,x,y,width,height);
-
-        // Physics
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.BLACK);
@@ -111,7 +118,7 @@ public class SlingShot {
             birb.x = endPoint.x - birb.width/4f - 20;
             birb.y = endPoint.y - birb.height/4f + 10;
 
-            batch.draw(birb.texture,birb.x,birb.y,birb.width,birb.height);
+            birb.render(batch);
 
             shapeRenderer.end();
 
@@ -119,10 +126,10 @@ public class SlingShot {
 
             shapeRenderer.end();
         }else{
-            float x = slingShotMiddle.x - birb.width/4f - 20;
-            float y = slingShotMiddle.y - birb.height/4f - 10;
+            birb.x = slingShotMiddle.x - birb.width/4f - 20;
+            birb.y = slingShotMiddle.y - birb.height/4f - 10;
 
-            batch.draw(birb.texture,x,y,birb.width,birb.height);
+            birb.render(batch);
         }
 
         // Update the end point as the user moves
