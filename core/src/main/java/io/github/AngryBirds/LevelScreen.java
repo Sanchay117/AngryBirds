@@ -505,8 +505,8 @@ public class LevelScreen extends ScreenAdapter {
             }else{
 
                 if(thrown){
-                    float magnitude = 10000000.0f;  // Magnitude of the impulse
-                    float angle = -1*(slingShotMiddle.y - testBird.getY())/(slingShotMiddle.x - testBird.getY()); // Convert degrees to radians (example: 45 degrees)
+                    float magnitude = 1.0f;  // Magnitude of the impulse
+                    float angle = (slingShotMiddle.y - testBird.getY())/(slingShotMiddle.x - testBird.getX()); // Convert degrees to radians (example: 45 degrees)
 
                     float impulseX = magnitude * MathUtils.cos(angle);
                     float impulseY = magnitude * MathUtils.sin(angle);
