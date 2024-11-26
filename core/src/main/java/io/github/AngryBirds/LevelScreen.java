@@ -505,13 +505,15 @@ public class LevelScreen extends ScreenAdapter {
             }else{
 
                 if(thrown){
-                    float magnitude = 1.0f;  // Magnitude of the impulse
+                    float stringLen =  (float) sqrt( (slingShotMiddle.y - testBird.getY())* (slingShotMiddle.y - testBird.getY()) + (slingShotMiddle.x - testBird.getX())*(slingShotMiddle.x - testBird.getX()));
+
+                    float magnitude = 100000.0f * stringLen;  // Magnitude of the impulse
                     float angle = (slingShotMiddle.y - testBird.getY())/(slingShotMiddle.x - testBird.getX()); // Convert degrees to radians (example: 45 degrees)
 
                     float impulseX = magnitude * MathUtils.cos(angle);
                     float impulseY = magnitude * MathUtils.sin(angle);
 
-                    testBird.body.applyLinearImpulse(impulseX, impulseY, testBird.getX(), testBird.getY(), true);
+                    testBird.body.setLinearVelocity(impulseX,impulseY);
                 }else{
                     testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
                 }
