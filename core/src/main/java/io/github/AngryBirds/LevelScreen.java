@@ -378,7 +378,7 @@ public class LevelScreen extends ScreenAdapter {
             game.background = new Texture("lvlBG.png");
 
             for(Bird bird : birds){
-                batch.draw(bird.texture,bird.x,bird.y,bird.width,bird.height);
+                batch.draw(bird.texture,bird.getX(),bird.getY(),bird.width,bird.height);
             }
 
             for(Material material:materials){

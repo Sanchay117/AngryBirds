@@ -48,9 +48,7 @@ public class SlingShot {
 
     public void setBirb(Bird birb) {
         this.birb = birb;
-
-        birb.x = slingShotMiddle.x - birb.width/4f - 20;
-        birb.y = slingShotMiddle.y - birb.height/4f - 10;
+        birb.setPos(slingShotMiddle.x - birb.width/4f - 20, slingShotMiddle.y - birb.height/4f - 10);
     }
 
     boolean inRange(float x, float y) {
@@ -115,8 +113,7 @@ public class SlingShot {
                 shapeRenderer.line(startPoint2.x + offset, startPoint2.y, endPoint.x + offset, endPoint.y);
             }
 
-            birb.x = endPoint.x - birb.width/4f - 20;
-            birb.y = endPoint.y - birb.height/4f + 10;
+            birb.setPos(endPoint.x - birb.width/4f - 20,endPoint.y - birb.height/4f + 10);
 
             birb.render(batch);
 
@@ -126,8 +123,7 @@ public class SlingShot {
 
             shapeRenderer.end();
         }else{
-            birb.x = slingShotMiddle.x - birb.width/4f - 20;
-            birb.y = slingShotMiddle.y - birb.height/4f - 10;
+            birb.setPos(slingShotMiddle.x - birb.width/4f - 20,slingShotMiddle.y - birb.height/4f - 10);
 
             birb.render(batch);
         }
