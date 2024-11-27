@@ -38,11 +38,15 @@ public class SettingsScreen extends ScreenAdapter {
     private float boardWidth;
     private float boardHeight;
 
+    private int lvl;
 
-    public SettingsScreen(Main game) {
+
+    public SettingsScreen(Main game,int lvl) {
         this.game = game;
         settingsBgTexture = new Texture("settingsBackground.png");  // Full background
         boardTexture = new Texture("settingbg.png");  // Board image
+
+        this.lvl = lvl;
     }
 
     @Override
@@ -81,7 +85,7 @@ public class SettingsScreen extends ScreenAdapter {
         crossBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelScreen(game));
+                game.setScreen(new LevelScreen(game,lvl));
             }
         });
 

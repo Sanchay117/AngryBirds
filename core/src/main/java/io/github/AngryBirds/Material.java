@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
+import java.util.Objects;
+
 public class Material {
     private String name;
     public TextureRegion texture;
@@ -28,7 +30,8 @@ public class Material {
 
         this.world = world;
 
-        if(name=="wood") hp = 5;
+        if(Objects.equals(name, "Wood")) hp = 5;
+        else if(Objects.equals(name, "Stone")) hp = 15;
 
         bodyDef = new BodyDef();
         // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody

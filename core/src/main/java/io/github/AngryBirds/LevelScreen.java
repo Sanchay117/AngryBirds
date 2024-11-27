@@ -84,18 +84,27 @@ public class LevelScreen extends ScreenAdapter {
     private final Texture wall = new Texture("wall.png");
     private final TextureRegion wallRegion = new TextureRegion(wall);
     private final Texture block = new Texture("wood_block.png");
+    private final Texture stoneFloor = new Texture("stone_flat.jpg");
+    private final Texture stoneWall = new Texture("stone_standing.jpg");
+    private final TextureRegion stoneFloorRegion = new TextureRegion(stoneFloor);
+    private final TextureRegion stoneWallRegion = new TextureRegion(stoneWall);
+
     private final ArrayList<Material> materials = new ArrayList<>();
+
     private final Texture pigTexture = new Texture("pig.png");
     private final ArrayList<Pig> pigs = new ArrayList<>();
 
     private int last;
+    private int lvl;
 
-    public LevelScreen(Main game) {
+    public LevelScreen(Main game,int lvl) {
         this.game = game;
         game.background = new Texture("lvlBG.png");
         progressBarTexture = new Texture("bar.png");
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
+
+        this.lvl = lvl;
 
         game.music.setVolume(0.4f);
     }
@@ -142,14 +151,14 @@ public class LevelScreen extends ScreenAdapter {
         nextlvlBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelScreen(game));
+                game.setScreen(new LevelScreen(game,lvl+1));
             }
         });
 
         restartlvlBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelScreen(game));
+                game.setScreen(new LevelScreen(game,lvl));
             }
         });
 
@@ -207,7 +216,7 @@ public class LevelScreen extends ScreenAdapter {
         restartBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelScreen(game));
+                game.setScreen(new LevelScreen(game,lvl));
             }
         });
 
@@ -297,7 +306,7 @@ public class LevelScreen extends ScreenAdapter {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SettingsScreen(game));
+                game.setScreen(new SettingsScreen(game,lvl));
             }
         });
         gameOverBtn.addListener(new ClickListener(){
@@ -322,23 +331,44 @@ public class LevelScreen extends ScreenAdapter {
         Bird r2 = new Red(redTexture,60,128,100,100,world);
         Bird r3 = new Red(redTexture,120,128,100,100,world);
 
-        Material floor1 = new Wood(floorRegion,viewWidth*0.33f, 128+248,350,30,world);
-        Material wall1 = new Wood(wallRegion,viewWidth*0.53f,128+0,50,250,world);
-        Material wall2 = new Wood(wallRegion,viewWidth*0.33f,128+0,50,250,world);
+        if(lvl==1){
+            Material floor1 = new Wood(floorRegion,viewWidth*0.33f, 128+248,350,30,world);
+            Material wall1 = new Wood(wallRegion,viewWidth*0.53f,128+0,50,250,world);
+            Material wall2 = new Wood(wallRegion,viewWidth*0.33f,128+0,50,250,world);
 
-        Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128,130,130,world);
+            Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128,world);
 
-        materials.add(wall1);
-        materials.add(floor1);
-        materials.add(wall2);
+            materials.add(wall1);
+            materials.add(floor1);
+            materials.add(wall2);
+
+            pigs.add(p1);
+        }else if(lvl==2){
+            Material wall1 = new Wood(wallRegion,viewWidth*0.55f,128+0,30,250,world);
+            Material wall2 = new Wood(wallRegion,viewWidth*0.75f,128+0,30,300,world);
+
+            Material floor1 = new Stone(stoneFloorRegion,viewWidth*0.55f - 90,128+250,200,20,world);
+            Material floor2 = new Stone(stoneFloorRegion,viewWidth*0.75f - 140,128+300,300,20,world);
+
+            Pig p1 = new AveragePig(pigTexture,viewWidth*0.555f ,128 + 250 + 20 + 65,world);
+            Pig p2 = new AveragePig(pigTexture,viewWidth*0.77f ,128 + 300 + 20 + 65,world);
+            Pig p3 = new SmallPig(pigTexture,viewWidth*0.705f ,128 + 300 + 20 + 25,world);
+
+            materials.add(wall1);
+            materials.add(wall2);
+            materials.add(floor1);
+            materials.add(floor2);
+
+            pigs.add(p1);
+            pigs.add(p2);
+            pigs.add(p3);
+        }
 
         birds.add(r1);
         birds.add(r2);
         birds.add(r3);
 
         last = birds.size()-1;
-
-        pigs.add(p1);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -542,7 +572,7 @@ public class LevelScreen extends ScreenAdapter {
                     1,                                      // scaleX
                     1,                                      // scaleY
                     (float) Math.toDegrees(material.body.getAngle()));
-                System.out.println( (float) Math.toDegrees(material.body.getAngle()));
+//                System.out.println( (float) Math.toDegrees(material.body.getAngle()));
             }
 
             int hp = 0;
@@ -552,7 +582,7 @@ public class LevelScreen extends ScreenAdapter {
                 hp+=pig.getHp();
             }
 
-            if(hp==0) isGameOver = true;
+//            if(hp==0) isGameOver = true;
 
 //            handImage.setPosition(handX, handY);
 //            handImage.draw(batch, 1);

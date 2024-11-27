@@ -132,23 +132,31 @@ public class MainScreen extends ScreenAdapter {
         lvlBtn1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelScreen(game));
+                game.setScreen(new LevelScreen(game,1));
             }
         });
 
         lvlBtn2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelScreen(game));
+                game.setScreen(new LevelScreen(game,2));
             }
         });
+
+        lvlBtn3.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LevelScreen(game,3));
+            }
+        });
+
         ClickListener shakeListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 shakeButton((ImageButton) event.getListenerActor());
             }
         };
-        lvlBtn3.addListener(shakeListener);
+//        lvlBtn3.addListener(shakeListener);
         lvlBtn4.addListener(shakeListener);
         lvlBtn5.addListener(shakeListener);
         // Add buttons to stage
