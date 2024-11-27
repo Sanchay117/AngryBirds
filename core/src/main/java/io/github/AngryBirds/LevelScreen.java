@@ -88,6 +88,12 @@ public class LevelScreen extends ScreenAdapter {
     private final Texture stoneWall = new Texture("stone_standing.jpg");
     private final TextureRegion stoneFloorRegion = new TextureRegion(stoneFloor);
     private final TextureRegion stoneWallRegion = new TextureRegion(stoneWall);
+    private final Texture stoneBlock = new Texture("stone_block.png");
+    private final TextureRegion stoneBlockRegion = new TextureRegion(stoneBlock);
+    private final Texture glassFloor = new Texture("Glass_flat.jpg");
+    private final Texture glassWall = new Texture("Glass_standing.jpg");
+    private final TextureRegion glassFloorRegion = new TextureRegion(glassFloor);
+    private final TextureRegion glassWallRegion = new TextureRegion(glassWall);
 
     private final ArrayList<Material> materials = new ArrayList<>();
 
@@ -285,16 +291,12 @@ public class LevelScreen extends ScreenAdapter {
         ImageButton gameOverBtn = new ImageButton(new ImageButton.ImageButtonStyle());
         pauseButton.getStyle().imageUp = skin.getDrawable("pause");
         settingsButton.getStyle().imageUp = skin.getDrawable("settings");
-        gameOverBtn.getStyle().imageUp = skin.getDrawable("gameOver");
 
         pauseButton.setPosition(viewWidth - 100, viewHeight - 100);
         pauseButton.setSize(90, 90);
 
         settingsButton.setPosition(10, viewHeight - 100);
         settingsButton.setSize(90, 90);
-
-        gameOverBtn.setPosition(viewWidth-200,-50);
-        gameOverBtn.setSize(200,200);
 
 
         pauseButton.addListener(new ClickListener() {
@@ -307,12 +309,6 @@ public class LevelScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new SettingsScreen(game,lvl));
-            }
-        });
-        gameOverBtn.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                isGameOver=!isGameOver;
             }
         });
 
@@ -362,6 +358,36 @@ public class LevelScreen extends ScreenAdapter {
             pigs.add(p1);
             pigs.add(p2);
             pigs.add(p3);
+        }else{
+            Material b1 = new Stone(stoneBlockRegion,viewWidth*0.55f,128,50,50,world);
+            Material b2 = new Stone(stoneBlockRegion,viewWidth*0.75f,128,50,50,world);
+            Material f1 = new Wood(floorRegion,viewWidth*0.525f,128+50, (viewWidth*28)/100,25,world);
+
+            Material wL = new Glass(glassWallRegion,viewWidth*0.55f + 12,128+50+25,25,250,world);
+            Material wR = new Glass(glassWallRegion,viewWidth*0.75f + 12,128+50+25,25,250,world);
+
+            Material c1 = new Wood(floorRegion,viewWidth*0.55f + 12 - (float) (viewWidth * 6) /100,128+50+25+250,viewWidth*14/100,35,world);
+            Material c2 = new Wood(floorRegion,viewWidth*0.75f + 12 - (float) (viewWidth * 6) /100,128+50+25+250,viewWidth*14/100,35,world);
+            Material c3 = new Stone(stoneFloorRegion,viewWidth*0.65f - (float) (viewWidth * 5.25) /100 , 128+25+50+250+35,viewWidth*14/100,25,world);
+
+            materials.add(b1);
+            materials.add(b2);
+            materials.add(f1);
+            materials.add(wL);
+            materials.add(wR);
+            materials.add(c1);
+            materials.add(c2);
+            materials.add(c3);
+
+            Pig bigBoy = new BigPig(pigTexture,viewWidth*0.65f + 25,128+75 + 100,world);
+            Pig l = new AveragePig(pigTexture,viewWidth*0.55f , 128+75+285 + 65,world);
+            Pig r = new AveragePig(pigTexture,viewWidth*0.75f + 40, 128+75+285 + 65,world);
+            Pig c = new SmallPig(pigTexture,viewWidth*0.65f + 25,128+75+285 + 25 + 25,world);
+
+            pigs.add(bigBoy);
+            pigs.add(l);
+            pigs.add(r);
+            pigs.add(c);
         }
 
         birds.add(r1);
@@ -505,9 +531,9 @@ public class LevelScreen extends ScreenAdapter {
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//        if (isTutorialEnabled) {
-//            updateHandAnimation(delta);
-//        }
+        if (isTutorialEnabled) {
+            updateHandAnimation(delta);
+        }
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -545,7 +571,7 @@ public class LevelScreen extends ScreenAdapter {
             gameOverStage.draw();
 
             game.mediumFont.draw(batch,"Game Over",viewWidth*0.355f,viewHeight*0.68f);
-            game.mediumFont.draw(batch,"Score: " + score,viewWidth*0.375f,viewHeight*0.52f);
+            game.smallFont.draw(batch,"Score: " + score,viewWidth*0.375f,viewHeight*0.52f);
 
             batch.end();
         }
@@ -578,14 +604,17 @@ public class LevelScreen extends ScreenAdapter {
             int hp = 0;
             for(Pig pig : pigs){
                 if(pig.getHp()>0) batch.draw(pig.texture,pig.getX() - pig.width/2f,pig.getY() - pig.height/2f,pig.width,pig.height);
-                else score+= pig.getHP_OG()*100;
+                else {
+                    score += pig.getHP_OG() * 100;
+                    pig.setHP_OG(0);
+                }
                 hp+=pig.getHp();
             }
 
-//            if(hp==0) isGameOver = true;
+            if(hp==0) isGameOver = true;
 
-//            handImage.setPosition(handX, handY);
-//            handImage.draw(batch, 1);
+            handImage.setPosition(handX, handY);
+            handImage.draw(batch, 1);
 
             batch.draw(SlingShot.texture,SlingShot.x,SlingShot.y,SlingShot.width,SlingShot.height);
             batch.end();

@@ -30,8 +30,9 @@ public class Material {
 
         this.world = world;
 
-        if(Objects.equals(name, "Wood")) hp = 5;
-        else if(Objects.equals(name, "Stone")) hp = 15;
+        if(Objects.equals(name, "Wood")) hp = 10;
+        else if(Objects.equals(name, "Stone")) hp = 20;
+        else hp = 15;
 
         bodyDef = new BodyDef();
         // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
@@ -52,7 +53,11 @@ public class Material {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = rectangle;
         fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.0f;
+        if(Objects.equals(name, "Stone")) fixtureDef.density = 0.7f;
+        if(Objects.equals(name, "Glass")) fixtureDef.density = 0.4f;
+        fixtureDef.friction = 0.2f;
+        if(Objects.equals(name, "Wood")) fixtureDef.friction = 0.4f;
+        if(Objects.equals(name, "Stone")) fixtureDef.friction = 0.5f;
         fixtureDef.restitution = 0.6f; // Make it bounce a little bit
 
 // Create the fixture and attach it to the body

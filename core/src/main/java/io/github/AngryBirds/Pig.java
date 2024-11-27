@@ -65,6 +65,10 @@ public class Pig {
         return HP_OG;
     }
 
+    public void setHP_OG(int hp){
+        HP_OG = hp;
+    }
+
     public int getHp() {
         return hp;
     }

@@ -190,7 +190,7 @@ public class MainScreen extends ScreenAdapter {
         stage.act(delta);
         stage.draw();
 
-        drawLockOverlay(lvlBtn3);
+//        drawLockOverlay(lvlBtn3);
         drawLockOverlay(lvlBtn4);
         drawLockOverlay(lvlBtn5);
 
