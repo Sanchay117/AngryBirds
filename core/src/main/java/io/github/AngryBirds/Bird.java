@@ -14,7 +14,7 @@ public class Bird {
     public int width;
 
     public Body body;
-    public World world;
+    private World world;
     private BodyDef bodyDef;
 
     public static final float PPM = 100.0f; // 1 meter = 100 pixels
@@ -55,7 +55,7 @@ public class Bird {
 //
 //        // Remember to dispose of any shapes after you're done with them!
 //        // BodyDef and FixtureDef don't need disposing, but shapes do.
-//        circle.dispose();
+        circle.dispose();
 
     }
 

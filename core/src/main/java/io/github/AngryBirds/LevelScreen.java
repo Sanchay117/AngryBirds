@@ -323,7 +323,7 @@ public class LevelScreen extends ScreenAdapter {
         Material floor1 = new Wood(floor,viewWidth*0.43f, 128+248,300,30);
         Material wall1 = new Wood(wall,viewWidth*0.51f,128+0,50,250);
 
-        Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128+276,130,130);
+        Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128+276,130,130,world);
 
         materials.add(wall1);
         materials.add(floor1);
@@ -337,6 +337,8 @@ public class LevelScreen extends ScreenAdapter {
         pigs.add(p1);
 
         Gdx.input.setInputProcessor(stage);
+
+        world.setContactListener(new MyContactListener());
 
         // Create our body definition
         BodyDef groundBodyDef = new BodyDef();
@@ -528,9 +530,13 @@ public class LevelScreen extends ScreenAdapter {
                 batch.draw(material.texture,material.x,material.y,material.width,material.height);
             }
 
+            int hp = 0;
             for(Pig pig : pigs){
-                batch.draw(pig.texture,pig.x,pig.y,pig.width,pig.height);
+                if(pig.getHp()>0) batch.draw(pig.texture,pig.x - pig.width/2f,pig.y - pig.height/4f,pig.width,pig.height);
+                hp+=pig.getHp();
             }
+
+            if(hp==0) isGameOver = true;
 
 //            handImage.setPosition(handX, handY);
 //            handImage.draw(batch, 1);
