@@ -113,10 +113,11 @@ public class MainScreen extends ScreenAdapter {
         lvlBtn5 = new ImageButton(lvlStyle);
         ImageButton.ImageButtonStyle loadStyle = new ImageButton.ImageButtonStyle();
         loadStyle.imageUp = new TextureRegionDrawable(new TextureRegion(loadTexture));
+
         loadGameBtn = new ImageButton(loadStyle);
 
         loadGameBtn.setSize(150, 150);
-        loadGameBtn.setPosition(20, 20); // Bottom-left corner
+        loadGameBtn.setPosition(viewWidth*0.5f - 75, 0); // Bottom-left corner
 
         loadGameBtn.addListener(new ClickListener() {
             @Override
@@ -124,6 +125,7 @@ public class MainScreen extends ScreenAdapter {
                 loadGame();
             }
         });
+
         backBtn.setPosition(0.05f, viewHeight - 200);
         backBtn.setSize(200, 200);
 
@@ -188,6 +190,7 @@ public class MainScreen extends ScreenAdapter {
         stage.addActor(lvlBtn3);
         stage.addActor(lvlBtn4);
         stage.addActor(lvlBtn5);
+        stage.addActor(loadGameBtn);
         stage.addActor(bird);
         stage.addActor(bubble);
 
