@@ -80,7 +80,9 @@ public class LevelScreen extends ScreenAdapter {
     private final SlingShot slingShot = new SlingShot(slingShotTexture,100,128,300,270,world);
 
     private final Texture floor = new Texture("wood_line.png");
+    private final TextureRegion floorRegion = new TextureRegion(floor);
     private final Texture wall = new Texture("wall.png");
+    private final TextureRegion wallRegion = new TextureRegion(wall);
     private final Texture block = new Texture("wood_block.png");
     private final ArrayList<Material> materials = new ArrayList<>();
     private final Texture pigTexture = new Texture("pig.png");
@@ -320,13 +322,15 @@ public class LevelScreen extends ScreenAdapter {
         Bird r2 = new Red(redTexture,60,128,100,100,world);
         Bird r3 = new Red(redTexture,120,128,100,100,world);
 
-        Material floor1 = new Wood(floor,viewWidth*0.43f, 128+248,300,30,world);
-        Material wall1 = new Wood(wall,viewWidth*0.51f,128+0,50,250,world);
+        Material floor1 = new Wood(floorRegion,viewWidth*0.33f, 128+248,350,30,world);
+        Material wall1 = new Wood(wallRegion,viewWidth*0.53f,128+0,50,250,world);
+        Material wall2 = new Wood(wallRegion,viewWidth*0.33f,128+0,50,250,world);
 
-        Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128+276,130,130,world);
+        Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128,130,130,world);
 
         materials.add(wall1);
         materials.add(floor1);
+        materials.add(wall2);
 
         birds.add(r1);
         birds.add(r2);
@@ -481,7 +485,7 @@ public class LevelScreen extends ScreenAdapter {
         batch.begin();
 
         batch.draw(game.background, 0, 0,viewWidth,viewHeight);
-        game.smallFont.draw(batch,"Score: 0",viewWidth*0.425f,viewHeight-30);
+        game.smallFont.draw(batch,"Score: " + score,viewWidth*0.425f,viewHeight-30);
         batch.draw(progressBarTexture, viewWidth * 0.4f, viewHeight - 150, 300, 60);
 
         if (isPaused) {
@@ -511,7 +515,7 @@ public class LevelScreen extends ScreenAdapter {
             gameOverStage.draw();
 
             game.mediumFont.draw(batch,"Game Over",viewWidth*0.355f,viewHeight*0.68f);
-            game.mediumFont.draw(batch,"Score: 0",viewWidth*0.375f,viewHeight*0.52f);
+            game.mediumFont.draw(batch,"Score: " + score,viewWidth*0.375f,viewHeight*0.52f);
 
             batch.end();
         }
@@ -527,12 +531,23 @@ public class LevelScreen extends ScreenAdapter {
             }
 
             for(Material material:materials){
-                batch.draw(material.texture,material.getX() - material.width/2f,material.getY() - material.height/4f,material.width,material.height);
+                // Draw with rotation
+                batch.draw(material.texture,
+                    material.getX() - material.width / 2f,  // x position (adjusting for center)
+                    material.getY() - material.height / 2f, // y position (adjusting for center)
+                    material.width / 2f,                    // originX (for rotation)
+                    material.height / 2f,                   // originY (for rotation)
+                    material.width,                         // width of the texture
+                    material.height,                        // height of the texture
+                    1,                                      // scaleX
+                    1,                                      // scaleY
+                    material.body.getAngle());
             }
 
             int hp = 0;
             for(Pig pig : pigs){
-                if(pig.getHp()>0) batch.draw(pig.texture,pig.getX() - pig.width/2f,pig.getY() - 0,pig.width,pig.height);
+                if(pig.getHp()>0) batch.draw(pig.texture,pig.getX() - pig.width/2f,pig.getY() - pig.height/2f,pig.width,pig.height);
+                else score+= pig.getHp()*100;
                 hp+=pig.getHp();
             }
 
@@ -663,5 +678,7 @@ public class LevelScreen extends ScreenAdapter {
         pauseTexture.dispose();
         batch.dispose();
         shapeRenderer.dispose();
+        world.dispose();
+        debugRenderer.dispose();
     }
 }

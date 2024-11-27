@@ -1,11 +1,12 @@
 package io.github.AngryBirds;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Material {
     private String name;
-    public Texture texture;
+    public TextureRegion texture;
     private float x;
     private float y;
     public int width;
@@ -17,7 +18,7 @@ public class Material {
 
     private int hp;
 
-    public Material(String name, Texture texture, float x, float y, int width, int height, World world) {
+    public Material(String name, TextureRegion texture, float x, float y, int width, int height, World world) {
         this.name = name;
         this.texture = texture;
         this.x = x;
@@ -33,7 +34,7 @@ public class Material {
         // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         // Set our body's starting position in the world
-        bodyDef.position.set(x ,y);
+        bodyDef.position.set(x + width/2f ,y + height/2f);
 
         // Create our body in the world using our body definition
         body = world.createBody(bodyDef);

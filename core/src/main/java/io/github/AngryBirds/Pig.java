@@ -40,7 +40,7 @@ public class Pig {
 //
 //        // Create a circle shape and set its radius to 6
         CircleShape circle = new CircleShape();
-        circle.setRadius(width/4f);
+        circle.setRadius(width/2f);
 //
 //        // Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();
