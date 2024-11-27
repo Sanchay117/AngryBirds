@@ -26,14 +26,14 @@ public class SettingsScreen extends ScreenAdapter {
     private Texture musicTexture;
     private Texture languageTexture;
     private Texture creditsTexture;
-    private Texture termsPrivacyTexture;
+    private Texture saveTexture;
 
     private ImageButton crossBtn;
     private ImageButton soundBtn;
     private ImageButton musicBtn;
     private ImageButton languageBtn;
     private ImageButton creditsBtn;
-    private ImageButton termsPrivacyBtn;
+    private ImageButton saveBtn;
 
     private float boardWidth;
     private float boardHeight;
@@ -41,13 +41,14 @@ public class SettingsScreen extends ScreenAdapter {
     private int lvl;
 
 
-    public SettingsScreen(Main game,int lvl) {
-        this.game = game;
-        settingsBgTexture = new Texture("settingsBackground.png");  // Full background
-        boardTexture = new Texture("settingbg.png");  // Board image
+    private final LevelScreen levelScreen;
 
+    public SettingsScreen(Main game, LevelScreen levelScreen, int lvl) {
+        this.game = game;
+        this.levelScreen = levelScreen;
         this.lvl = lvl;
     }
+
 
     @Override
     public void show() {
@@ -58,7 +59,7 @@ public class SettingsScreen extends ScreenAdapter {
         musicTexture = new Texture("music.png");
         languageTexture = new Texture("lang.png");
         creditsTexture = new Texture("credits.png");
-        termsPrivacyTexture = new Texture("TnC.png");
+        saveTexture = new Texture("save.png");
 
         Skin skin = new Skin();
         skin.add("cross", crossBtnTexture);
@@ -66,7 +67,7 @@ public class SettingsScreen extends ScreenAdapter {
         skin.add("music", musicTexture);
         skin.add("language", languageTexture);
         skin.add("credits", creditsTexture);
-        skin.add("termsPrivacy", termsPrivacyTexture);
+        skin.add("termsPrivacy", saveTexture);
 
         boardHeight = Math.min(viewWidth, viewHeight) * 0.9f;
         boardWidth = boardHeight * 1.2f;
@@ -100,7 +101,7 @@ public class SettingsScreen extends ScreenAdapter {
 
         languageBtn = createButton(languageTexture, rightColumnX, boardY + 0.45f * boardHeight, secbuttonSize);
         creditsBtn = createButton(creditsTexture, rightColumnX, boardY + 0.45f * boardHeight - buttonSpacing, secbuttonSize);
-        termsPrivacyBtn = createButton(termsPrivacyTexture, rightColumnX, boardY + 0.45f * boardHeight - 2 * buttonSpacing, secbuttonSize);
+        saveBtn = createButton(saveTexture, rightColumnX, boardY + 0.45f * boardHeight - 2 * buttonSpacing, secbuttonSize);
 
         musicBtn.addListener(new ClickListener() {
             @Override
@@ -109,13 +110,19 @@ public class SettingsScreen extends ScreenAdapter {
                 else game.music.setVolume(0.0f);
             }
         });
+        saveBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                levelScreen.saveGame();
+            }
+        });
 
         stage.addActor(crossBtn);
         stage.addActor(soundBtn);
         stage.addActor(musicBtn);
         stage.addActor(languageBtn);
         stage.addActor(creditsBtn);
-        stage.addActor(termsPrivacyBtn);
+        stage.addActor(saveBtn);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -159,6 +166,6 @@ public class SettingsScreen extends ScreenAdapter {
         musicTexture.dispose();
         languageTexture.dispose();
         creditsTexture.dispose();
-        termsPrivacyTexture.dispose();
+        saveTexture.dispose();
     }
 }
