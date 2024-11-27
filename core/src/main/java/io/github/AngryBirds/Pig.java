@@ -5,9 +5,9 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public class Pig {
     public float size;
-    public int hp;
-    public float x;
-    public float y;
+    private int hp;
+    private float x;
+    private float y;
     public Texture texture;
     public int width;
     public int height;
@@ -59,5 +59,23 @@ public class Pig {
 
     public int getHp() {
         return hp;
+    }
+
+    public void setPos(float x, float y){
+        this.x = x + width/4f;
+        this.y = y + height/4f;
+        body.setTransform(x, y, body.getAngle());
+    }
+
+    public float getX(){
+        return body.getPosition().x;
+    }
+
+    public float getY(){
+        return body.getPosition().y;
+    }
+
+    public void setHp(int hp){
+        this.hp = hp;
     }
 }

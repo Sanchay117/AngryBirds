@@ -320,8 +320,8 @@ public class LevelScreen extends ScreenAdapter {
         Bird r2 = new Red(redTexture,60,128,100,100,world);
         Bird r3 = new Red(redTexture,120,128,100,100,world);
 
-        Material floor1 = new Wood(floor,viewWidth*0.43f, 128+248,300,30);
-        Material wall1 = new Wood(wall,viewWidth*0.51f,128+0,50,250);
+        Material floor1 = new Wood(floor,viewWidth*0.43f, 128+248,300,30,world);
+        Material wall1 = new Wood(wall,viewWidth*0.51f,128+0,50,250,world);
 
         Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128+276,130,130,world);
 
@@ -527,12 +527,12 @@ public class LevelScreen extends ScreenAdapter {
             }
 
             for(Material material:materials){
-                batch.draw(material.texture,material.x,material.y,material.width,material.height);
+                batch.draw(material.texture,material.getX() - material.width/2f,material.getY() - material.height/4f,material.width,material.height);
             }
 
             int hp = 0;
             for(Pig pig : pigs){
-                if(pig.getHp()>0) batch.draw(pig.texture,pig.x - pig.width/2f,pig.y - pig.height/4f,pig.width,pig.height);
+                if(pig.getHp()>0) batch.draw(pig.texture,pig.getX() - pig.width/2f,pig.getY() - 0,pig.width,pig.height);
                 hp+=pig.getHp();
             }
 
