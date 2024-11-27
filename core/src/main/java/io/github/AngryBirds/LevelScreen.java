@@ -350,6 +350,57 @@ public class LevelScreen extends ScreenAdapter {
         groundBody.createFixture(groundBox, 0.0f);
         // Clean up after ourselves
         groundBox.dispose();
+
+        BodyDef ceilingBodyDef = new BodyDef();
+        // Set its world position
+        ceilingBodyDef.position.set(new Vector2(camera.viewportWidth, camera.viewportHeight));
+
+        // Create a body from the definition and add it to the world
+        Body ceilingBody = world.createBody(ceilingBodyDef);
+
+        // Create a polygon shape
+        PolygonShape ceilingBox = new PolygonShape();
+        // Set the polygon shape as a box which is twice the size of our view port and 20 high
+        // (setAsBox takes half-width and half-height as arguments)
+        ceilingBox.setAsBox(camera.viewportWidth, 120f);
+        // Create a fixture from our polygon shape and add it to our ceiling body
+        ceilingBody.createFixture(ceilingBox, 0.0f);
+        // Clean up after ourselves
+        ceilingBox.dispose();
+
+        BodyDef wallDef1 = new BodyDef();
+        // Set its world position
+        wallDef1.position.set(new Vector2(0, 10));
+
+        // Create a body from the definition and add it to the world
+        Body wallBody1 = world.createBody(wallDef1);
+
+        // Create a polygon shape
+        PolygonShape wall1Box = new PolygonShape();
+        // Set the polygon shape as a box which is twice the size of our view port and 20 high
+        // (setAsBox takes half-width and half-height as arguments)
+        wall1Box.setAsBox(0, camera.viewportHeight);
+        // Create a fixture from our polygon shape and add it to our ground body
+        wallBody1.createFixture(wall1Box, 0.0f);
+        // Clean up after ourselves
+        wall1Box.dispose();
+
+        BodyDef wallDef2 = new BodyDef();
+        // Set its world position
+        wallDef2.position.set(new Vector2(camera.viewportWidth, 0));
+
+        // Create a body from the definition and add it to the world
+        Body wallBody2 = world.createBody(wallDef2);
+
+        // Create a polygon shape
+        PolygonShape wall2Box = new PolygonShape();
+        // Set the polygon shape as a box which is twice the size of our view port and 20 high
+        // (setAsBox takes half-width and half-height as arguments)
+        wall2Box.setAsBox(2, camera.viewportHeight);
+        // Create a fixture from our polygon shape and add it to our ground body
+        wallBody2.createFixture(wall2Box, 0.0f);
+        // Clean up after ourselves
+        wall2Box.dispose();
     }
 
     private final float g = 9.8f;
@@ -383,27 +434,32 @@ public class LevelScreen extends ScreenAdapter {
     }
 
     private void drawTrajectory(float x,float y,float velocity_initial,ShapeRenderer shapeRenderer) {
-        float tan = y/x;
-        float hypotenuse = (float) (float) sqrt((endPoint.x-slingShotMiddle.x)*(endPoint.x-slingShotMiddle.x) + (endPoint.y-slingShotMiddle.y)*(endPoint.y-slingShotMiddle.y) );;
+        float stringLen =  (float) sqrt( (slingShotMiddle.y - y)* (slingShotMiddle.y - y) + (slingShotMiddle.x - x)*(slingShotMiddle.x - x));
 
-        float sin = (y)/hypotenuse;
-        float cos = x/hypotenuse;
+        float magnitude = 0.5f * stringLen;  // Magnitude of the impulse
+        float angle = MathUtils.atan2(slingShotMiddle.y - y, slingShotMiddle.x - x);
 
-        float timeOfFlight = 2*velocity_initial*sin/g;
+        System.out.println(angle);
+
+        float sin =  MathUtils.cos(angle);
+        float cos =  MathUtils.sin(angle);
+
+        float timeOfFlight = 2*magnitude*sin/g;
         float timeStep = 0.35f;
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(new Color(20, 20, 20, 0.8f)); // Semi-transparent red
 
         for (float t = 0; t <= timeOfFlight; t += timeStep) {
-            float xCoord = getX(cos, x, velocity_initial, t);
-            float yCoord = getY(sin, y, velocity_initial, t);
+            float xCoord = getX(cos, x, magnitude, t);
+            float yCoord = getY(sin, y, magnitude, t);
 
             shapeRenderer.circle(xCoord, yCoord, 7);
         }
     }
 
     private boolean thrown = false;
+    private boolean left = false;
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -504,18 +560,22 @@ public class LevelScreen extends ScreenAdapter {
                 shapeRenderer.end();
             }else{
 
-                if(thrown){
+                if(thrown && !left ){
                     float stringLen =  (float) sqrt( (slingShotMiddle.y - testBird.getY())* (slingShotMiddle.y - testBird.getY()) + (slingShotMiddle.x - testBird.getX())*(slingShotMiddle.x - testBird.getX()));
 
-                    float magnitude = 100000.0f * stringLen;  // Magnitude of the impulse
-                    float angle = (slingShotMiddle.y - testBird.getY())/(slingShotMiddle.x - testBird.getX()); // Convert degrees to radians (example: 45 degrees)
+                    float magnitude = 2.0f * stringLen;  // Magnitude of the impulse
+                    float angle = MathUtils.atan2(slingShotMiddle.y - testBird.getY(), slingShotMiddle.x - testBird.getX());
 
                     float impulseX = magnitude * MathUtils.cos(angle);
                     float impulseY = magnitude * MathUtils.sin(angle);
 
                     testBird.body.setLinearVelocity(impulseX,impulseY);
+                    testBird.body.setLinearDamping(0.0f);
+                    testBird.setPos(testBird.getX() + 10, testBird.getY());
+                    left = true;
+                    System.out.println("Velocity: " + testBird.body.getLinearVelocity());
                 }else{
-                    testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
+                    if(!left) testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
                 }
             }
 

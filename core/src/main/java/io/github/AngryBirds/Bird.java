@@ -46,8 +46,8 @@ public class Bird {
 //        // Create a fixture definition to apply our shape to
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
+        fixtureDef.density = .5f;
+        fixtureDef.friction = 0.0f;
         fixtureDef.restitution = 0.6f; // Make it bounce a little bit
 //
 //        // Create our fixture and attach it to the body
