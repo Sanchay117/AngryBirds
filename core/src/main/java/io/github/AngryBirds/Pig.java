@@ -12,6 +12,8 @@ public class Pig {
     public int width;
     public int height;
 
+    private int HP_OG;
+
     public Body body;
     private World world;
     private BodyDef bodyDef;
@@ -26,6 +28,8 @@ public class Pig {
         this.height = height;
 
         this.world = world;
+
+        this.HP_OG  = hp;
 
         // First we create a body definition
         bodyDef = new BodyDef();
@@ -55,6 +59,10 @@ public class Pig {
 //        // Remember to dispose of any shapes after you're done with them!
 //        // BodyDef and FixtureDef don't need disposing, but shapes do.
         circle.dispose();
+    }
+
+    public int getHP_OG(){
+        return HP_OG;
     }
 
     public int getHp() {

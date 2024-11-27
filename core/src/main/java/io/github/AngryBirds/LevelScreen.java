@@ -547,7 +547,7 @@ public class LevelScreen extends ScreenAdapter {
             int hp = 0;
             for(Pig pig : pigs){
                 if(pig.getHp()>0) batch.draw(pig.texture,pig.getX() - pig.width/2f,pig.getY() - pig.height/2f,pig.width,pig.height);
-                else score+= pig.getHp()*100;
+                else score+= pig.getHP_OG()*100;
                 hp+=pig.getHp();
             }
 
