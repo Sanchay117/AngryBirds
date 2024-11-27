@@ -541,7 +541,8 @@ public class LevelScreen extends ScreenAdapter {
                     material.height,                        // height of the texture
                     1,                                      // scaleX
                     1,                                      // scaleY
-                    material.body.getAngle());
+                    (float) Math.toDegrees(material.body.getAngle()));
+                System.out.println( (float) Math.toDegrees(material.body.getAngle()));
             }
 
             int hp = 0;
