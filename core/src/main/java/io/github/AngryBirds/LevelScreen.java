@@ -75,7 +75,6 @@ public class LevelScreen extends ScreenAdapter {
 
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
-    private final Bird testBird = new Red(redTexture,120,128,100,100,world);
 
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
     private final SlingShot slingShot = new SlingShot(slingShotTexture,100,128,300,270,world);
@@ -317,6 +316,7 @@ public class LevelScreen extends ScreenAdapter {
 
         Bird r1 = new Red(redTexture,0,128,100,100,world);
         Bird r2 = new Red(redTexture,60,128,100,100,world);
+        Bird r3 = new Red(redTexture,120,128,100,100,world);
 
         Material floor1 = new Wood(floor,viewWidth*0.43f, 128+248,300,30);
         Material wall1 = new Wood(wall,viewWidth*0.51f,128+0,50,250);
@@ -328,6 +328,7 @@ public class LevelScreen extends ScreenAdapter {
 
         birds.add(r1);
         birds.add(r2);
+        birds.add(r3);
 
         pigs.add(p1);
 
@@ -439,8 +440,6 @@ public class LevelScreen extends ScreenAdapter {
         float magnitude = 0.5f * stringLen;  // Magnitude of the impulse
         float angle = MathUtils.atan2(slingShotMiddle.y - y, slingShotMiddle.x - x);
 
-        System.out.println(angle);
-
         float sin =  MathUtils.cos(angle);
         float cos =  MathUtils.sin(angle);
 
@@ -460,6 +459,7 @@ public class LevelScreen extends ScreenAdapter {
 
     private boolean thrown = false;
     private boolean left = false;
+    private int last = birds.size()-1;
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -518,7 +518,7 @@ public class LevelScreen extends ScreenAdapter {
             game.background = new Texture("lvlBG.png");
 
             for(Bird bird : birds){
-                batch.draw(bird.texture,bird.getX(),bird.getY(),bird.width,bird.height);
+                batch.draw(bird.texture,bird.getX()- bird.width / 2f,bird.getY()- bird.height/4f,bird.width,bird.height);
             }
 
             for(Material material:materials){
@@ -535,9 +535,15 @@ public class LevelScreen extends ScreenAdapter {
             batch.draw(SlingShot.texture,SlingShot.x,SlingShot.y,SlingShot.width,SlingShot.height);
             batch.end();
 
+            Bird testBird = null;
+            if(last>=0) {
+                testBird = birds.get(last);
+                System.out.println(testBird);
+            }
+
             float thickness = 4f;
 
-            if (dragging) {
+            if (dragging && testBird != null) {
                 thrown = true;
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.setColor(Color.BLACK);
@@ -560,7 +566,7 @@ public class LevelScreen extends ScreenAdapter {
                 shapeRenderer.end();
             }else{
 
-                if(thrown && !left ){
+                if(thrown && !left && testBird != null ) {
                     float stringLen =  (float) sqrt( (slingShotMiddle.y - testBird.getY())* (slingShotMiddle.y - testBird.getY()) + (slingShotMiddle.x - testBird.getX())*(slingShotMiddle.x - testBird.getX()));
 
                     float magnitude = 2.0f * stringLen;  // Magnitude of the impulse
@@ -575,7 +581,15 @@ public class LevelScreen extends ScreenAdapter {
                     left = true;
                     System.out.println("Velocity: " + testBird.body.getLinearVelocity());
                 }else{
-                    if(!left) testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
+                    if(!left && testBird!=null) testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
+                    else if(left){
+                        if(last>=0){
+                            System.out.println(last);
+                            last--;
+                            thrown = false;
+                            left = false;
+                        }
+                    }
                 }
             }
 
@@ -595,7 +609,7 @@ public class LevelScreen extends ScreenAdapter {
             }
 
             batch.begin();
-            batch.draw(testBird.texture, testBird.getX(), testBird.getY(), testBird.width, testBird.height);
+            if(testBird!=null) batch.draw(testBird.texture, testBird.getX()- testBird.width / 2f,testBird.getY()- testBird.height/4f, testBird.width, testBird.height);
             batch.end();
 
             stage.act(delta);

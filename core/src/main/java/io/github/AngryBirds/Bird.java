@@ -34,7 +34,7 @@ public class Bird {
         // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         // Set our body's starting position in the world
-        bodyDef.position.set(x,y);
+        bodyDef.position.set(x ,y);
 
         // Create our body in the world using our body definition
         body = world.createBody(bodyDef);
@@ -60,8 +60,8 @@ public class Bird {
     }
 
     public void setPos(float x, float y){
-        this.x = x;
-        this.y = y;
+        this.x = x + width/4f;
+        this.y = y + height/4f;
         body.setTransform(x, y, body.getAngle());
     }
 
