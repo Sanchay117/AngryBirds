@@ -28,7 +28,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.Color;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Math.sqrt;
 
@@ -113,6 +116,46 @@ public class LevelScreen extends ScreenAdapter {
         this.lvl = lvl;
 
         game.music.setVolume(0.4f);
+    }
+    public LevelScreen(Main game, int level, GameState gameState) {
+        this.game = game;
+        this.lvl = level;
+        this.score = gameState.getScore();
+
+        for (BirdState birdState : gameState.getBirds()) {
+            birds.add(new Bird(
+                birdState.getType(),
+                1.0f,
+                new Texture(birdState.getType() + ".png"),
+                birdState.getX(),
+                birdState.getY(),
+                50, 50,
+                world
+            ));
+        }
+
+        for (PigState pigState : gameState.getPigs()) {
+            pigs.add(new Pig(
+                1.0f,
+                pigState.getHp(),
+                new Texture("pig.png"),
+                pigState.getX(),
+                pigState.getY(),
+                50, 50,
+                world
+            ));
+        }
+
+        for (MaterialState materialState : gameState.getMaterials()) {
+            materials.add(new Material(
+                materialState.getName(),
+                new TextureRegion(new Texture(materialState.getName() + ".png")),
+                materialState.getX(),
+                materialState.getY(),
+                100, 100,
+                world
+            ));
+        }
     }
 
     public void createGameOverScreen(){
@@ -231,6 +274,32 @@ public class LevelScreen extends ScreenAdapter {
         pauseStage.addActor(backBtn);
         pauseStage.addActor(restartBtn);
     }
+    public void saveGame() {
+        List<BirdState> birdStates = new ArrayList<>();
+        for (Bird bird : birds) {
+            birdStates.add(new BirdState(bird.getX(), bird.getY(), bird.getType()));
+        }
+
+        List<PigState> pigStates = new ArrayList<>();
+        for (Pig pig : pigs) {
+            pigStates.add(new PigState(pig.getX(), pig.getY(), pig.getHp()));
+        }
+
+        List<MaterialState> materialStates = new ArrayList<>();
+        for (Material material : materials) {
+            materialStates.add(new MaterialState(material.getX(), material.getY(), material.getHp(), material.getName()));
+        }
+
+        GameState gameState = new GameState(lvl, score, birdStates, pigStates, materialStates);
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savedGame.ser"))) {
+            oos.writeObject(gameState);
+            System.out.println("Game saved successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Failed to save the game.");
+        }
+    }
 
     @Override
     public void show(){
@@ -308,7 +377,7 @@ public class LevelScreen extends ScreenAdapter {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new SettingsScreen(game,lvl));
+                game.setScreen(new SettingsScreen(game, LevelScreen.this, lvl)); // Correct reference to `LevelScreen`
             }
         });
 
