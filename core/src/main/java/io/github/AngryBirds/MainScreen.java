@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -25,6 +26,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.Color;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainScreen extends ScreenAdapter {
 
@@ -36,12 +43,14 @@ public class MainScreen extends ScreenAdapter {
     private Texture backBtnTexture;
     private Texture lvlBtnTexture;
     private Texture lockTexture;
+    private Texture loadTexture;
     private ImageButton backBtn;
     private ImageButton lvlBtn1;
     private ImageButton lvlBtn2;
     private ImageButton lvlBtn3;
     private ImageButton lvlBtn4;
     private ImageButton lvlBtn5;
+    private ImageButton loadGameBtn;
     private Image bird;
     private Image bubble;
     private Texture birdTexture;
@@ -71,6 +80,7 @@ public class MainScreen extends ScreenAdapter {
         lockTexture = new Texture("lock.png");
         birdTexture = new Texture("bird.png");
         bubbleTexture = new Texture("bubble.png");
+        loadTexture = new Texture("load.png");
 
         Skin skin = new Skin();
         skin.add("back", backBtnTexture);
@@ -101,7 +111,19 @@ public class MainScreen extends ScreenAdapter {
         lvlBtn3 = new ImageButton(lvlStyle);
         lvlBtn4 = new ImageButton(lvlStyle);
         lvlBtn5 = new ImageButton(lvlStyle);
+        ImageButton.ImageButtonStyle loadStyle = new ImageButton.ImageButtonStyle();
+        loadStyle.imageUp = new TextureRegionDrawable(new TextureRegion(loadTexture));
+        loadGameBtn = new ImageButton(loadStyle);
 
+        loadGameBtn.setSize(150, 150);
+        loadGameBtn.setPosition(20, 20); // Bottom-left corner
+
+        loadGameBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                loadGame();
+            }
+        });
         backBtn.setPosition(0.05f, viewHeight - 200);
         backBtn.setSize(200, 200);
 
@@ -195,6 +217,36 @@ public class MainScreen extends ScreenAdapter {
         drawLockOverlay(lvlBtn5);
 
         batch.end();
+    }
+
+    public void loadGame() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("savedGame.ser"))) {
+            GameState gameState = (GameState) ois.readObject();
+            game.setScreen(new LevelScreen(game, gameState.getLevel(), gameState));
+            System.out.println("Game loaded successfully.");
+        } catch (FileNotFoundException e) {
+            System.out.println("No saved game found.");
+            displayNoSavedGamePopup();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Failed to load the game.");
+        }
+    }
+
+
+
+    private void displayNoSavedGamePopup() {
+        Dialog dialog = new Dialog("No Saved Game", new Skin(Gdx.files.internal("uiskin.json"))) {
+            @Override
+            protected void result(Object object) {
+                if(object.equals(true)){
+                    game.setScreen(new MainScreen(game));
+                }
+            }
+        };
+        dialog.text("No saved game exists. Start a new game instead!");
+        dialog.button("OK");
+        dialog.show(stage);
     }
     private void shakeButton(ImageButton button) {
         button.addAction(Actions.sequence(
