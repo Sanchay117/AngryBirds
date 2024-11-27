@@ -86,6 +86,8 @@ public class LevelScreen extends ScreenAdapter {
     private final Texture pigTexture = new Texture("pig.png");
     private final ArrayList<Pig> pigs = new ArrayList<>();
 
+    private int last;
+
     public LevelScreen(Main game) {
         this.game = game;
         game.background = new Texture("lvlBG.png");
@@ -330,6 +332,8 @@ public class LevelScreen extends ScreenAdapter {
         birds.add(r2);
         birds.add(r3);
 
+        last = birds.size()-1;
+
         pigs.add(p1);
 
         Gdx.input.setInputProcessor(stage);
@@ -459,7 +463,6 @@ public class LevelScreen extends ScreenAdapter {
 
     private boolean thrown = false;
     private boolean left = false;
-    private int last = birds.size()-1;
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -538,7 +541,6 @@ public class LevelScreen extends ScreenAdapter {
             Bird testBird = null;
             if(last>=0) {
                 testBird = birds.get(last);
-                System.out.println(testBird);
             }
 
             float thickness = 4f;
@@ -581,10 +583,9 @@ public class LevelScreen extends ScreenAdapter {
                     left = true;
                     System.out.println("Velocity: " + testBird.body.getLinearVelocity());
                 }else{
-                    if(!left && testBird!=null) testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
-                    else if(left){
+//                    if(!left && testBird!=null) testBird.setPos(slingShotMiddle.x - testBird.width/4f - 20,slingShotMiddle.y - testBird.height/4f - 10);
+                    if(left){
                         if(last>=0){
-                            System.out.println(last);
                             last--;
                             thrown = false;
                             left = false;
