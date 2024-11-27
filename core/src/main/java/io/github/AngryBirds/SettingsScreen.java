@@ -85,6 +85,8 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
+
+
         float buttonSize = 120f;
         float leftColumnX = boardX + 0.25f * boardWidth;
         float rightColumnX = boardX + 0.525f * boardWidth;
@@ -95,6 +97,14 @@ public class SettingsScreen extends ScreenAdapter {
         languageBtn = createButton(languageTexture, rightColumnX, boardY + 0.45f * boardHeight, secbuttonSize);
         creditsBtn = createButton(creditsTexture, rightColumnX, boardY + 0.45f * boardHeight - buttonSpacing, secbuttonSize);
         termsPrivacyBtn = createButton(termsPrivacyTexture, rightColumnX, boardY + 0.45f * boardHeight - 2 * buttonSpacing, secbuttonSize);
+
+        musicBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(game.music.getVolume()==0) game.music.setVolume(0.4f);
+                else game.music.setVolume(0.0f);
+            }
+        });
 
         stage.addActor(crossBtn);
         stage.addActor(soundBtn);
