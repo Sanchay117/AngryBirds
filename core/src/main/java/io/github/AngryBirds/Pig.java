@@ -3,23 +3,37 @@ package io.github.AngryBirds;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class Pig {
-    public float size;
+import java.io.Serializable;
+
+public class Pig implements Serializable {
     private int hp;
     private float x;
     private float y;
-    public Texture texture;
-    public int width;
-    public int height;
+    private transient Texture texture;
+    private int width;
+    private int height;
 
     private int HP_OG;
 
-    public Body body;
-    private World world;
-    private BodyDef bodyDef;
+    public transient Body body;
+    private transient World world;
+    private transient BodyDef bodyDef;
 
-    public Pig(float size, int hp, Texture texture, float x, float y, int width, int height, World world) {
-        this.size = size;
+    private String file_name;
+
+    public Pig(int hp, String file_name, float x, float y, int width, int height) {
+        this.hp = hp;
+        this.x = x;
+        this.y = y;
+        this.file_name = file_name;
+        this.texture = new Texture(file_name);
+        this.width = width;
+        this.height = height;
+
+        this.HP_OG = hp;
+    }
+
+    public Pig(int hp, Texture texture, float x, float y, int width, int height, World world,String file_name) {
         this.hp = hp;
         this.x = x;
         this.y = y;
@@ -30,6 +44,8 @@ public class Pig {
         this.world = world;
 
         this.HP_OG  = hp;
+
+        this.file_name = file_name;
 
         // First we create a body definition
         bodyDef = new BodyDef();
@@ -61,8 +77,20 @@ public class Pig {
         circle.dispose();
     }
 
+    public String getFile_name() {
+        return file_name;
+    }
+
     public int getHP_OG(){
         return HP_OG;
+    }
+
+    public float getXStraightUp(){
+        return x;
+    }
+
+    public float getYStraightUp(){
+        return y;
     }
 
     public void setHP_OG(int hp){
@@ -89,5 +117,21 @@ public class Pig {
 
     public void setHp(int hp){
         this.hp = hp;
+    }
+
+    public Texture getTexture(){
+        return texture;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public World getWorld(){
+        return world;
     }
 }

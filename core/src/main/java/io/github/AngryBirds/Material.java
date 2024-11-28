@@ -4,23 +4,46 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Material {
+public class Material implements Serializable {
     private String name;
-    public TextureRegion texture;
+    private transient TextureRegion texture;
     private float x;
     private float y;
-    public int width;
-    public int height;
+    private int width;
+    private int height;
 
-    public Body body;
-    private World world;
-    private BodyDef bodyDef;
+    public transient Body body;
+    private transient World world;
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public TextureRegion getTexture() {
+        return texture;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    private transient BodyDef bodyDef;
 
     private int hp;
+    private String file_name;
 
-    public Material(String name, TextureRegion texture, float x, float y, int width, int height, World world) {
+    public String getFile_name(){
+        return file_name;
+    }
+
+    public Material(String name, TextureRegion texture, float x, float y, int width, int height, World world,String file_name) {
         this.name = name;
         this.texture = texture;
         this.x = x;
@@ -29,6 +52,7 @@ public class Material {
         this.height = height;
 
         this.world = world;
+        this.file_name = file_name;
 
         if(Objects.equals(name, "Wood")) hp = 10;
         else if(Objects.equals(name, "Stone")) hp = 20;
@@ -67,6 +91,23 @@ public class Material {
         rectangle.dispose();
     }
 
+    public Material(String name, String file_name, float x, float y, int width, int height) {
+        this.name = name;
+        this.file_name = file_name;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    public float getXStraightUp(){
+        return x;
+    }
+
+    public float getYStraightUp(){
+        return y;
+    }
+
     public int getHp() {
         return hp;
     }
@@ -92,4 +133,6 @@ public class Material {
     public String getName(){
         return name;
     }
+
+
 }

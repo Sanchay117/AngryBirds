@@ -107,6 +107,8 @@ public class LevelScreen extends ScreenAdapter {
     private int last;
     private int lvl;
 
+    private boolean loaded = false;
+
     private AssetManager assetManager;
 
     public LevelScreen(Main game,int lvl) {
@@ -128,39 +130,30 @@ public class LevelScreen extends ScreenAdapter {
 
     public LevelScreen(Main game, int level, GameState gameState) {
         this.game = game;
+        game.background = new Texture("lvlBG.png");
+        progressBarTexture = new Texture("bar.png");
+        this.batch = new SpriteBatch();
+        this.shapeRenderer = new ShapeRenderer();
+
         this.lvl = level;
-        this.score = gameState.getScore();
-        for (BirdState birdState : gameState.getBirds()) {
-            birds.add(new Bird(
-                birdState.getType(),
-                1.0f,
-                new Texture(birdState.getType() + ".png"),
-                birdState.getX(),
-                birdState.getY(),
-                50, 50,
-                world
-            ));
+
+        loaded = true;
+
+        game.music.setVolume(0.4f);
+
+        assetManager = new AssetManager();
+        assetManager.load("lvlBG.png", Texture.class);
+        assetManager.load("settingsBackground.png",Texture.class);
+        assetManager.finishLoading();
+
+        for (Bird bird : gameState.getBirds()) {
+            birds.add(new Bird(bird.getType(),new Texture(bird.getFile_name()),bird.getXStraightUp(), bird.getYStraightUp(), bird.getWidth(),bird.getHeight(),world,bird.getFile_name()));
         }
-        for (PigState pigState : gameState.getPigs()) {
-            pigs.add(new Pig(
-                1.0f,
-                pigState.getHp(),
-                new Texture("pig.png"),
-                pigState.getX(),
-                pigState.getY(),
-                50, 50,
-                world
-            ));
+        for (Pig pig : gameState.getPigs()) {
+            pigs.add(new Pig(pig.getHp(),new Texture(pig.getFile_name()), pig.getXStraightUp(), pig.getYStraightUp(), pig.getWidth(),pig.getHeight(),world, pig.getFile_name()));
         }
-        for (MaterialState materialState : gameState.getMaterials()) {
-            materials.add(new Material(
-                materialState.getName(),
-                new TextureRegion(new Texture(materialState.getName() + ".png")),
-                materialState.getX(),
-                materialState.getY(),
-                100, 100,
-                world
-            ));
+        for (Material material : gameState.getMaterials()) {
+            materials.add(new Material(material.getName(),new TextureRegion(new Texture(material.getFile_name())),material.getXStraightUp(), material.getYStraightUp(), material.getWidth(),material.getHeight(),world, material.getFile_name()));
         }
     }
 
@@ -282,19 +275,32 @@ public class LevelScreen extends ScreenAdapter {
     }
 
     public void saveGame() {
-        List<BirdState> birdStates = new ArrayList<>();
+        System.out.println("----------SAVE_GAME-----------------");
+        ArrayList<Bird> b = new ArrayList<>();
         for (Bird bird : birds) {
-            birdStates.add(new BirdState(bird.getX(), bird.getY(), bird.getType()));
+            System.out.println(bird + " 1 ");
+            b.add(new Bird(bird.getType(),bird.getFile_name(),bird.getX(), bird.getY(), bird.getWidth(),bird.getHeight()));
+            System.out.println(bird + " 2 ");
         }
-        List<PigState> pigStates = new ArrayList<>();
+
+        System.out.println("----------BIRB ADDED-----------------");
+
+        ArrayList<Pig> p = new ArrayList<>();
         for (Pig pig : pigs) {
-            pigStates.add(new PigState(pig.getX(), pig.getY(), pig.getHp()));
+            p.add(new Pig(pig.getHp(),pig.getFile_name(), pig.getX(), pig.getY(), pig.getWidth(),pig.getHeight()));
         }
-        List<MaterialState> materialStates = new ArrayList<>();
+
+        ArrayList<Material> m = new ArrayList<>();
         for (Material material : materials) {
-            materialStates.add(new MaterialState(material.getX(), material.getY(), material.getHp(), material.getName()));
+            m.add(new Material(material.getName(),material.getFile_name(),material.getX(), material.getY(), material.getWidth(),material.getHeight()));
         }
-        GameState gameState = new GameState(lvl, score, birdStates, pigStates, materialStates);
+
+        System.out.println("abcdefghj->0");
+
+        GameState gameState = new GameState(lvl, score, b, p, m);
+
+        System.out.println("abcdefghj");
+
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savedGame.ser"))) {
             oos.writeObject(gameState);
             System.out.println("Game saved successfully.");
@@ -395,76 +401,80 @@ public class LevelScreen extends ScreenAdapter {
         createPauseScreen();
         createGameOverScreen();
 
-        Bird r1 = new Red(redTexture,0,128,100,100,world);
-        Bird r2 = new Red(redTexture,60,128,100,100,world);
-        Bird r3 = new Red(redTexture,120,128,100,100,world);
+        Bird r1 = new Red(redTexture,0,128,100,100,world,"red.png");
+        Bird r2 = new Red(redTexture,60,128,100,100,world,"red.png");
+        Bird r3 = new Red(redTexture,120,128,100,100,world,"red.png");
 
-        if(lvl==1){
-            Material floor1 = new Wood(floorRegion,viewWidth*0.33f, 128+248,350,30,world);
-            Material wall1 = new Wood(wallRegion,viewWidth*0.53f,128+0,50,250,world);
-            Material wall2 = new Wood(wallRegion,viewWidth*0.33f,128+0,50,250,world);
+        if(!loaded){
+            if(lvl==1){
+                Material floor1 = new Wood(floorRegion,viewWidth*0.33f, 128+248,350,30,world,"wood_line.png");
+                Material wall1 = new Wood(wallRegion,viewWidth*0.53f,128+0,50,250,world,"wall.png");
+                Material wall2 = new Wood(wallRegion,viewWidth*0.33f,128+0,50,250,world,"wall.png");
 
-            Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128,world);
+                Pig p1 = new AveragePig(pigTexture,viewWidth*0.485f,128,world,"pig.png");
 
-            materials.add(wall1);
-            materials.add(floor1);
-            materials.add(wall2);
+                materials.add(wall1);
+                materials.add(floor1);
+                materials.add(wall2);
 
-            pigs.add(p1);
-        }else if(lvl==2){
-            Material wall1 = new Wood(wallRegion,viewWidth*0.55f,128+0,30,250,world);
-            Material wall2 = new Wood(wallRegion,viewWidth*0.75f,128+0,30,300,world);
+                pigs.add(p1);
+            }else if(lvl==2){
+                Material wall1 = new Wood(wallRegion,viewWidth*0.55f,128+0,30,250,world,"wall.png");
+                Material wall2 = new Wood(wallRegion,viewWidth*0.75f,128+0,30,300,world,"wall.png");
 
-            Material floor1 = new Stone(stoneFloorRegion,viewWidth*0.55f - 90,128+250,200,20,world);
-            Material floor2 = new Stone(stoneFloorRegion,viewWidth*0.75f - 140,128+300,300,20,world);
+                Material floor1 = new Stone(stoneFloorRegion,viewWidth*0.55f - 90,128+250,200,20,world,"stone_flat.jpg");
+                Material floor2 = new Stone(stoneFloorRegion,viewWidth*0.75f - 140,128+300,300,20,world,"stone_flat.jpg");
 
-            Pig p1 = new AveragePig(pigTexture,viewWidth*0.555f ,128 + 250 + 20 + 65,world);
-            Pig p2 = new AveragePig(pigTexture,viewWidth*0.77f ,128 + 300 + 20 + 65,world);
-            Pig p3 = new SmallPig(pigTexture,viewWidth*0.705f ,128 + 300 + 20 + 25,world);
+                Pig p1 = new AveragePig(pigTexture,viewWidth*0.555f ,128 + 250 + 20 + 65,world,"pig.png");
+                Pig p2 = new AveragePig(pigTexture,viewWidth*0.77f ,128 + 300 + 20 + 65,world,"pig.png");
+                Pig p3 = new SmallPig(pigTexture,viewWidth*0.705f ,128 + 300 + 20 + 25,world,"pig.png");
 
-            materials.add(wall1);
-            materials.add(wall2);
-            materials.add(floor1);
-            materials.add(floor2);
+                materials.add(wall1);
+                materials.add(wall2);
+                materials.add(floor1);
+                materials.add(floor2);
 
-            pigs.add(p1);
-            pigs.add(p2);
-            pigs.add(p3);
-        }else{
-            Material b1 = new Stone(stoneBlockRegion,viewWidth*0.55f,128,50,50,world);
-            Material b2 = new Stone(stoneBlockRegion,viewWidth*0.75f,128,50,50,world);
-            Material f1 = new Wood(floorRegion,viewWidth*0.525f,128+50, (viewWidth*28)/100,25,world);
+                pigs.add(p1);
+                pigs.add(p2);
+                pigs.add(p3);
+            }else{
+                Material b1 = new Stone(stoneBlockRegion,viewWidth*0.55f,128,50,50,world,"stone_block.png");
+                Material b2 = new Stone(stoneBlockRegion,viewWidth*0.75f,128,50,50,world,"stone_block.png");
+                Material f1 = new Wood(floorRegion,viewWidth*0.525f,128+50, (viewWidth*28)/100,25,world,"wood_line.png");
 
-            Material wL = new Glass(glassWallRegion,viewWidth*0.55f + 12,128+50+25,25,250,world);
-            Material wR = new Glass(glassWallRegion,viewWidth*0.75f + 12,128+50+25,25,250,world);
+                Material wL = new Glass(glassWallRegion,viewWidth*0.55f + 12,128+50+25,25,250,world,"Glass_standing.jpg");
+                Material wR = new Glass(glassWallRegion,viewWidth*0.75f + 12,128+50+25,25,250,world,"Glass_standing.jpg");
 
-            Material c1 = new Wood(floorRegion,viewWidth*0.55f + 12 - (float) (viewWidth * 6) /100,128+50+25+250,viewWidth*14/100,35,world);
-            Material c2 = new Wood(floorRegion,viewWidth*0.75f + 12 - (float) (viewWidth * 6) /100,128+50+25+250,viewWidth*14/100,35,world);
-            Material c3 = new Stone(stoneFloorRegion,viewWidth*0.65f - (float) (viewWidth * 5.25) /100 , 128+25+50+250+35,viewWidth*14/100,25,world);
+                Material c1 = new Wood(floorRegion,viewWidth*0.55f + 12 - (float) (viewWidth * 6) /100,128+50+25+250,viewWidth*14/100,35,world,"wood_line.png");
+                Material c2 = new Wood(floorRegion,viewWidth*0.75f + 12 - (float) (viewWidth * 6) /100,128+50+25+250,viewWidth*14/100,35,world,"wood_line.png");
+                Material c3 = new Stone(stoneFloorRegion,viewWidth*0.65f - (float) (viewWidth * 5.25) /100 , 128+25+50+250+35,viewWidth*14/100,25,world,"stone_flat.jpg");
 
-            materials.add(b1);
-            materials.add(b2);
-            materials.add(f1);
-            materials.add(wL);
-            materials.add(wR);
-            materials.add(c1);
-            materials.add(c2);
-            materials.add(c3);
+                materials.add(b1);
+                materials.add(b2);
+                materials.add(f1);
+                materials.add(wL);
+                materials.add(wR);
+                materials.add(c1);
+                materials.add(c2);
+                materials.add(c3);
 
-            Pig bigBoy = new BigPig(pigTexture,viewWidth*0.65f + 25,128+75 + 100,world);
-            Pig l = new AveragePig(pigTexture,viewWidth*0.55f , 128+75+285 + 65,world);
-            Pig r = new AveragePig(pigTexture,viewWidth*0.75f + 40, 128+75+285 + 65,world);
-            Pig c = new SmallPig(pigTexture,viewWidth*0.65f + 25,128+75+285 + 25 + 25,world);
+                Pig bigBoy = new BigPig(pigTexture,viewWidth*0.65f + 25,128+75 + 100,world,"pig.png");
+                Pig l = new AveragePig(pigTexture,viewWidth*0.55f , 128+75+285 + 65,world,"pig.png");
+                Pig r = new AveragePig(pigTexture,viewWidth*0.75f + 40, 128+75+285 + 65,world,"pig.png");
+                Pig c = new SmallPig(pigTexture,viewWidth*0.65f + 25,128+75+285 + 25 + 25,world,"pig.png");
 
-            pigs.add(bigBoy);
-            pigs.add(l);
-            pigs.add(r);
-            pigs.add(c);
+                pigs.add(bigBoy);
+                pigs.add(l);
+                pigs.add(r);
+                pigs.add(c);
+            }
+
+            birds.add(r1);
+            birds.add(r2);
+            birds.add(r3);
         }
 
-        birds.add(r1);
-        birds.add(r2);
-        birds.add(r3);
+
 
         last = birds.size()-1;
 
@@ -655,18 +665,18 @@ public class LevelScreen extends ScreenAdapter {
             game.background = assetManager.get("lvlBG.png", Texture.class);
 
             for(Bird bird : birds){
-                batch.draw(bird.texture,bird.getX()- bird.width / 2f,bird.getY()- bird.height/4f,bird.width,bird.height);
+                batch.draw(bird.getTexture(),bird.getX()- bird.getWidth() / 2f,bird.getY()- bird.getHeight()/4f,bird.getWidth(),bird.getHeight());
             }
 
             for(Material material:materials){
                 // Draw with rotation
-                batch.draw(material.texture,
-                    material.getX() - material.width / 2f,  // x position (adjusting for center)
-                    material.getY() - material.height / 2f, // y position (adjusting for center)
-                    material.width / 2f,                    // originX (for rotation)
-                    material.height / 2f,                   // originY (for rotation)
-                    material.width,                         // width of the texture
-                    material.height,                        // height of the texture
+                batch.draw(material.getTexture(),
+                    material.getX() - material.getWidth() / 2f,  // x position (adjusting for center)
+                    material.getY() - material.getHeight() / 2f, // y position (adjusting for center)
+                    material.getWidth() / 2f,                    // originX (for rotation)
+                    material.getHeight() / 2f,                   // originY (for rotation)
+                    material.getWidth(),                         // width of the texture
+                    material.getHeight(),                        // height of the texture
                     1,                                      // scaleX
                     1,                                      // scaleY
                     (float) Math.toDegrees(material.body.getAngle()));
@@ -675,7 +685,7 @@ public class LevelScreen extends ScreenAdapter {
 
             int hp = 0;
             for(Pig pig : pigs){
-                if(pig.getHp()>0) batch.draw(pig.texture,pig.getX() - pig.width/2f,pig.getY() - pig.height/2f,pig.width,pig.height);
+                if(pig.getHp()>0) batch.draw(pig.getTexture(),pig.getX() - pig.getWidth()/2f,pig.getY() - pig.getHeight()/2f,pig.getWidth(),pig.getHeight());
                 else {
                     score += pig.getHP_OG() * 100;
                     pig.setHP_OG(0);
@@ -714,7 +724,7 @@ public class LevelScreen extends ScreenAdapter {
 
                 shapeRenderer.end();
 
-                testBird.setPos(endPoint.x - testBird.width/4f - 20,endPoint.y - testBird.height/4f + 10);
+                testBird.setPos(endPoint.x - testBird.getWidth()/4f - 20,endPoint.y - testBird.getHeight()/4f + 10);
 
                 drawTrajectory(endPoint.x, endPoint.y, getInitialVelocity(), shapeRenderer);
 
@@ -763,7 +773,7 @@ public class LevelScreen extends ScreenAdapter {
             }
 
             batch.begin();
-            if(testBird!=null) batch.draw(testBird.texture, testBird.getX()- testBird.width / 2f,testBird.getY()- testBird.height/4f, testBird.width, testBird.height);
+            if(testBird!=null) batch.draw(testBird.getTexture(), testBird.getX()- testBird.getWidth() / 2f,testBird.getY()- testBird.getHeight()/4f, testBird.getWidth(), testBird.getHeight());
             batch.end();
 
             stage.act(delta);

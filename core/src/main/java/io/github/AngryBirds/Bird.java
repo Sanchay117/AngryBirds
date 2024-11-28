@@ -4,30 +4,38 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class Bird {
+import java.io.Serializable;
+
+public class Bird implements Serializable {
     private String type;
-    private float size;
-    public Texture texture;
+    private transient Texture texture;
     private float x;
     private float y;
-    public int height;
-    public int width;
+    private int height;
+    private int width;
 
-    public Body body;
-    private World world;
-    private BodyDef bodyDef;
 
-    public static final float PPM = 100.0f; // 1 meter = 100 pixels
 
-    public Bird(String type, float size, Texture texture, float x, float y,int width, int height,World world) {
+    public transient Body body;
+    private transient World world;
+    private transient BodyDef bodyDef;
+
+    private String file_name;
+
+    public String getFile_name() {
+        return file_name;
+    }
+
+    public Bird(String type,  Texture texture, float x, float y,int width, int height,World world,String file_name) {
         this.type = type;
-        this.size = size;
         this.texture = texture;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.world = world;
+
+        this.file_name = file_name;
 
         // First we create a body definition
         bodyDef = new BodyDef();
@@ -59,6 +67,15 @@ public class Bird {
 
     }
 
+    public Bird(String type,  String f, float x, float y,int width, int height) {
+        this.type = type;
+        this.file_name = f;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
     public void setPos(float x, float y){
         this.x = x + width/4f;
         this.y = y + height/4f;
@@ -69,6 +86,14 @@ public class Bird {
         return body.getPosition().x;
     }
 
+    public float getXStraightUp(){
+        return x;
+    }
+
+    public float getYStraightUp(){
+        return y;
+    }
+
     public float getY(){
         return body.getPosition().y;
     }
@@ -76,5 +101,18 @@ public class Bird {
     public String getType(){
         return type;
     }
+
+    public Texture getTexture(){
+        return texture;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
 
 }
