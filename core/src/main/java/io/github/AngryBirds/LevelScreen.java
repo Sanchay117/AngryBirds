@@ -812,5 +812,6 @@ public class LevelScreen extends ScreenAdapter {
         shapeRenderer.dispose();
         world.dispose();
         debugRenderer.dispose();
+        assetManager.dispose();
     }
 }

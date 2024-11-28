@@ -118,7 +118,7 @@ public class MainScreen extends ScreenAdapter {
         loadStyle.imageUp = new TextureRegionDrawable(new TextureRegion(loadTexture));
         loadGameBtn = new ImageButton(loadStyle);
         loadGameBtn.setSize(150, 150);
-        loadGameBtn.setPosition(20, 20); // Bottom-left corner
+        loadGameBtn.setPosition(viewWidth*0.5f - 100, 0); // Bottom-left corner
 
         loadGameBtn.addListener(new ClickListener() {
             @Override
@@ -188,6 +188,7 @@ public class MainScreen extends ScreenAdapter {
         stage.addActor(lvlBtn3);
         stage.addActor(lvlBtn4);
         stage.addActor(lvlBtn5);
+        stage.addActor(loadGameBtn);
         stage.addActor(bird);
         stage.addActor(bubble);
 
