@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 public class Bird {
     private String type;
     private float size;
-    private Texture texture;
+    public Texture texture;
     private float x;
     private float y;
     public int height;
@@ -75,10 +75,6 @@ public class Bird {
 
     public String getType(){
         return type;
-    }
-
-    public Texture getTexture(){
-        return texture;
     }
 
 }

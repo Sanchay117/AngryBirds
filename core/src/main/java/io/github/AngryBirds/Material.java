@@ -20,16 +20,14 @@ public class Material {
 
     private int hp;
 
-    private String file;
-
-    public Material(String name, TextureRegion texture, float x, float y, int width, int height, World world,String file) {
+    public Material(String name, TextureRegion texture, float x, float y, int width, int height, World world) {
         this.name = name;
         this.texture = texture;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.file = file;
+
         this.world = world;
 
         if(Objects.equals(name, "Wood")) hp = 10;
@@ -73,10 +71,6 @@ public class Material {
         return hp;
     }
 
-    public String getFile(){
-        return file;
-    }
-
     public void setPos(float x, float y){
         this.x = x + width/4f;
         this.y = y + height/4f;
@@ -91,11 +85,11 @@ public class Material {
         return body.getPosition().y;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setHp(int hp){
         this.hp = hp;
+    }
+
+    public String getName(){
+        return name;
     }
 }

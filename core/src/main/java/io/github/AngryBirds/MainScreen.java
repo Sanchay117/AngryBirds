@@ -30,8 +30,6 @@ import com.badlogic.gdx.graphics.Color;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainScreen extends ScreenAdapter {
 
@@ -80,6 +78,7 @@ public class MainScreen extends ScreenAdapter {
         lockTexture = new Texture("lock.png");
         birdTexture = new Texture("bird.png");
         bubbleTexture = new Texture("bubble.png");
+
         loadTexture = new Texture("load.png");
 
         Skin skin = new Skin();
@@ -111,13 +110,15 @@ public class MainScreen extends ScreenAdapter {
         lvlBtn3 = new ImageButton(lvlStyle);
         lvlBtn4 = new ImageButton(lvlStyle);
         lvlBtn5 = new ImageButton(lvlStyle);
+
+        backBtn.setPosition(0.05f, viewHeight - 200);
+        backBtn.setSize(200, 200);
+
         ImageButton.ImageButtonStyle loadStyle = new ImageButton.ImageButtonStyle();
         loadStyle.imageUp = new TextureRegionDrawable(new TextureRegion(loadTexture));
-
         loadGameBtn = new ImageButton(loadStyle);
-
         loadGameBtn.setSize(150, 150);
-        loadGameBtn.setPosition(viewWidth*0.5f - 125, 0); // Bottom-left corner
+        loadGameBtn.setPosition(20, 20); // Bottom-left corner
 
         loadGameBtn.addListener(new ClickListener() {
             @Override
@@ -125,9 +126,6 @@ public class MainScreen extends ScreenAdapter {
                 loadGame();
             }
         });
-
-        backBtn.setPosition(0.05f, viewHeight - 200);
-        backBtn.setSize(200, 200);
 
         lvlBtn1.setSize(350, 350);
         lvlBtn2.setSize(350, 350);
@@ -190,7 +188,6 @@ public class MainScreen extends ScreenAdapter {
         stage.addActor(lvlBtn3);
         stage.addActor(lvlBtn4);
         stage.addActor(lvlBtn5);
-        stage.addActor(loadGameBtn);
         stage.addActor(bird);
         stage.addActor(bubble);
 
@@ -221,6 +218,14 @@ public class MainScreen extends ScreenAdapter {
 
         batch.end();
     }
+    private void shakeButton(ImageButton button) {
+        button.addAction(Actions.sequence(
+                Actions.moveBy(10, 0, 0.05f),
+                Actions.moveBy(-20, 0, 0.05f),
+                Actions.moveBy(20, 0, 0.05f),
+                Actions.moveBy(-10, 0, 0.05f)
+        ));
+    }
 
     public void loadGame() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("savedGame.ser"))) {
@@ -235,9 +240,6 @@ public class MainScreen extends ScreenAdapter {
             System.out.println("Failed to load the game.");
         }
     }
-
-
-
     private void displayNoSavedGamePopup() {
         Dialog dialog = new Dialog("No Saved Game", new Skin(Gdx.files.internal("uiskin.json"))) {
             @Override
@@ -251,14 +253,7 @@ public class MainScreen extends ScreenAdapter {
         dialog.button("OK");
         dialog.show(stage);
     }
-    private void shakeButton(ImageButton button) {
-        button.addAction(Actions.sequence(
-                Actions.moveBy(10, 0, 0.05f),
-                Actions.moveBy(-20, 0, 0.05f),
-                Actions.moveBy(20, 0, 0.05f),
-                Actions.moveBy(-10, 0, 0.05f)
-        ));
-    }
+
     private void drawCenteredText(BitmapFont font, String text, ImageButton button) {
         GlyphLayout layout = new GlyphLayout(font, text);
 
