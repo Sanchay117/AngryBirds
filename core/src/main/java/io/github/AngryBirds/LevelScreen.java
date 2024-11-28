@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -106,6 +107,8 @@ public class LevelScreen extends ScreenAdapter {
     private int last;
     private int lvl;
 
+    private AssetManager assetManager;
+
     public LevelScreen(Main game,int lvl) {
         this.game = game;
         game.background = new Texture("lvlBG.png");
@@ -116,6 +119,11 @@ public class LevelScreen extends ScreenAdapter {
         this.lvl = lvl;
 
         game.music.setVolume(0.4f);
+
+        assetManager = new AssetManager();
+        assetManager.load("lvlBG.png", Texture.class);
+        assetManager.load("settingsBackground.png",Texture.class);
+        assetManager.finishLoading();
     }
     public LevelScreen(Main game, int level, GameState gameState) {
         this.game = game;
@@ -625,7 +633,7 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(pauseStage);
             }
 
-            game.background = new Texture("settingsBackground.png");
+            game.background = assetManager.get("settingsBackground.png",Texture.class);
 
             pauseStage.act(delta);
             pauseStage.draw();
@@ -641,8 +649,6 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(gameOverStage);
             }
 
-            game.background = new Texture("settingsBackground.png");
-
             gameOverStage.act(delta);
             gameOverStage.draw();
 
@@ -656,7 +662,7 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(stage);
             }
 
-            game.background = new Texture("lvlBG.png");
+            game.background = assetManager.get("lvlBG.png", Texture.class);
 
             for(Bird bird : birds){
                 batch.draw(bird.getTexture(),bird.getX()- bird.width / 2f,bird.getY()- bird.height/4f,bird.width,bird.height);
@@ -816,5 +822,6 @@ public class LevelScreen extends ScreenAdapter {
         shapeRenderer.dispose();
         world.dispose();
         debugRenderer.dispose();
+        assetManager.dispose();
     }
 }
