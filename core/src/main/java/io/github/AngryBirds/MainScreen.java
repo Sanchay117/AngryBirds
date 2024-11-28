@@ -117,7 +117,7 @@ public class MainScreen extends ScreenAdapter {
         loadGameBtn = new ImageButton(loadStyle);
 
         loadGameBtn.setSize(150, 150);
-        loadGameBtn.setPosition(viewWidth*0.5f - 75, 0); // Bottom-left corner
+        loadGameBtn.setPosition(viewWidth*0.5f - 125, 0); // Bottom-left corner
 
         loadGameBtn.addListener(new ClickListener() {
             @Override

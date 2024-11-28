@@ -48,8 +48,8 @@ public class SettingsScreen extends ScreenAdapter {
         this.levelScreen = levelScreen;
         this.lvl = lvl;
 
-        boardTexture = new Texture("settingbg.png");  // Board image
-        settingsBgTexture = new Texture("settingsBackground.png");
+        boardTexture = new Texture(Gdx.files.internal("settingbg.png"));
+        settingsBgTexture = new Texture(Gdx.files.internal("settingsBackground.png"));
     }
 
 
@@ -92,6 +92,8 @@ public class SettingsScreen extends ScreenAdapter {
                 game.setScreen(new LevelScreen(game,lvl));
             }
         });
+
+
 
         float buttonSize = 120f;
         float leftColumnX = boardX + 0.25f * boardWidth;

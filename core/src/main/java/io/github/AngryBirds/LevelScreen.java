@@ -136,39 +136,39 @@ public class LevelScreen extends ScreenAdapter {
         game.background = new Texture("lvlBG.png");
         progressBarTexture = new Texture("bar.png");
 
-        for (BirdState birdState : gameState.getBirds()) {
+        for (Bird bird : gameState.getBirds()) {
             birds.add(new Bird(
-                birdState.getType(),
+                bird.getType(),
                 1.0f,
-                new Texture(birdState.getType() + ".png"),
-                birdState.getX(),
-                birdState.getY(),
+                new Texture(bird.getType() + ".png"),
+                bird.getX(),
+                bird.getY(),
                 50, 50,
                 world
             ));
         }
 
-        for (PigState pigState : gameState.getPigs()) {
+        for (Pig pig : gameState.getPigs()) {
             pigs.add(new Pig(
                 1.0f,
-                pigState.getHp(),
+                pig.getHp(),
                 new Texture("pig.png"),
-                pigState.getX(),
-                pigState.getY(),
+                pig.getX(),
+                pig.getY(),
                 50, 50,
                 world
             ));
         }
 
-        for (MaterialState materialState : gameState.getMaterials()) {
+        for (Material material : gameState.getMaterials()) {
             materials.add(new Material(
-                materialState.getName(),
-                new TextureRegion(new Texture(materialState.getName())),
-                materialState.getX(),
-                materialState.getY(),
+                material.getName(),
+                new TextureRegion(new Texture(material.getName())),
+                material.getX(),
+                material.getY(),
                 100, 100,
                 world,
-                materialState.getName()
+                material.getName()
             ));
         }
     }
@@ -290,22 +290,8 @@ public class LevelScreen extends ScreenAdapter {
         pauseStage.addActor(restartBtn);
     }
     public void saveGame() {
-        List<BirdState> birdStates = new ArrayList<>();
-        for (Bird bird : birds) {
-            birdStates.add(new BirdState(bird.getX(), bird.getY(), bird.getType()));
-        }
 
-        List<PigState> pigStates = new ArrayList<>();
-        for (Pig pig : pigs) {
-            pigStates.add(new PigState(pig.getX(), pig.getY(), pig.getHp()));
-        }
-
-        List<MaterialState> materialStates = new ArrayList<>();
-        for (Material material : materials) {
-            materialStates.add(new MaterialState(material.getX(), material.getY(), material.getHp(), material.getFile()));
-        }
-
-        GameState gameState = new GameState(lvl, score, birdStates, pigStates, materialStates);
+        GameState gameState = new GameState(lvl, score, birds, pigs, materials);
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savedGame.ser"))) {
             oos.writeObject(gameState);
