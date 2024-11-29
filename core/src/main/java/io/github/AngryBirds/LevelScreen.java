@@ -123,7 +123,10 @@ public class LevelScreen extends ScreenAdapter {
 
         this.lvl = lvl;
 
-        game.music.setVolume(0.4f);
+        if (!game.songs[game.currentSongIndex].isPlaying()) {
+            game.songs[game.currentSongIndex].setVolume(0.5f);
+            game.songs[game.currentSongIndex].play();
+        }
 
         assetManager = new AssetManager();
         assetManager.load("lvlBG.png", Texture.class);
@@ -142,7 +145,10 @@ public class LevelScreen extends ScreenAdapter {
 
         loaded = true;
 
-        game.music.setVolume(0.4f);
+        if (!game.songs[game.currentSongIndex].isPlaying()) {
+            game.songs[game.currentSongIndex].setVolume(0.5f);
+            game.songs[game.currentSongIndex].play();
+        }
 
         assetManager = new AssetManager();
         assetManager.load("lvlBG.png", Texture.class);
