@@ -123,7 +123,7 @@ public class SettingsScreen extends ScreenAdapter {
         creditsBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new CreditScreen(game, SettingsScreen.this)); // Open CreditScreen
+                game.setScreen(new CreditScreen(game, SettingsScreen.this,lvl)); // Open CreditScreen
             }
         });
 
