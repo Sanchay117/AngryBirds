@@ -98,8 +98,8 @@ public class SettingsScreen extends ScreenAdapter {
         float buttonSize = 120f;
         float leftColumnX = boardX + 0.25f * boardWidth;
         float rightColumnX = boardX + 0.525f * boardWidth;
-        float secbuttonSize = 270f;
-        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight, buttonSize);
+        float secbuttonSize = 325f;
+        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight+15, buttonSize*1.1f);
 
         soundBtn.addListener(new ClickListener() {
             @Override
@@ -109,7 +109,7 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        musicBtn = createButton(musicTexture, leftColumnX, boardY + 0.475f * boardHeight - buttonSpacing, buttonSize);
+        musicBtn = createButton(musicTexture, rightColumnX, boardY + 0.475f * boardHeight +15, buttonSize*1.1f);
         musicBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -117,20 +117,20 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        creditsBtn = createButton(creditsTexture, rightColumnX, boardY + 0.45f * boardHeight - buttonSpacing, secbuttonSize);
-        saveBtn = createButton(saveTexture, rightColumnX, boardY + 0.45f * boardHeight - 2 * buttonSpacing, secbuttonSize);
+        creditsBtn = createButton(creditsTexture, leftColumnX, boardY + 0.45f * boardHeight - 30, secbuttonSize);
+        saveBtn = createButton(saveTexture, leftColumnX, boardY + 0.45f * boardHeight - 60, secbuttonSize);
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
         sliderStyle.background = new TextureRegionDrawable(new TextureRegion(sliderBgTexture));
         TextureRegionDrawable knobDrawable = new TextureRegionDrawable(new TextureRegion(sliderKnobTexture));
-        knobDrawable.setMinWidth(30); // Set desired width
-        knobDrawable.setMinHeight(30); // Set desired height
+        knobDrawable.setMinWidth(35);
+        knobDrawable.setMinHeight(35);
         sliderStyle.knob = knobDrawable;
 
 
         volumeSlider = new Slider(0, 1, 0.01f, false, sliderStyle);
-        volumeSlider.setSize(0.4f * boardWidth, 50);
-        volumeSlider.setPosition(boardX + 0.3f * boardWidth, boardY + 0.65f * boardHeight);
+        volumeSlider.setSize(0.45f * boardWidth, 25);
+        volumeSlider.setPosition(boardX + 0.3f * boardWidth, boardY - 0.4f * boardHeight);
         volumeSlider.setValue(game.songs[game.currentSongIndex].getVolume());
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
