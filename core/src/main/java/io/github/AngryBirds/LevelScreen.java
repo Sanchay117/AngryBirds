@@ -54,6 +54,9 @@ public class LevelScreen extends ScreenAdapter {
     private Texture settingsTexture;
     private ImageButton settingsButton;
     private Texture progressBarTexture;
+    private Texture progressFrameTexture;
+    private int totalInitialHealth;
+
     private boolean isPaused;
     private boolean isGameOver;
 
@@ -118,7 +121,6 @@ public class LevelScreen extends ScreenAdapter {
     public LevelScreen(Main game,int lvl) {
         this.game = game;
         game.background = new Texture("lvlBG.png");
-        progressBarTexture = new Texture("bar.png");
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
 
@@ -138,7 +140,6 @@ public class LevelScreen extends ScreenAdapter {
     public LevelScreen(Main game, int level, GameState gameState) {
         this.game = game;
         game.background = new Texture("lvlBG.png");
-        progressBarTexture = new Texture("bar.png");
         this.batch = new SpriteBatch();
         this.shapeRenderer = new ShapeRenderer();
 
@@ -323,7 +324,12 @@ public class LevelScreen extends ScreenAdapter {
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
         camera.update();
-
+        progressFrameTexture = new Texture("scorefr.png");
+        totalInitialHealth = 0;
+        for (Pig pig : pigs) {
+            totalInitialHealth += pig.getHp();
+        }
+        progressBarTexture = new Texture("bar.png");
         handImage = new Image(handTexture);
         handImage.setSize(300, 400);
         handX = handStartX;
@@ -636,12 +642,22 @@ public class LevelScreen extends ScreenAdapter {
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-
+        int remainingHealth = 0;
+        for (Pig pig : pigs) {
+            remainingHealth += Math.max(0, pig.getHp()); 
+        }
+        float progressPercentage = (float) (totalInitialHealth - remainingHealth) / totalInitialHealth;
+        progressPercentage = Math.max(0, Math.min(progressPercentage, 1));
         batch.begin();
 
         batch.draw(game.background, 0, 0,viewWidth,viewHeight);
+        float frameX = viewWidth * 0.4f;
+        float frameY = viewHeight - 150;
+        float frameWidth = 300;
+        float frameHeight = 60;
+        float barWidth = progressPercentage * (frameWidth - 10);
+        batch.draw(progressBarTexture, frameX + 5, frameY + 5, barWidth, frameHeight - 10);
         game.smallFont.draw(batch,"Score: " + score,viewWidth*0.425f,viewHeight-30);
-        batch.draw(progressBarTexture, viewWidth * 0.4f, viewHeight - 150, 300, 60);
 
         if (isPaused) {
             if (Gdx.input.getInputProcessor() != pauseStage) {
@@ -861,5 +877,6 @@ public class LevelScreen extends ScreenAdapter {
         world.dispose();
         debugRenderer.dispose();
         assetManager.dispose();
+        progressFrameTexture.dispose();
     }
 }
