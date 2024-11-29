@@ -14,13 +14,13 @@ public class MyContactListener implements ContactListener {
         if (bodyA.getUserData() instanceof Pig) {
             Pig pig = (Pig) bodyA.getUserData();
             pig.setHp(pig.getHp()-5); // Reduce Pig's health
-            System.out.println("Pig HP: " + pig.getHp());
+//            System.out.println("Pig HP: " + pig.getHp());
         }
 
         if (bodyB.getUserData() instanceof Pig) {
             Pig pig = (Pig) bodyB.getUserData();
             pig.setHp(pig.getHp()-5); // Reduce Pig's health
-            System.out.println("Pig HP: " + pig.getHp());
+//            System.out.println("Pig HP: " + pig.getHp());
         }
 
         if(bodyA.getUserData() instanceof Material || bodyB.getUserData() instanceof Material) {

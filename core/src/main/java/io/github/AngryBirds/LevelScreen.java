@@ -282,7 +282,7 @@ public class LevelScreen extends ScreenAdapter {
         ArrayList<Bird> b = new ArrayList<>();
         for (Bird bird : birds) {
             System.out.println(bird + " 1 ");
-            b.add(new Bird(bird.getType(),bird.getFile_name(),bird.getX(), bird.getY(), bird.getWidth(),bird.getHeight()));
+            b.add(new Bird(bird.getType(),bird.getFile_name(),bird.getXStraightUp(), bird.getYStraightUp(), bird.getWidth(),bird.getHeight()));
             System.out.println(bird + " 2 ");
         }
 
@@ -290,12 +290,12 @@ public class LevelScreen extends ScreenAdapter {
 
         ArrayList<Pig> p = new ArrayList<>();
         for (Pig pig : pigs) {
-            p.add(new Pig(pig.getHp(),pig.getFile_name(), pig.getX(), pig.getY(), pig.getWidth(),pig.getHeight()));
+            p.add(new Pig(pig.getHp(),pig.getFile_name(), pig.getXStraightUp(), pig.getYStraightUp(), pig.getWidth(),pig.getHeight()));
         }
 
         ArrayList<Material> m = new ArrayList<>();
         for (Material material : materials) {
-            m.add(new Material(material.getName(),material.getFile_name(),material.getX(), material.getY(), material.getWidth(),material.getHeight()));
+            m.add(new Material(material.getName(),material.getFile_name(),material.getXStraightUp(), material.getYStraightUp(), material.getWidth(),material.getHeight()));
         }
 
         System.out.println("abcdefghj->0");
