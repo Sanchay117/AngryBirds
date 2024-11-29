@@ -22,6 +22,18 @@ public class MyContactListener implements ContactListener {
             pig.setHp(pig.getHp()-5); // Reduce Pig's health
             System.out.println("Pig HP: " + pig.getHp());
         }
+
+        if(bodyA.getUserData() instanceof Material ) {
+            Material material = (Material) bodyA.getUserData();
+            material.hit();
+            System.out.println("Material HP: " + material.getHp());
+        }
+
+        if(bodyB.getUserData() instanceof Material ) {
+            Material material = (Material) bodyB.getUserData();
+            material.hit();
+            System.out.println("Material HP: " + material.getHp());
+        }
     }
 
     @Override

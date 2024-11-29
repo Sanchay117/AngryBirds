@@ -664,28 +664,24 @@ public class LevelScreen extends ScreenAdapter {
             }
 
             for(Material material:materials){
+                if(material.getHp()==0){
+                    materials.removeIf(materiall -> material.getHp() == 0);
+                    continue;
+                }
                 // Draw with rotation
-                batch.draw(material.getTexture(),
-                    material.getX() - material.getWidth() / 2f,  // x position (adjusting for center)
-                    material.getY() - material.getHeight() / 2f, // y position (adjusting for center)
-                    material.getWidth() / 2f,                    // originX (for rotation)
-                    material.getHeight() / 2f,                   // originY (for rotation)
-                    material.getWidth(),                         // width of the texture
-                    material.getHeight(),                        // height of the texture
-                    1,                                      // scaleX
-                    1,                                      // scaleY
-                    (float) Math.toDegrees(material.body.getAngle()));
-//                System.out.println( (float) Math.toDegrees(material.body.getAngle()));
+                batch.draw(material.getTexture(), material.getX() - material.getWidth() / 2f, material.getY() - material.getHeight() / 2f,material.getWidth() / 2f, material.getHeight() / 2f, material.getWidth(), material.getHeight(), 1, 1, (float) Math.toDegrees(material.body.getAngle()));
             }
 
             int hp = 0;
             for(Pig pig : pigs){
-                if(pig.getHp()>0) batch.draw(pig.getTexture(),pig.getX() - pig.getWidth()/2f,pig.getY() - pig.getHeight()/2f,pig.getWidth(),pig.getHeight());
+                if(pig.getHp()>0) {
+                    batch.draw(pig.getTexture(), pig.getX() - pig.getWidth() / 2f, pig.getY() - pig.getHeight() / 2f, pig.getWidth(), pig.getHeight());
+                    hp+=pig.getHp();
+                }
                 else {
                     score += pig.getHP_OG() * 100;
                     pig.setHP_OG(0);
                 }
-                hp+=pig.getHp();
             }
 
             if(hp==0) isGameOver = true;

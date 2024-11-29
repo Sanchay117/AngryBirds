@@ -5,6 +5,6 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class AveragePig extends Pig{
     public AveragePig(Texture texture, float x, float y,World world,String name) {
-        super(15,texture,x,y,130,130,world,name);
+        super(40,texture,x,y,130,130,world,name);
     }
 }

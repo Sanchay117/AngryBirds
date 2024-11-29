@@ -1,6 +1,5 @@
 package io.github.AngryBirds;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -54,9 +53,9 @@ public class Material implements Serializable {
         this.world = world;
         this.file_name = file_name;
 
-        if(Objects.equals(name, "Wood")) hp = 10;
-        else if(Objects.equals(name, "Stone")) hp = 20;
-        else hp = 15;
+        if(Objects.equals(name, "Wood")) hp = 5;
+        else if(Objects.equals(name, "Stone")) hp = 15;
+        else hp = 10; // glass
 
         bodyDef = new BodyDef();
         // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
@@ -89,6 +88,10 @@ public class Material implements Serializable {
 
 // Dispose of the shape after creating the fixture
         rectangle.dispose();
+    }
+
+    public void hit(){
+        this.hp-=5;
     }
 
     public Material(String name, String file_name, float x, float y, int width, int height) {
