@@ -22,6 +22,8 @@ public class Main extends Game {
     Music[] songs;
     Texture background;
 
+    int currentSongIndex;
+
     @Override
     public void create () {
 
@@ -35,11 +37,11 @@ public class Main extends Game {
             Gdx.audio.newMusic(Gdx.files.internal("song3.mp3"))
         };
         currentSongIndex = 0;
-      
+
         songs[currentSongIndex].setLooping(true);
         songs[currentSongIndex].setVolume(0.5f);
         songs[currentSongIndex].play();
-        
+
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("angrybirds-regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 130;
@@ -62,7 +64,7 @@ public class Main extends Game {
         songs[currentSongIndex].setLooping(true);
         songs[currentSongIndex].play();
     }
-    
+
     @Override
     public void dispose () {
         shapeRenderer.dispose();
@@ -70,6 +72,8 @@ public class Main extends Game {
         font.dispose();
         smallFont.dispose();
         mediumFont.dispose();
-        music.dispose();
+        for(Music x:songs){
+            x.dispose();
+        }
     }
 }

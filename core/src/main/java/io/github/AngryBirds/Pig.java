@@ -116,7 +116,7 @@ public class Pig implements Serializable {
     }
 
     public void setHp(int hp){
-        this.hp = hp;
+        this.hp = Math.max(hp, 0);
     }
 
     public Texture getTexture(){
@@ -138,5 +138,9 @@ public class Pig implements Serializable {
     public void setTexture(Texture texture,String name){
         this.texture = texture;
         this.file_name = name;
+    }
+
+    public void hit(){
+        setHp(hp-5);
     }
 }

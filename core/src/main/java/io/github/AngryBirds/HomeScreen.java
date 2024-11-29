@@ -44,7 +44,10 @@ public class HomeScreen extends ScreenAdapter {
         this.game = game;
         game.background = new Texture("bg.png");
 
-        game.music.setVolume(0.4f);
+        if (!game.songs[game.currentSongIndex].isPlaying()) {
+            game.songs[game.currentSongIndex].setVolume(0.5f);
+            game.songs[game.currentSongIndex].play();
+        }
 
         batch = new SpriteBatch();
     }
