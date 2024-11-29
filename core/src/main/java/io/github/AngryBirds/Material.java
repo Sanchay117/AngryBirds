@@ -91,7 +91,7 @@ public class Material implements Serializable {
     }
 
     public void hit(){
-        this.hp-=5;
+        this.hp=Math.max(0, this.hp-5);
     }
 
     public Material(String name, String file_name, float x, float y, int width, int height) {
