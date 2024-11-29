@@ -456,6 +456,10 @@ public class LevelScreen extends ScreenAdapter {
                 birds.add(y1);
                 birds.add(r2);
             }else{
+                Bird blue1 = new Blue(blueTexture,140,128,50,50,world,"blue.png");
+                Bird r1 = new Red(redTexture,10,128,100,100,world,"red.png");
+                Bird r2 = new Red(redTexture,80,128,100,100,world,"red.png");
+
                 Material b1 = new Stone(stoneBlockRegion,viewWidth*0.55f,128,50,50,world,"stone_block.png");
                 Material b2 = new Stone(stoneBlockRegion,viewWidth*0.75f,128,50,50,world,"stone_block.png");
                 Material f1 = new Wood(floorRegion,viewWidth*0.525f,128+50, (viewWidth*28)/100,25,world,"wood_line.png");
@@ -485,6 +489,10 @@ public class LevelScreen extends ScreenAdapter {
                 pigs.add(l);
                 pigs.add(r);
                 pigs.add(c);
+
+                birds.add(r1);
+                birds.add(r2);
+                birds.add(blue1);
             }
         }
 
@@ -706,7 +714,19 @@ public class LevelScreen extends ScreenAdapter {
             batch.end();
 
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-                if(!special && last<1){
+                if(lvl==3 && !special && last<2){
+                    special = true;
+                    Bird birb = birds.get(2);
+                    Bird child1 = new Blue(blueTexture,birb.getX(),birb.getY()+100,birb.getWidth(),birb.getHeight(),world,"blue.png");
+                    Bird child2 = new Blue(blueTexture,birb.getX(),birb.getY()-100,birb.getWidth(),birb.getHeight(),world,"blue.png");
+
+                    child1.body.setLinearVelocity(birb.body.getLinearVelocity());
+                    child2.body.setLinearVelocity(birb.body.getLinearVelocity());
+
+                    birds.add(child1);
+                    birds.add(child2);
+                }
+                if(!special && last<1 && lvl == 2){
                     special = true;
                     birds.get(1).body.setLinearVelocity(birds.get(1).body.getLinearVelocity().x*4, birds.get(1).body.getLinearVelocity().y);
                 }
