@@ -628,6 +628,7 @@ public class LevelScreen extends ScreenAdapter {
     private boolean left = false;
     private boolean special = false;
     private long start = 0;
+    private ArrayList<Material> remove = new ArrayList<>();
     @Override
     public void render(float delta) {
         if(start == 0) start = System.currentTimeMillis();
@@ -644,7 +645,7 @@ public class LevelScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
         int remainingHealth = 0;
         for (Pig pig : pigs) {
-            remainingHealth += Math.max(0, pig.getHp()); 
+            remainingHealth += Math.max(0, pig.getHp());
         }
         float progressPercentage = (float) (totalInitialHealth - remainingHealth) / totalInitialHealth;
         progressPercentage = Math.max(0, Math.min(progressPercentage, 1));
@@ -703,12 +704,18 @@ public class LevelScreen extends ScreenAdapter {
 
             for(Material material:materials){
                 if(material.getHp()==0){
-                    materials.removeIf(materiall -> material.getHp() == 0);
-                    continue;
+                    remove.add(material);
                 }
                 // Draw with rotation
                 batch.draw(material.getTexture(), material.getX() - material.getWidth() / 2f, material.getY() - material.getHeight() / 2f,material.getWidth() / 2f, material.getHeight() / 2f, material.getWidth(), material.getHeight(), 1, 1, (float) Math.toDegrees(material.body.getAngle()));
             }
+
+            for(Material m:remove){
+                world.destroyBody(m.body);
+                materials.remove(m);
+            }
+
+            remove.clear();
 
             int hp = 0;
             for(Pig pig : pigs){
