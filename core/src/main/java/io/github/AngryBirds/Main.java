@@ -19,7 +19,7 @@ public class Main extends Game {
     BitmapFont font;
     BitmapFont smallFont;
     BitmapFont mediumFont;
-    Music music;
+    Music[] songs;
     Texture background;
 
     @Override
@@ -29,14 +29,17 @@ public class Main extends Game {
         shapeRenderer = new ShapeRenderer();
 
         font = new BitmapFont();
-
-        // bg music
-        music = Gdx.audio.newMusic(Gdx.files.internal("birds_angry.mp3"));
-        music.setLooping(true);
-        music.setVolume(0.0f);
-        music.play();
-
-        // font
+        songs = new Music[]{
+            Gdx.audio.newMusic(Gdx.files.internal("birds_angry.mp3")),
+            Gdx.audio.newMusic(Gdx.files.internal("song2.mp3")),
+            Gdx.audio.newMusic(Gdx.files.internal("song3.mp3"))
+        };
+        currentSongIndex = 0;
+      
+        songs[currentSongIndex].setLooping(true);
+        songs[currentSongIndex].setVolume(0.5f);
+        songs[currentSongIndex].play();
+        
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("angrybirds-regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 130;
@@ -53,6 +56,13 @@ public class Main extends Game {
         setScreen(new HomeScreen(this));
     }
 
+    public void nextSong() {
+        songs[currentSongIndex].stop();
+        currentSongIndex = (currentSongIndex + 1) % songs.length;
+        songs[currentSongIndex].setLooping(true);
+        songs[currentSongIndex].play();
+    }
+    
     @Override
     public void dispose () {
         shapeRenderer.dispose();
