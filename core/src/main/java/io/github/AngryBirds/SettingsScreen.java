@@ -101,11 +101,19 @@ public class SettingsScreen extends ScreenAdapter {
         float secbuttonSize = 270f;
         soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight, buttonSize);
 
+        soundBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(game.songs[game.currentSongIndex].getVolume()==0) game.songs[game.currentSongIndex].setVolume(0.4f);
+                else game.songs[game.currentSongIndex].setVolume(0.0f);
+            }
+        });
+
         musicBtn = createButton(musicTexture, leftColumnX, boardY + 0.475f * boardHeight - buttonSpacing, buttonSize);
         musicBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.nextSong(); 
+                game.nextSong();
             }
         });
 
@@ -114,15 +122,19 @@ public class SettingsScreen extends ScreenAdapter {
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
         sliderStyle.background = new TextureRegionDrawable(new TextureRegion(sliderBgTexture));
-        sliderStyle.knob = new TextureRegionDrawable(new TextureRegion(sliderKnobTexture));
+        TextureRegionDrawable knobDrawable = new TextureRegionDrawable(new TextureRegion(sliderKnobTexture));
+        knobDrawable.setMinWidth(30); // Set desired width
+        knobDrawable.setMinHeight(30); // Set desired height
+        sliderStyle.knob = knobDrawable;
+
 
         volumeSlider = new Slider(0, 1, 0.01f, false, sliderStyle);
         volumeSlider.setSize(0.4f * boardWidth, 50);
         volumeSlider.setPosition(boardX + 0.3f * boardWidth, boardY + 0.65f * boardHeight);
-        volumeSlider.setValue(game.songs[game.currentSongIndex].getVolume());  
+        volumeSlider.setValue(game.songs[game.currentSongIndex].getVolume());
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = game.font; 
+        labelStyle.font = game.font;
         volumeLabel = new Label("Volume: " + (int) (volumeSlider.getValue() * 100) + "%", labelStyle);
         volumeLabel.setPosition(volumeSlider.getX(), volumeSlider.getY() + 60);
 
@@ -131,7 +143,7 @@ public class SettingsScreen extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 float volume = volumeSlider.getValue();
                 volumeLabel.setText("Volume: " + (int) (volume * 100) + "%");
-                game.songs[game.currentSongIndex].setVolume(volume); 
+                game.songs[game.currentSongIndex].setVolume(volume);
             }
         });
 
