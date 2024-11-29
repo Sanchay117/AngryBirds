@@ -137,5 +137,9 @@ public class Material implements Serializable {
         return name;
     }
 
+    public void clear(){
+        world.destroyBody(body);
+    }
+
 
 }

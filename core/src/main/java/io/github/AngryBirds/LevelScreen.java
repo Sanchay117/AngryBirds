@@ -79,6 +79,8 @@ public class LevelScreen extends ScreenAdapter {
     private final OrthographicCamera camera = new OrthographicCamera();
 
     private final Texture redTexture = new Texture(Gdx.files.internal("red.png"));
+    private final Texture yellowTexture = new Texture(Gdx.files.internal("yellow.png"));
+    private final Texture blueTexture = new Texture(Gdx.files.internal("blue.png"));
     private final ArrayList<Bird> birds = new ArrayList<>();
 
     private final Texture slingShotTexture = new Texture(Gdx.files.internal("slingShot.png"));
@@ -403,12 +405,14 @@ public class LevelScreen extends ScreenAdapter {
         createPauseScreen();
         createGameOverScreen();
 
-        Bird r1 = new Red(redTexture,0,128,100,100,world,"red.png");
-        Bird r2 = new Red(redTexture,60,128,100,100,world,"red.png");
-        Bird r3 = new Red(redTexture,120,128,100,100,world,"red.png");
+
 
         if(!loaded){
             if(lvl==1){
+                Bird r1 = new Red(redTexture,10,128,100,100,world,"red.png");
+                Bird r2 = new Red(redTexture,80,128,100,100,world,"red.png");
+                Bird r3 = new Red(redTexture,140,128,100,100,world,"red.png");
+
                 Material floor1 = new Wood(floorRegion,viewWidth*0.33f, 128+248,350,30,world,"wood_line.png");
                 Material wall1 = new Wood(wallRegion,viewWidth*0.53f,128+0,50,250,world,"wall.png");
                 Material wall2 = new Wood(wallRegion,viewWidth*0.33f,128+0,50,250,world,"wall.png");
@@ -420,7 +424,15 @@ public class LevelScreen extends ScreenAdapter {
                 materials.add(wall2);
 
                 pigs.add(p1);
+
+                birds.add(r1);
+                birds.add(r2);
+                birds.add(r3);
             }else if(lvl==2){
+                Bird r1 = new Red(redTexture,10,128,100,100,world,"red.png");
+                Bird y1 = new Yellow(yellowTexture,80,128,75,75,world,"yellow.png");
+                Bird r2 = new Red(redTexture,140,128,100,100,world,"red.png");
+
                 Material wall1 = new Wood(wallRegion,viewWidth*0.55f,128+0,30,250,world,"wall.png");
                 Material wall2 = new Wood(wallRegion,viewWidth*0.75f,128+0,30,300,world,"wall.png");
 
@@ -439,6 +451,10 @@ public class LevelScreen extends ScreenAdapter {
                 pigs.add(p1);
                 pigs.add(p2);
                 pigs.add(p3);
+
+                birds.add(r1);
+                birds.add(y1);
+                birds.add(r2);
             }else{
                 Material b1 = new Stone(stoneBlockRegion,viewWidth*0.55f,128,50,50,world,"stone_block.png");
                 Material b2 = new Stone(stoneBlockRegion,viewWidth*0.75f,128,50,50,world,"stone_block.png");
@@ -470,10 +486,6 @@ public class LevelScreen extends ScreenAdapter {
                 pigs.add(r);
                 pigs.add(c);
             }
-
-            birds.add(r1);
-            birds.add(r2);
-            birds.add(r3);
         }
 
 
@@ -602,6 +614,7 @@ public class LevelScreen extends ScreenAdapter {
 
     private boolean thrown = false;
     private boolean left = false;
+    private boolean special = false;
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -691,6 +704,13 @@ public class LevelScreen extends ScreenAdapter {
 
             batch.draw(SlingShot.texture,SlingShot.x,SlingShot.y,SlingShot.width,SlingShot.height);
             batch.end();
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+                if(!special && last<1){
+                    special = true;
+                    birds.get(1).body.setLinearVelocity(birds.get(1).body.getLinearVelocity().x*4, birds.get(1).body.getLinearVelocity().y);
+                }
+            }
 
             Bird testBird = null;
             if(last>=0) {

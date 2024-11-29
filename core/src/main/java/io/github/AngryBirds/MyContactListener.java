@@ -23,16 +23,26 @@ public class MyContactListener implements ContactListener {
             System.out.println("Pig HP: " + pig.getHp());
         }
 
-        if(bodyA.getUserData() instanceof Material ) {
-            Material material = (Material) bodyA.getUserData();
-            material.hit();
-            System.out.println("Material HP: " + material.getHp());
+        if(bodyA.getUserData() instanceof Material || bodyB.getUserData() instanceof Material) {
+            System.out.println(bodyA.getUserData() + "->A " + bodyB.getUserData() + "->B");
         }
 
-        if(bodyB.getUserData() instanceof Material ) {
+        if(bodyA.getUserData() instanceof Material && bodyB.getUserData() instanceof Bird ) {
+            Material material = (Material) bodyA.getUserData();
+            if(material.getHp()>0) {
+                material.hit();
+                System.out.println("Material HP: " + material.getHp());
+                System.out.println("BODY B : " + bodyB.getUserData());
+            }
+        }
+
+        if(bodyB.getUserData() instanceof Material && bodyA.getUserData() instanceof Bird) {
             Material material = (Material) bodyB.getUserData();
-            material.hit();
-            System.out.println("Material HP: " + material.getHp());
+            if(material.getHp()>0) {
+                material.hit();
+                System.out.println("Material HP: " + material.getHp());
+                System.out.println("BODY A : " + bodyB.getUserData());
+            }
         }
     }
 
