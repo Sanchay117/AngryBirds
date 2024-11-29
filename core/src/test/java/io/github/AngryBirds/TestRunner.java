@@ -20,7 +20,7 @@ public class TestRunner {
         System.out.println("Test Run Successful: " + result.wasSuccessful());
 
         System.out.println("Running Material Tests...");
-        Result result2 = JUnitCore.runClasses(PigTest.class);
+        Result result2 = JUnitCore.runClasses(MaterialTest.class);
 
         for (Failure failure : result2.getFailures()) {
             System.out.println("Failure Details:");
@@ -31,7 +31,7 @@ public class TestRunner {
 
         System.out.println("Test Run Successful: " + result2.wasSuccessful());
 
-        System.out.println("Tests Run: " + result.getRunCount());
-        System.out.println("Tests Failed: " + result.getFailureCount());
+        System.out.println("Tests Run: " + (result.getRunCount() + result2.getRunCount()));
+        System.out.println("Tests Failed: " + (result.getFailureCount() + result2.getFailureCount()));
     }
 }
