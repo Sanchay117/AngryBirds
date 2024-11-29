@@ -120,6 +120,13 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
+        creditsBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new CreditScreen(game, SettingsScreen.this)); // Open CreditScreen
+            }
+        });
+
         stage.addActor(crossBtn);
         stage.addActor(soundBtn);
         stage.addActor(musicBtn);
