@@ -30,6 +30,7 @@ public class SettingsScreen extends ScreenAdapter {
     private Texture saveTexture;
     private Texture sliderBgTexture;
     private Texture sliderKnobTexture;
+    private TextureRegion blurredBackground;
 
     private ImageButton crossBtn;
     private ImageButton soundBtn;
@@ -47,11 +48,11 @@ public class SettingsScreen extends ScreenAdapter {
 
     private final LevelScreen levelScreen;
 
-    public SettingsScreen(Main game, LevelScreen levelScreen, int lvl) {
+    public SettingsScreen(Main game, LevelScreen levelScreen, int lvl, TextureRegion blurredBackground) {
         this.game = game;
         this.levelScreen = levelScreen;
         this.lvl = lvl;
-
+        this.blurredBackground = blurredBackground;
         boardTexture = new Texture(Gdx.files.internal("settingbg.png"));
         settingsBgTexture = new Texture(Gdx.files.internal("settingsBackground.png"));
     }
@@ -170,7 +171,7 @@ public class SettingsScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        game.batch.draw(settingsBgTexture, 0, 0, viewWidth, viewHeight);
+        game.batch.draw(blurredBackground, 0, 0, viewWidth, viewHeight);
         game.batch.draw(boardTexture, (viewWidth - boardWidth) / 2, (viewHeight - boardHeight) / 2, boardWidth, boardHeight);
         game.batch.end();
 
@@ -206,5 +207,8 @@ public class SettingsScreen extends ScreenAdapter {
         saveTexture.dispose();
         sliderBgTexture.dispose();
         sliderKnobTexture.dispose();
+        if (blurredBackground != null) {
+            blurredBackground.getTexture().dispose();
+        }
     }
 }
