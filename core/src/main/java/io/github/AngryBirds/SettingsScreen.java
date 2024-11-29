@@ -30,7 +30,6 @@ public class SettingsScreen extends ScreenAdapter {
     private Texture saveTexture;
     private Texture sliderBgTexture;
     private Texture sliderKnobTexture;
-    private TextureRegion blurredBackground;
 
     private ImageButton crossBtn;
     private ImageButton soundBtn;
@@ -48,11 +47,11 @@ public class SettingsScreen extends ScreenAdapter {
 
     private final LevelScreen levelScreen;
 
-    public SettingsScreen(Main game, LevelScreen levelScreen, int lvl, TextureRegion blurredBackground) {
+    public SettingsScreen(Main game, LevelScreen levelScreen, int lvl) {
         this.game = game;
         this.levelScreen = levelScreen;
         this.lvl = lvl;
-        this.blurredBackground = blurredBackground;
+
         boardTexture = new Texture(Gdx.files.internal("settingbg.png"));
         settingsBgTexture = new Texture(Gdx.files.internal("settingsBackground.png"));
     }
@@ -99,8 +98,8 @@ public class SettingsScreen extends ScreenAdapter {
         float buttonSize = 120f;
         float leftColumnX = boardX + 0.25f * boardWidth;
         float rightColumnX = boardX + 0.525f * boardWidth;
-        float secbuttonSize = 360f;
-        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight+40, buttonSize*1.5f);
+        float secbuttonSize = 270f;
+        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight, buttonSize);
 
         soundBtn.addListener(new ClickListener() {
             @Override
@@ -110,7 +109,7 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        musicBtn = createButton(musicTexture, rightColumnX+20, boardY + 0.475f * boardHeight +40, buttonSize*1.5f);
+        musicBtn = createButton(musicTexture, leftColumnX, boardY + 0.475f * boardHeight - buttonSpacing, buttonSize);
         musicBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -118,20 +117,20 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        creditsBtn = createButton(creditsTexture, boardX + 0.5f * boardWidth-70, boardY + 0.25f * boardHeight -60 , secbuttonSize);
-        saveBtn = createButton(saveTexture, boardX + 0.5f * boardWidth-70, boardY + 0.25f * boardHeight - 160, secbuttonSize);
+        creditsBtn = createButton(creditsTexture, rightColumnX, boardY + 0.45f * boardHeight - buttonSpacing, secbuttonSize);
+        saveBtn = createButton(saveTexture, rightColumnX, boardY + 0.45f * boardHeight - 2 * buttonSpacing, secbuttonSize);
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
         sliderStyle.background = new TextureRegionDrawable(new TextureRegion(sliderBgTexture));
         TextureRegionDrawable knobDrawable = new TextureRegionDrawable(new TextureRegion(sliderKnobTexture));
-        knobDrawable.setMinWidth(35);
-        knobDrawable.setMinHeight(35);
+        knobDrawable.setMinWidth(30); // Set desired width
+        knobDrawable.setMinHeight(30); // Set desired height
         sliderStyle.knob = knobDrawable;
 
 
         volumeSlider = new Slider(0, 1, 0.01f, false, sliderStyle);
-        volumeSlider.setSize(0.45f * boardWidth, 25);
-        volumeSlider.setPosition(boardX + 0.3f * boardWidth, boardY - 0.4f * boardHeight);
+        volumeSlider.setSize(0.4f * boardWidth, 50);
+        volumeSlider.setPosition(boardX + 0.3f * boardWidth, boardY + 0.65f * boardHeight);
         volumeSlider.setValue(game.songs[game.currentSongIndex].getVolume());
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -171,7 +170,7 @@ public class SettingsScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        game.batch.draw(blurredBackground, 0, 0, viewWidth, viewHeight);
+        game.batch.draw(settingsBgTexture, 0, 0, viewWidth, viewHeight);
         game.batch.draw(boardTexture, (viewWidth - boardWidth) / 2, (viewHeight - boardHeight) / 2, boardWidth, boardHeight);
         game.batch.end();
 
@@ -207,8 +206,5 @@ public class SettingsScreen extends ScreenAdapter {
         saveTexture.dispose();
         sliderBgTexture.dispose();
         sliderKnobTexture.dispose();
-        if (blurredBackground != null) {
-            blurredBackground.getTexture().dispose();
-        }
     }
 }

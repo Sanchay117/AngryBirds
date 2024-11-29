@@ -56,10 +56,6 @@ public class LevelScreen extends ScreenAdapter {
     private Texture progressBarTexture;
     private Texture progressFrameTexture;
     private int totalInitialHealth;
-    private FrameBuffer frameBuffer;
-    private TextureRegion blurredBackground;
-    private ShaderProgram blurShader;
-
 
     private boolean isPaused;
     private boolean isGameOver;
@@ -315,39 +311,12 @@ public class LevelScreen extends ScreenAdapter {
             System.out.println("Failed to save the game.");
         }
     }
-    private void captureScreen() {
-        if (frameBuffer == null) {
-            frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-        }
-        frameBuffer.begin();
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    
-        
-        batch.begin();
-        renderGameContent(); 
-        batch.end();
-    
-        frameBuffer.end();
-    
-        blurredBackground = new TextureRegion(frameBuffer.getColorBufferTexture());
-        blurredBackground.flip(false, true);
-    }
 
     @Override
     public void show(){
         stage = new Stage();
         pauseStage = new Stage();
         gameOverStage = new Stage();
-
-        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-        blurShader = new ShaderProgram(
-            Gdx.files.internal("blurShader.vert"), 
-            Gdx.files.internal("blurShader.glsl") 
-        );
-
-        if (!blurShader.isCompiled()) {
-            System.err.println("Shader compilation failed: " + blurShader.getLog());
-        }
 
         camera.viewportWidth = Gdx.graphics.getWidth(); // Convert screen width to meters
         camera.viewportHeight = Gdx.graphics.getHeight() ; // Convert screen height to meters
@@ -419,15 +388,13 @@ public class LevelScreen extends ScreenAdapter {
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                captureScreen();
                 isPaused = !isPaused;
             }
         });
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                captureScreen();
-                game.setScreen(new SettingsScreen(game,LevelScreen.this,lvl,blurredBackground));
+                game.setScreen(new SettingsScreen(game,LevelScreen.this,lvl));
             }
         });
 
@@ -656,13 +623,7 @@ public class LevelScreen extends ScreenAdapter {
             shapeRenderer.circle(point.x, point.y, 7);
         }
     }
-    private void renderBlurredBackground() {
-        batch.setShader(blurShader);
-        batch.begin();
-        batch.draw(blurredBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.end();
-        batch.setShader(null);
-    }
+
     private boolean thrown = false;
     private boolean left = false;
     private boolean special = false;
@@ -704,7 +665,7 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(pauseStage);
             }
 
-            renderBlurredBackground();
+            game.background = assetManager.get("settingsBackground.png",Texture.class);
 
             pauseStage.act(delta);
             pauseStage.draw();
@@ -720,7 +681,8 @@ public class LevelScreen extends ScreenAdapter {
                 Gdx.input.setInputProcessor(gameOverStage);
             }
 
-            renderBlurredBackground();
+            game.background = assetManager.get("settingsBackground.png",Texture.class);
+
             gameOverStage.act(delta);
             gameOverStage.draw();
 
@@ -856,13 +818,16 @@ public class LevelScreen extends ScreenAdapter {
                 }
             }
 
+            // Update the end point as the user moves
             if (Gdx.input.isTouched()) {
                 float touchX = Gdx.input.getX();
                 float touchY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
                 if (!dragging && inRange(touchX, touchY)) {
+                    // Start dragging from the current touch position
                     dragging = true;
                 }
+                // Update the end point (B) as the user moves
                 endPoint.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
             } else {
                 dragging = false;
@@ -875,7 +840,7 @@ public class LevelScreen extends ScreenAdapter {
             stage.act(delta);
             stage.draw();
         }
-        renderBlurredBackground();
+
         world.step(1/60f, 6, 2);
         debugRenderer.render(world, camera.combined);
 
@@ -920,14 +885,5 @@ public class LevelScreen extends ScreenAdapter {
         debugRenderer.dispose();
         assetManager.dispose();
         progressFrameTexture.dispose();
-        if (frameBuffer != null) {
-        frameBuffer.dispose();
-        }
-        if (blurShader != null) {
-            blurShader.dispose();
-        }
-        if (blurredBackground != null) {
-            blurredBackground.getTexture().dispose();
-        }
     }
 }
