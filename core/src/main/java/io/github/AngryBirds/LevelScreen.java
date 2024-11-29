@@ -101,6 +101,7 @@ public class LevelScreen extends ScreenAdapter {
     private final Texture glassWall = new Texture("Glass_standing.jpg");
     private final TextureRegion glassFloorRegion = new TextureRegion(glassFloor);
     private final TextureRegion glassWallRegion = new TextureRegion(glassWall);
+    private final Texture deadPig = new Texture("deadPig.png");
 
     private final ArrayList<Material> materials = new ArrayList<>();
 
@@ -278,15 +279,10 @@ public class LevelScreen extends ScreenAdapter {
     }
 
     public void saveGame() {
-        System.out.println("----------SAVE_GAME-----------------");
         ArrayList<Bird> b = new ArrayList<>();
         for (Bird bird : birds) {
-            System.out.println(bird + " 1 ");
             b.add(new Bird(bird.getType(),bird.getFile_name(),bird.getXStraightUp(), bird.getYStraightUp(), bird.getWidth(),bird.getHeight()));
-            System.out.println(bird + " 2 ");
         }
-
-        System.out.println("----------BIRB ADDED-----------------");
 
         ArrayList<Pig> p = new ArrayList<>();
         for (Pig pig : pigs) {
@@ -298,11 +294,7 @@ public class LevelScreen extends ScreenAdapter {
             m.add(new Material(material.getName(),material.getFile_name(),material.getXStraightUp(), material.getYStraightUp(), material.getWidth(),material.getHeight()));
         }
 
-        System.out.println("abcdefghj->0");
-
         GameState gameState = new GameState(lvl, score, b, p, m);
-
-        System.out.println("abcdefghj");
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savedGame.ser"))) {
             oos.writeObject(gameState);
@@ -623,8 +615,11 @@ public class LevelScreen extends ScreenAdapter {
     private boolean thrown = false;
     private boolean left = false;
     private boolean special = false;
+    private long start = 0;
     @Override
     public void render(float delta) {
+        if(start == 0) start = System.currentTimeMillis();
+
         Gdx.gl.glClearColor(1, 1, 1, 1);
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -696,16 +691,22 @@ public class LevelScreen extends ScreenAdapter {
             int hp = 0;
             for(Pig pig : pigs){
                 if(pig.getHp()>0) {
-                    batch.draw(pig.getTexture(), pig.getX() - pig.getWidth() / 2f, pig.getY() - pig.getHeight() / 2f, pig.getWidth(), pig.getHeight());
                     hp+=pig.getHp();
                 }
-                else {
+                else if(pig.getHP_OG()!=0) {
                     score += pig.getHP_OG() * 100;
                     pig.setHP_OG(0);
+                    pig.setTexture(deadPig,"deadPig.png");
                 }
+
+                batch.draw(pig.getTexture(), pig.getX() - pig.getWidth() / 2f, pig.getY() - pig.getHeight() / 2f, pig.getWidth(), pig.getHeight());
             }
 
             if(hp==0) isGameOver = true;
+            if(last<0){
+                long end = System.currentTimeMillis();
+                if(end-start >= 61000) isGameOver = true;
+            }
 
             handImage.setPosition(handX, handY);
             handImage.draw(batch, 1);

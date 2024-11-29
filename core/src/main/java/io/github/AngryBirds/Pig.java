@@ -134,4 +134,9 @@ public class Pig implements Serializable {
     public World getWorld(){
         return world;
     }
+
+    public void setTexture(Texture texture,String name){
+        this.texture = texture;
+        this.file_name = name;
+    }
 }

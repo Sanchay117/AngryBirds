@@ -11,16 +11,20 @@ public class MyContactListener implements ContactListener {
         Body bodyB = contact.getFixtureB().getBody();
 
         // Check if the collision involves a Pig
-        if (bodyA.getUserData() instanceof Pig) {
+        if (bodyA.getUserData() instanceof Pig && !(bodyB.getUserData() instanceof Pig)) {
             Pig pig = (Pig) bodyA.getUserData();
-            pig.setHp(pig.getHp()-5); // Reduce Pig's health
-//            System.out.println("Pig HP: " + pig.getHp());
+            if(pig.getHp()>0) {
+                pig.setHp(pig.getHp() - 5);
+                System.out.println("PIG HP " + pig.getHp());
+            }
         }
 
-        if (bodyB.getUserData() instanceof Pig) {
+        if (bodyB.getUserData() instanceof Pig && !(bodyA.getUserData() instanceof Pig)) {
             Pig pig = (Pig) bodyB.getUserData();
-            pig.setHp(pig.getHp()-5); // Reduce Pig's health
-//            System.out.println("Pig HP: " + pig.getHp());
+            if(pig.getHp()>0) {
+                pig.setHp(pig.getHp() - 5);
+                System.out.println("PIG HP " + pig.getHp());
+            }
         }
 
         if(bodyA.getUserData() instanceof Material || bodyB.getUserData() instanceof Material) {
