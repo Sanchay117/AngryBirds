@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Array;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -343,17 +344,6 @@ public class LevelScreen extends ScreenAdapter {
         // Position above GameOver button
         tutorialToggle.setSize(190, 190);
 
-        tutorialToggle.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                isTutorialEnabled = !isTutorialEnabled;
-                tutorialToggle.getStyle().imageUp = isTutorialEnabled ?
-                        tutorialSkin.getDrawable("on") : tutorialSkin.getDrawable("off");
-                handImage.setVisible(isTutorialEnabled);
-            }
-        });
-
-
         Skin skin = new Skin();
         skin.add("pause", pauseTexture);
         skin.add("settings", settingsTexture);
@@ -363,6 +353,18 @@ public class LevelScreen extends ScreenAdapter {
         handImage.setPosition(handStartX+70, handStartY);
         handImage.setSize(80, 80);
         handImage.setVisible(isTutorialEnabled);
+
+        tutorialToggle.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isTutorialEnabled = !isTutorialEnabled;
+                tutorialToggle.getStyle().imageUp = isTutorialEnabled ?
+                    tutorialSkin.getDrawable("on") : tutorialSkin.getDrawable("off");
+                if(!isTutorialEnabled){
+                    handImage.setSize(0,0);
+                }else handImage.setSize(80,80);
+            }
+        });
 
         pauseButton = new ImageButton(new ImageButton.ImageButtonStyle());
         settingsButton = new ImageButton(new ImageButton.ImageButtonStyle());
@@ -567,41 +569,34 @@ public class LevelScreen extends ScreenAdapter {
         return false;
     }
 
-    private float getX(float cos,float x,float velocity_initial,float t) {
-        return x + cos*velocity_initial*t;
-    }
+    private void drawTrajectory(Bird testBird,ShapeRenderer shapeRenderer) {
+        float stringLen =  (float) sqrt( (slingShotMiddle.y - testBird.getY())* (slingShotMiddle.y - testBird.getY()) + (slingShotMiddle.x - testBird.getX())*(slingShotMiddle.x - testBird.getX()));
 
-    private float getY(float sin,float y,float velocity_initial,float t) {
-        return (float) (y + sin*velocity_initial*t - 0.5*g*t*t);
-    }
+        float magnitude = 0.75f * stringLen;  // Magnitude of the impulse
+        float angle = MathUtils.atan2(slingShotMiddle.y - testBird.getY(), slingShotMiddle.x - testBird.getX());
 
-    private float getInitialVelocity(){
-        float stringLength = (float) sqrt((endPoint.x-slingShotMiddle.x)*(endPoint.x-slingShotMiddle.x) + (endPoint.y-slingShotMiddle.y)*(endPoint.y-slingShotMiddle.y) );
+        float impulseX = magnitude * MathUtils.cos(angle);
+        float impulseY = magnitude * MathUtils.sin(angle);
 
-        if(endPoint.x>slingShotMiddle.x) return -1*stringLength/2;
-        return stringLength/2;
-    }
+        // Create an array or list to store trajectory points
+        Array<Vector2> trajectoryPoints = new Array<>();
 
-    private void drawTrajectory(float x,float y,float velocity_initial,ShapeRenderer shapeRenderer) {
-        float stringLen =  (float) sqrt( (slingShotMiddle.y - y)* (slingShotMiddle.y - y) + (slingShotMiddle.x - x)*(slingShotMiddle.x - x));
+        float timeStep = 0.25f;
+        float totalTime = 2*impulseY/g;
 
-        float magnitude = 0.5f * stringLen;  // Magnitude of the impulse
-        float angle = MathUtils.atan2(slingShotMiddle.y - y, slingShotMiddle.x - x);
+        trajectoryPoints.clear();
+        for (float t = 0; t <= totalTime; t += timeStep) {
+            float predictedX = testBird.getX() + impulseX * t;
+            float predictedY = testBird.getY() + impulseY * t - (0.5f * 9.8f * t * t); // Accounting for gravity
 
-        float sin =  MathUtils.cos(angle);
-        float cos =  MathUtils.sin(angle);
-
-        float timeOfFlight = 2*magnitude*sin/g;
-        float timeStep = 0.35f;
+            trajectoryPoints.add(new Vector2(predictedX, predictedY));
+        }
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(new Color(20, 20, 20, 0.8f)); // Semi-transparent red
+        shapeRenderer.setColor(new Color(20, 20, 20, 0.8f));
 
-        for (float t = 0; t <= timeOfFlight; t += timeStep) {
-            float xCoord = getX(cos, x, magnitude, t);
-            float yCoord = getY(sin, y, magnitude, t);
-
-            shapeRenderer.circle(xCoord, yCoord, 7);
+        for (Vector2 point : trajectoryPoints) {
+            shapeRenderer.circle(point.x, point.y, 7);
         }
     }
 
@@ -724,9 +719,9 @@ public class LevelScreen extends ScreenAdapter {
 
                 shapeRenderer.end();
 
-                testBird.setPos(endPoint.x - testBird.getWidth()/4f - 20,endPoint.y - testBird.getHeight()/4f + 10);
+                testBird.setPos(endPoint.x ,endPoint.y);
 
-                drawTrajectory(endPoint.x, endPoint.y, getInitialVelocity(), shapeRenderer);
+                drawTrajectory(testBird, shapeRenderer);
 
                 shapeRenderer.end();
             }else{
@@ -734,7 +729,7 @@ public class LevelScreen extends ScreenAdapter {
                 if(thrown && !left && testBird != null ) {
                     float stringLen =  (float) sqrt( (slingShotMiddle.y - testBird.getY())* (slingShotMiddle.y - testBird.getY()) + (slingShotMiddle.x - testBird.getX())*(slingShotMiddle.x - testBird.getX()));
 
-                    float magnitude = 2.0f * stringLen;  // Magnitude of the impulse
+                    float magnitude = 0.75f * stringLen;  // Magnitude of the impulse
                     float angle = MathUtils.atan2(slingShotMiddle.y - testBird.getY(), slingShotMiddle.x - testBird.getX());
 
                     float impulseX = magnitude * MathUtils.cos(angle);
