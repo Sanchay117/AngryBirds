@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -24,22 +26,24 @@ public class SettingsScreen extends ScreenAdapter {
     private Texture crossBtnTexture;
     private Texture soundTexture;
     private Texture musicTexture;
-    private Texture languageTexture;
     private Texture creditsTexture;
     private Texture saveTexture;
+    private Texture sliderBgTexture;
+    private Texture sliderKnobTexture;
 
     private ImageButton crossBtn;
     private ImageButton soundBtn;
     private ImageButton musicBtn;
-    private ImageButton languageBtn;
     private ImageButton creditsBtn;
     private ImageButton saveBtn;
+
+    private Slider volumeSlider;
+    private Label volumeLabel;
 
     private float boardWidth;
     private float boardHeight;
 
     private int lvl;
-
 
     private final LevelScreen levelScreen;
 
@@ -52,7 +56,6 @@ public class SettingsScreen extends ScreenAdapter {
         settingsBgTexture = new Texture(Gdx.files.internal("settingsBackground.png"));
     }
 
-
     @Override
     public void show() {
         stage = new Stage();
@@ -60,15 +63,15 @@ public class SettingsScreen extends ScreenAdapter {
         crossBtnTexture = new Texture("cross.png");
         soundTexture = new Texture("sound.png");
         musicTexture = new Texture("music.png");
-        languageTexture = new Texture("lang.png");
         creditsTexture = new Texture("credits.png");
         saveTexture = new Texture("save.png");
+        sliderBgTexture = new Texture("sliderBg.png");
+        sliderKnobTexture = new Texture("sliderKnob.png");
 
         Skin skin = new Skin();
         skin.add("cross", crossBtnTexture);
         skin.add("sound", soundTexture);
         skin.add("music", musicTexture);
-        skin.add("language", languageTexture);
         skin.add("credits", creditsTexture);
         skin.add("termsPrivacy", saveTexture);
 
@@ -85,34 +88,53 @@ public class SettingsScreen extends ScreenAdapter {
         crossBtn.setPosition(boardX + boardWidth - crossBtn.getWidth() - 75,
             boardY + boardHeight - crossBtn.getHeight() - 30);
 
-
         crossBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new LevelScreen(game,lvl));
+                game.setScreen(new LevelScreen(game, lvl));
             }
         });
-
-
 
         float buttonSize = 120f;
         float leftColumnX = boardX + 0.25f * boardWidth;
         float rightColumnX = boardX + 0.525f * boardWidth;
         float secbuttonSize = 270f;
         soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight, buttonSize);
+
         musicBtn = createButton(musicTexture, leftColumnX, boardY + 0.475f * boardHeight - buttonSpacing, buttonSize);
-
-        languageBtn = createButton(languageTexture, rightColumnX, boardY + 0.45f * boardHeight, secbuttonSize);
-        creditsBtn = createButton(creditsTexture, rightColumnX, boardY + 0.45f * boardHeight - buttonSpacing, secbuttonSize);
-        saveBtn = createButton(saveTexture, rightColumnX, boardY + 0.45f * boardHeight - 2 * buttonSpacing, secbuttonSize);
-
         musicBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(game.music.getVolume()==0) game.music.setVolume(0.4f);
-                else game.music.setVolume(0.0f);
+                game.nextSong(); 
             }
         });
+
+        creditsBtn = createButton(creditsTexture, rightColumnX, boardY + 0.45f * boardHeight - buttonSpacing, secbuttonSize);
+        saveBtn = createButton(saveTexture, rightColumnX, boardY + 0.45f * boardHeight - 2 * buttonSpacing, secbuttonSize);
+
+        Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
+        sliderStyle.background = new TextureRegionDrawable(new TextureRegion(sliderBgTexture));
+        sliderStyle.knob = new TextureRegionDrawable(new TextureRegion(sliderKnobTexture));
+
+        volumeSlider = new Slider(0, 1, 0.01f, false, sliderStyle);
+        volumeSlider.setSize(0.4f * boardWidth, 50);
+        volumeSlider.setPosition(boardX + 0.3f * boardWidth, boardY + 0.65f * boardHeight);
+        volumeSlider.setValue(game.songs[game.currentSongIndex].getVolume());  
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = game.font; 
+        volumeLabel = new Label("Volume: " + (int) (volumeSlider.getValue() * 100) + "%", labelStyle);
+        volumeLabel.setPosition(volumeSlider.getX(), volumeSlider.getY() + 60);
+
+        volumeSlider.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                float volume = volumeSlider.getValue();
+                volumeLabel.setText("Volume: " + (int) (volume * 100) + "%");
+                game.songs[game.currentSongIndex].setVolume(volume); 
+            }
+        });
+
         saveBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -120,19 +142,13 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        creditsBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new CreditScreen(game, SettingsScreen.this)); // Open CreditScreen
-            }
-        });
-
         stage.addActor(crossBtn);
         stage.addActor(soundBtn);
         stage.addActor(musicBtn);
-        stage.addActor(languageBtn);
         stage.addActor(creditsBtn);
         stage.addActor(saveBtn);
+        stage.addActor(volumeSlider);
+        stage.addActor(volumeLabel);
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -168,14 +184,15 @@ public class SettingsScreen extends ScreenAdapter {
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
-//        stage.dispose();
-//        settingsBgTexture.dispose();
-//        boardTexture.dispose();
-//        crossBtnTexture.dispose();
-//        soundTexture.dispose();
-//        musicTexture.dispose();
-//        languageTexture.dispose();
-//        creditsTexture.dispose();
-//        saveTexture.dispose();
+        stage.dispose();
+        settingsBgTexture.dispose();
+        boardTexture.dispose();
+        crossBtnTexture.dispose();
+        soundTexture.dispose();
+        musicTexture.dispose();
+        creditsTexture.dispose();
+        saveTexture.dispose();
+        sliderBgTexture.dispose();
+        sliderKnobTexture.dispose();
     }
 }
