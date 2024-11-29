@@ -2,6 +2,7 @@ package io.github.AngryBirds;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -99,7 +100,7 @@ public class SettingsScreen extends ScreenAdapter {
         float leftColumnX = boardX + 0.25f * boardWidth;
         float rightColumnX = boardX + 0.525f * boardWidth;
         float secbuttonSize = 270f;
-        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight, buttonSize);
+        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.365f * boardHeight, buttonSize);
 
         soundBtn.addListener(new ClickListener() {
             @Override
@@ -109,7 +110,7 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        musicBtn = createButton(musicTexture, leftColumnX, boardY + 0.475f * boardHeight - buttonSpacing, buttonSize);
+        musicBtn = createButton(musicTexture, leftColumnX, boardY + 0.365f * boardHeight - buttonSpacing, buttonSize);
         musicBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -122,6 +123,7 @@ public class SettingsScreen extends ScreenAdapter {
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
         sliderStyle.background = new TextureRegionDrawable(new TextureRegion(sliderBgTexture));
+        sliderStyle.background.setMinHeight(10);
         TextureRegionDrawable knobDrawable = new TextureRegionDrawable(new TextureRegion(sliderKnobTexture));
         knobDrawable.setMinWidth(30); // Set desired width
         knobDrawable.setMinHeight(30); // Set desired height
@@ -129,14 +131,15 @@ public class SettingsScreen extends ScreenAdapter {
 
 
         volumeSlider = new Slider(0, 1, 0.01f, false, sliderStyle);
-        volumeSlider.setSize(0.4f * boardWidth, 50);
-        volumeSlider.setPosition(boardX + 0.3f * boardWidth, boardY + 0.65f * boardHeight);
+        volumeSlider.setSize(0.45f * boardWidth, 10);
+        volumeSlider.setPosition(boardX + 0.28f * boardWidth, boardY + 0.55f * boardHeight);
         volumeSlider.setValue(game.songs[game.currentSongIndex].getVolume());
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = game.font;
+        labelStyle.font = game.smallFont;
+        labelStyle.fontColor = Color.BLACK;
         volumeLabel = new Label("Volume: " + (int) (volumeSlider.getValue() * 100) + "%", labelStyle);
-        volumeLabel.setPosition(volumeSlider.getX(), volumeSlider.getY() + 60);
+        volumeLabel.setPosition(volumeSlider.getX() + 80, volumeSlider.getY() + 40);
 
         volumeSlider.addListener(new ClickListener() {
             @Override
@@ -151,6 +154,13 @@ public class SettingsScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 levelScreen.saveGame();
+            }
+        });
+
+        creditsBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new CreditScreen(game, SettingsScreen.this)); // Open CreditScreen
             }
         });
 
@@ -197,14 +207,14 @@ public class SettingsScreen extends ScreenAdapter {
     public void hide() {
         Gdx.input.setInputProcessor(null);
         stage.dispose();
-        settingsBgTexture.dispose();
-        boardTexture.dispose();
-        crossBtnTexture.dispose();
-        soundTexture.dispose();
-        musicTexture.dispose();
-        creditsTexture.dispose();
-        saveTexture.dispose();
-        sliderBgTexture.dispose();
-        sliderKnobTexture.dispose();
+//        settingsBgTexture.dispose();
+//        boardTexture.dispose();
+//        crossBtnTexture.dispose();
+//        soundTexture.dispose();
+//        musicTexture.dispose();
+//        creditsTexture.dispose();
+//        saveTexture.dispose();
+//        sliderBgTexture.dispose();
+//        sliderKnobTexture.dispose();
     }
 }
