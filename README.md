@@ -84,7 +84,7 @@ The slingshot is the core of the gameplay:
 5. **Game End Conditions**
 The game ends when:
 - **Victory**: All pigs are eliminated.
-- **Defeat**: All available birds are used up without eliminating all pigs.
+- **Defeat**: All available birds are used up without eliminating all pigs(with a buffer of 1 min).
   
 6. **Game Save and Load with Serialization**
 - **Save Game**: Players can save their progress at any time using the settings menu. The game's state, including the positions and statuses of birds, pigs, materials, and score, is serialized into a file.
