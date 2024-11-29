@@ -34,7 +34,8 @@ public class Main extends Game {
         songs = new Music[]{
             Gdx.audio.newMusic(Gdx.files.internal("birds_angry.mp3")),
             Gdx.audio.newMusic(Gdx.files.internal("song2.mp3")),
-            Gdx.audio.newMusic(Gdx.files.internal("song3.mp3"))
+            Gdx.audio.newMusic(Gdx.files.internal("song3.mp3")),
+            Gdx.audio.newMusic(Gdx.files.internal("song4.mp3"))
         };
         currentSongIndex = 0;
 

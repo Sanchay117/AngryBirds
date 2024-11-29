@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.*;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class Pig implements Serializable {
     private int hp;
@@ -20,6 +21,8 @@ public class Pig implements Serializable {
     private transient BodyDef bodyDef;
 
     private String file_name;
+
+    private HashMap<Material,Integer> hits = new HashMap<Material, Integer>();
 
     public Pig(int hp, String file_name, float x, float y, int width, int height) {
         this.hp = hp;
@@ -67,7 +70,7 @@ public class Pig implements Serializable {
         fixtureDef.shape = circle;
         fixtureDef.density = .5f;
         fixtureDef.friction = 0.0f;
-        fixtureDef.restitution = 0.6f; // Make it bounce a little bit
+        fixtureDef.restitution = 0.0f; // Make it bounce a little bit
 //
 //        // Create our fixture and attach it to the body
         Fixture fixture = body.createFixture(fixtureDef);
@@ -117,6 +120,13 @@ public class Pig implements Serializable {
 
     public void setHp(int hp){
         this.hp = Math.max(hp, 0);
+    }
+
+    public void hit(Material material){
+        if(!hits.containsKey(material)) {
+            this.hp = Math.max(hp - 5, 0);
+            hits.put(material,1);
+        }
     }
 
     public Texture getTexture(){

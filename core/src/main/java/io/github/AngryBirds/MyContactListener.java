@@ -10,25 +10,16 @@ public class MyContactListener implements ContactListener {
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();
 
-        // Check if the collision involves a Pig
         if (bodyA.getUserData() instanceof Pig && !(bodyB.getUserData() instanceof Pig)) {
             Pig pig = (Pig) bodyA.getUserData();
-            if(pig.getHp()>0) {
-                pig.setHp(pig.getHp() - 5);
-                System.out.println("PIG HP " + pig.getHp());
-            }
+            if(bodyB.getUserData() instanceof Material) pig.hit((Material) bodyB.getUserData());
+            else pig.setHp(pig.getHp() - 5);
         }
 
         if (bodyB.getUserData() instanceof Pig && !(bodyA.getUserData() instanceof Pig)) {
             Pig pig = (Pig) bodyB.getUserData();
-            if(pig.getHp()>0) {
-                pig.setHp(pig.getHp() - 5);
-                System.out.println("PIG HP " + pig.getHp());
-            }
-        }
-
-        if(bodyA.getUserData() instanceof Material || bodyB.getUserData() instanceof Material) {
-            System.out.println(bodyA.getUserData() + "->A " + bodyB.getUserData() + "->B");
+            if(bodyA.getUserData() instanceof Material) pig.hit((Material) bodyA.getUserData());
+            else pig.setHp(pig.getHp() - 5);
         }
 
         if(bodyA.getUserData() instanceof Material && bodyB.getUserData() instanceof Bird ) {
