@@ -123,7 +123,7 @@ public class SettingsScreen extends ScreenAdapter {
         creditsBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new CreditScreen(game, SettingsScreen.this,lvl)); // Open CreditScreen
+                game.setScreen(new CreditScreen(game, SettingsScreen.this)); // Open CreditScreen
             }
         });
 
@@ -168,14 +168,14 @@ public class SettingsScreen extends ScreenAdapter {
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
-        stage.dispose();
-        settingsBgTexture.dispose();
-        boardTexture.dispose();
-        crossBtnTexture.dispose();
-        soundTexture.dispose();
-        musicTexture.dispose();
-        languageTexture.dispose();
-        creditsTexture.dispose();
-        saveTexture.dispose();
+//        stage.dispose();
+//        settingsBgTexture.dispose();
+//        boardTexture.dispose();
+//        crossBtnTexture.dispose();
+//        soundTexture.dispose();
+//        musicTexture.dispose();
+//        languageTexture.dispose();
+//        creditsTexture.dispose();
+//        saveTexture.dispose();
     }
 }
