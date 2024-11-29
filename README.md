@@ -53,6 +53,50 @@ in your terminal.<br>
 `./gradlew lwjgl3:run`<br/>
 To run the tests navigate to core/src/test/java/io/github/AngryBirds/ and run this "TestRunner.java" file.
 
+## Features
+This Angry Birds-inspired game comes with the following exciting features:
+
+1. **Three Types of Pigs**
+The game includes three types of pigs, each varying in size and health points (HP):
+- **Small Pig**: Low HP, easiest to eliminate.
+- **Medium Pig**: Moderate HP, offering a balanced challenge.
+- **Large Pig**: High HP, requiring precise shots and more damage to eliminate.
+  
+2. **Three Types of Birds**
+Players can launch different types of birds, each with unique abilities:
+- **Red Bird**: The standard bird with normal velocity and no special abilities.
+- **Yellow Bird**: Gains extra velocity after launch and flies straight when clicked mid-flight.
+- **Blue Bird**: Splits into three smaller birds when clicked, allowing for wider area damage.
+  
+3. **Three Types of Materials**
+Structures are built using different materials, each with unique HP values that determine their durability:
+
+- **Wood**: Weakest material, breaks easily with moderate force.
+- **Stone**: Stronger than wood, requires more powerful hits to break.
+- **Glass**: Fragile material, shatters with minimal force.
+  
+4. **Dynamic Slingshot Mechanics**
+The slingshot is the core of the gameplay:
+- Drag the bird to aim and adjust the trajectory.
+- Release to launch the bird toward the target.
+- The slingshot's elasticity determines the velocity and trajectory based on how far the bird is dragged.
+
+5. **Game End Conditions**
+The game ends when:
+- **Victory**: All pigs are eliminated.
+- **Defeat**: All available birds are used up without eliminating all pigs.
+  
+6. **Game Save and Load with Serialization**
+- **Save Game**: Players can save their progress at any time using the settings menu. The game's state, including the positions and statuses of birds, pigs, materials, and score, is serialized into a file.
+- **Load Game**: Resume from the exact state where the game was saved. The saved file is deserialized to reconstruct the game world, ensuring all elements (like remaining birds, pig health, and structure states) are restored accurately.
+  
+7. **Audio Features**
+- **Mute/Unmute**: Players can mute or unmute the game's sound effects and background music.
+- **Volume Adjustment**: Use the volume slider in the settings menu to adjust the game volume to your preference.
+- **Background Music Selection**: Choose from four different background music tracks to suit your mood.
+
+
+
 ### Credits
 
 Sanchay Singh: 2023478<br>
