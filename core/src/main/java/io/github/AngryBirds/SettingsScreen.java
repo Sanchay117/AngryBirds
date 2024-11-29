@@ -98,8 +98,8 @@ public class SettingsScreen extends ScreenAdapter {
         float buttonSize = 120f;
         float leftColumnX = boardX + 0.25f * boardWidth;
         float rightColumnX = boardX + 0.525f * boardWidth;
-        float secbuttonSize = 325f;
-        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight+15, buttonSize*1.1f);
+        float secbuttonSize = 360f;
+        soundBtn = createButton(soundTexture, leftColumnX, boardY + 0.475f * boardHeight+40, buttonSize*1.5f);
 
         soundBtn.addListener(new ClickListener() {
             @Override
@@ -109,7 +109,7 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        musicBtn = createButton(musicTexture, rightColumnX, boardY + 0.475f * boardHeight +15, buttonSize*1.1f);
+        musicBtn = createButton(musicTexture, rightColumnX+20, boardY + 0.475f * boardHeight +40, buttonSize*1.5f);
         musicBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -117,8 +117,8 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        creditsBtn = createButton(creditsTexture, leftColumnX, boardY + 0.45f * boardHeight - 30, secbuttonSize);
-        saveBtn = createButton(saveTexture, leftColumnX, boardY + 0.45f * boardHeight - 60, secbuttonSize);
+        creditsBtn = createButton(creditsTexture, boardX + 0.5f * boardWidth-70, boardY + 0.25f * boardHeight -60 , secbuttonSize);
+        saveBtn = createButton(saveTexture, boardX + 0.5f * boardWidth-70, boardY + 0.25f * boardHeight - 160, secbuttonSize);
 
         Slider.SliderStyle sliderStyle = new Slider.SliderStyle();
         sliderStyle.background = new TextureRegionDrawable(new TextureRegion(sliderBgTexture));
