@@ -54,8 +54,8 @@ public class Material implements Serializable {
         this.file_name = file_name;
 
         if(Objects.equals(name, "Wood")) hp = 15;
-        else if(Objects.equals(name, "Stone")) hp = 35;
-        else hp = 25; // glass
+        else if(Objects.equals(name, "Stone")) hp = 25;
+        else hp = 20; // glass
 
         bodyDef = new BodyDef();
         // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
