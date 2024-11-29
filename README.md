@@ -34,7 +34,8 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 
 ## Resources Used
 LibGDX Docs<br/>
-Canva
+Canva<br/>
+JUnit4
 
 ## UML
 You can see the updated UML in the file named UML_2.pdf
@@ -42,11 +43,15 @@ You can see the updated UML in the file named UML_2.pdf
 ## Use Case Diagram
 You can see the updated use case diagram in the file named UseCase2.pdf
 
+## Demo
+You can see the video showcasing the game's features in demo.mp4
+
 ## Running The Game
 
 To run this project first pull this repo and then navigate to the project folder and then type the following command 
 in your terminal.<br>
-`./gradlew lwjgl3:run`
+`./gradlew lwjgl3:run`<br/>
+To run the tests navigate to core/src/test/java/io/github/AngryBirds/ and run this "TestRunner.java" file.
 
 ### Credits
 
